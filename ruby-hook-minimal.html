@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قلاب — مینیمال</title>
+<style>
+  @font-face{font-family:"Yekan";src:url(fonts/Yekan.woff2) format("woff2"),url(fonts/Yekan.ttf) format("truetype");font-display:block}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center;font-family:"Yekan",Tahoma,sans-serif;color:#fff}
+  #stage{width:1080px;height:1920px;position:relative;overflow:hidden;flex:none;transform-origin:center;background:#000}
+  .g{position:absolute;inset:0}
+  svg{overflow:visible}
+  .full{position:absolute;left:0;top:0;width:1080px;height:1920px}
+  .ln{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+  .cap{position:absolute;left:60px;right:60px;text-align:center;font-size:54px;line-height:1.75;color:#fff;white-space:nowrap;
+    --p:0%;-webkit-mask-image:linear-gradient(to left,#000 calc(var(--p) - 14%),transparent var(--p));mask-image:linear-gradient(to left,#000 calc(var(--p) - 14%),transparent var(--p))}
+  .cap.q{color:#9b9b9b;font-size:48px}
+  .cap.sm{font-size:44px}
+  #dot{position:absolute;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:#fff;z-index:20;
+    box-shadow:0 0 18px 4px rgba(255,255,255,.55),0 0 60px 10px rgba(255,255,255,.18)}
+  #streak{position:absolute;left:0;top:0;width:6px;height:520px;margin-left:-3px;border-radius:3px;z-index:19;transform-origin:50% 0;
+    background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,0))}
+  #trail{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:18;pointer-events:none}
+  #trail path{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.55}
+  #face{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:21;pointer-events:none}
+  .pend{position:absolute;top:-20px;width:40px;height:900px;margin-left:-20px;transform-origin:50% 0}
+  .pend i{position:absolute;left:19px;top:0;width:2px;height:880px;background:linear-gradient(rgba(255,255,255,.15),rgba(255,255,255,.75))}
+  .pend b{position:absolute;left:0;bottom:0;width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:0 0 14px 2px rgba(255,255,255,.45)}
+  .z{position:absolute;font-size:44px;color:#fff;opacity:0}
+  .sent{position:absolute;right:190px;width:720px;text-align:right;font-size:40px;line-height:1.6;color:#8c8c8c;white-space:normal}
+  .bul{position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px;border-radius:50%;background:#fff;opacity:.9;box-shadow:0 0 10px rgba(255,255,255,.5)}
+  #ring{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px;border-radius:50%;border:3px solid #fff;opacity:0}
+  #handle{position:absolute;left:0;right:0;top:1790px;text-align:center;font-size:28px;letter-spacing:.2em;color:rgba(255,255,255,.32);direction:ltr;font-family:"Yekan",sans-serif;z-index:30}
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg width="0" height="0" style="position:absolute"><defs id="fdefs"></defs></svg>
+
+  <!-- S0 قلاب -->
+  <div class="g" id="g0">
+    <svg class="full" viewBox="0 0 1080 1920">
+      <path class="ln" id="string0" d="M540 -20 V800" style="stroke-width:3;opacity:.8"/>
+      <path class="ln" id="hook0" d="M540 842 V884 C540 944 474 944 474 890"/>
+      <path class="ln" id="barb0" d="M474 890 l-14 -22 M474 890 l22 -12"/>
+    </svg>
+  </div>
+  <!-- S1 تعریف -->
+  <div class="g" id="g1">
+    <svg class="full" viewBox="0 0 1080 1920">
+      <g id="bub"><path class="ln" d="M240 712 h120 a20 20 0 0 1 20 20 v62 a20 20 0 0 1 -20 20 h-64 l-34 28 v-28 h-22 a20 20 0 0 1 -20 -20 v-62 a20 20 0 0 1 20 -20 z"/><path class="ln" d="M256 752 h88 M256 776 h56" style="stroke-width:3"/></g>
+      <g id="img"><rect class="ln" x="714" y="706" width="140" height="110" rx="16"/><circle class="ln" cx="748" cy="740" r="11"/><path class="ln" d="M722 808 l42 -38 30 26 22 -18 32 30"/></g>
+      <path class="ln" id="eye" d="M410 760 C470 690 610 690 670 760 C610 830 470 830 410 760 Z"/>
+      <path class="ln" id="play" d="M500 690 L620 760 L500 830 Z"/>
+    </svg>
+  </div>
+  <!-- S2 مثال -->
+  <div class="g" id="g2"><div id="cradle"></div></div>
+  <!-- S3 نکته -->
+  <div class="g" id="g3">
+    <svg class="full" viewBox="0 0 1080 1920">
+      <rect class="ln" id="post" x="320" y="470" width="440" height="620" rx="44" style="stroke-width:3"/>
+      <rect class="ln" id="pvid" x="352" y="502" width="376" height="236" rx="20" style="stroke-width:3"/>
+      <path class="ln" id="ptri" d="M524 596 L568 620 L524 644 Z" style="stroke-width:3"/>
+      <path class="ln" id="ptitle" d="M700 800 H450" style="stroke-width:16;opacity:.35"/>
+      <path class="ln" id="pc1" d="M700 870 H390" style="stroke-width:9;opacity:.35"/>
+      <path class="ln" id="pc2" d="M700 920 H420" style="stroke-width:9;opacity:.22"/>
+      <path class="ln" id="pc3" d="M700 970 H520" style="stroke-width:9;opacity:.22"/>
+      <path class="ln" id="pc4" d="M700 1020 H470" style="stroke-width:9;opacity:.22"/>
+    </svg>
+  </div>
+  <!-- S4 تمرین -->
+  <div class="g" id="g4">
+    <div class="sent" id="t1" style="top:520px">«۳ ثانیه‌ی اول، سرنوشت فروش این ویدیو رو تعیین می‌کنه.»</div>
+    <div class="sent" id="t2" style="top:700px">«چرا مشتری‌هات ویدیوی تو رو رد می‌کنن؟»</div>
+    <div class="sent" id="t3" style="top:880px">«اگه کسب‌وکار داری، این اشتباه داره فروشت رو می‌خوره.»</div>
+    <div class="bul" id="b1"></div><div class="bul" id="b2"></div><div class="bul" id="b3"></div>
+    <div id="ring"></div>
+  </div>
+
+  <svg id="trail" viewBox="0 0 1080 1920"><path id="trailp" d=""/></svg>
+  <div id="streak"></div>
+  <div id="dot"></div>
+  <svg id="face" viewBox="0 0 1080 1920">
+    <g id="sleep" style="opacity:0"><path d="M508 790 q12 10 24 0 M548 790 q12 10 24 0" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/><path d="M528 826 h24" stroke="#000" stroke-width="5" stroke-linecap="round"/></g>
+    <g id="awake" style="opacity:0"><circle cx="520" cy="788" r="9" fill="#000"/><circle cx="560" cy="788" r="9" fill="#000"/><circle cx="540" cy="828" r="9" fill="none" stroke="#000" stroke-width="5"/></g>
+  </svg>
+  <div class="z" id="z1" style="left:610px;top:700px">z</div><div class="z" id="z2" style="left:640px;top:660px;font-size:36px">z</div><div class="z" id="z3" style="left:665px;top:625px;font-size:30px">z</div>
+  <div id="handle">@ruby.explains</div>
+</div>
+
+<script src="vendor/gsap.min.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search), MANUAL = q.has('manual');
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const stage = $('#stage');
+  const fit = () => stage.style.transform = `scale(${Math.min(innerWidth / 1080, innerHeight / 1920)})`;
+  addEventListener('resize', fit); fit();
+  try { await document.fonts.load('54px Yekan'); await document.fonts.ready; } catch (e) {}
+
+  const TOTAL = 44, CX = 540, CY = 820;
+  const tl = gsap.timeline({ paused: true, repeat: MANUAL ? 0 : -1, defaults: { ease: 'power3.out' } });
+
+  /* ---------- ابزارها ---------- */
+  // بلور جهت‌دار (مثل موشن‌بلور نمونه) با فیلتر SVG
+  let fid = 0;
+  const blurOf = el => {
+    if (el._blur) return el._blur;
+    const id = 'f' + (fid++), ns = 'http://www.w3.org/2000/svg';
+    const f = document.createElementNS(ns, 'filter'); f.id = id; f.setAttribute('x', '-50%'); f.setAttribute('y', '-50%'); f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+    const b = document.createElementNS(ns, 'feGaussianBlur'); b.setAttribute('stdDeviation', '0 0'); f.append(b); $('#fdefs').append(f);
+    el.style.filter = `url(#${id})`; el._blur = b; return b;
+  };
+  // کپشن با تایپ نرم از راست به چپ
+  const cap = (g, text, y, cls = '') => { const d = document.createElement('div'); d.className = 'cap ' + cls; d.style.top = y + 'px'; d.innerHTML = text; $(g).append(d); return d; };
+  const type = (el, t, dur) => tl.fromTo(el, { '--p': '0%' }, { '--p': '114%', duration: dur || Math.min(1.4, .35 + el.textContent.length * .028), ease: 'none' }, t);
+  const smear = (el, t, dx = -140) => { const b = blurOf(el); tl.to(el, { x: dx, autoAlpha: 0, duration: .45, ease: 'power2.in' }, t); tl.fromTo(b, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: '26 0' }, duration: .45, ease: 'power2.in', immediateRender: false }, t); };
+  const drop = (el, t) => { const b = blurOf(el); tl.to(el, { y: 160, autoAlpha: 0, duration: .5, ease: 'power2.in' }, t); tl.fromTo(b, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: '0 22' }, duration: .5, ease: 'power2.in', immediateRender: false }, t); };
+  const draw = (el, t, dur = .8, ease = 'power2.inOut') => { const L = el.getTotalLength ? el.getTotalLength() : 1000; tl.fromTo(el, { strokeDasharray: L + 2, strokeDashoffset: L + 2 }, { strokeDashoffset: 0, duration: dur, ease }, t); };
+  const drawG = (g, t, dur) => [...g.querySelectorAll('path,rect,circle')].forEach((p, i) => draw(p, t + i * .08, dur));
+  // نقطه
+  const D = $('#dot');
+  gsap.set(D, { x: CX, y: 2100 });
+  const dotTo = (x, y, t, dur = .6, ease = 'power3.inOut') => tl.to(D, { x, y, duration: dur, ease }, t);
+  // حرکت روی منحنی + دنباله‌ی خطی
+  const bez = (p, u) => { const v = 1 - u; return [0, 1].map(k => v * v * v * p[0][k] + 3 * v * v * u * p[1][k] + 3 * v * u * u * p[2][k] + u * u * u * p[3][k]); };
+  const TP = $('#trailp');
+  const curve = (p, t, dur = .9, ease = 'power2.inOut', tail = .45) => {
+    const o = { u: 0 };
+    tl.fromTo(o, { u: 0 }, { u: 1, duration: dur, ease, immediateRender: false,
+      onUpdate: () => {
+        const [x, y] = bez(p, o.u); gsap.set(D, { x, y });
+        const a = Math.max(0, o.u - tail); let d = '';
+        for (let i = 0; i <= 24; i++) { const [px, py] = bez(p, a + (o.u - a) * i / 24); d += (i ? 'L' : 'M') + px.toFixed(1) + ' ' + py.toFixed(1); }
+        TP.setAttribute('d', d); TP.style.opacity = o.u >= 1 ? 0 : .55;
+      } }, t);
+    tl.set(TP, { attr: { d: '' } }, t + dur + .01);
+  };
+  const squash = (t, s = .25) => tl.fromTo(D, { scaleX: 1 + s, scaleY: 1 - s }, { scaleX: 1, scaleY: 1, duration: .5, ease: 'elastic.out(1,.4)', immediateRender: false }, t);
+  // پن سریع گروه‌ها با بلور افقی
+  const panOut = (g, t, dx = -1080) => { const el = $(g), b = blurOf(el); tl.to(el, { x: dx, duration: .55, ease: 'power3.in' }, t); tl.fromTo(b, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: '40 0' }, duration: .55, ease: 'power3.in', immediateRender: false }, t); tl.set(el, { autoAlpha: 0 }, t + .56); };
+  $$('.g').forEach((g, i) => gsap.set(g, { autoAlpha: 0 }));
+  const show = (g, t) => tl.set(g, { autoAlpha: 1, x: 0 }, t);
+
+  /* ================= S0 · قلاب (0 – 4.6) ================= */
+  show('#g0', 0);
+  const st = $('#streak');
+  tl.fromTo(st, { x: CX, y: 2100, scaleY: 1, autoAlpha: 1 }, { y: CY, duration: .9, ease: 'power3.out' }, 0);
+  tl.to(st, { scaleY: 0, duration: .5, ease: 'power2.out' }, .55);
+  tl.fromTo(D, { x: CX, y: 2100 }, { y: CY, duration: .9, ease: 'power3.out', immediateRender: false }, 0);
+  squash(.9, .18);
+  const c0a = cap('#g0', 'این ویدیو رو تا آخر ببین؛', 1040);
+  type(c0a, .95);
+  draw($('#string0'), 1.6, .6, 'power2.out');
+  draw($('#hook0'), 2.0, .5); draw($('#barb0'), 2.4, .25);
+  tl.fromTo(D, { y: CY }, { y: CY - 24, duration: .25, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 2.6);
+  smear(c0a, 2.55);
+  const c0b = cap('#g0', 'چون همین الان داری<br>یک قلاب رو تجربه می‌کنی.', 1040);
+  type(c0b, 2.85, 1.2);
+  tl.fromTo('#g0 svg', { y: 0 }, { y: -26, duration: .2, yoyo: true, repeat: 1, ease: 'power2.out' }, 3.4);
+  tl.fromTo(D, { y: CY }, { y: CY - 26, duration: .2, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 3.4);
+
+  /* ================= S1 · تعریف (4.3 – 13) ================= */
+  panOut('#g0', 4.3);
+  curve([[CX, CY], [900, 700], [820, 520], [CX, 760]], 4.3, 1.0, 'power2.inOut');
+  squash(5.3, .2);
+  show('#g1', 4.6);
+  const c1a = cap('#g1', 'Hook یا قلاب،', 1000);
+  tl.fromTo(c1a, { x: 300 }, { x: 0, duration: .6 }, 4.6);
+  type(c1a, 4.9, .7);
+  // نقطه دو تکه می‌شه: حباب جمله و قاب تصویر
+  const mini = [0, 1].map(() => { const m = D.cloneNode(); m.id = ''; m.style.zIndex = 19; stage.append(m); gsap.set(m, { x: CX, y: 760, autoAlpha: 0, scale: .5 }); return m; });
+  tl.set(mini, { autoAlpha: 1 }, 5.9);
+  tl.to(mini[0], { x: 300, y: 762, duration: .55, ease: 'power3.out' }, 5.9);
+  tl.to(mini[1], { x: 784, y: 762, duration: .55, ease: 'power3.out' }, 5.9);
+  tl.to(mini, { scale: 0, autoAlpha: 0, duration: .3 }, 6.4);
+  drawG($('#bub'), 6.4, .7); drawG($('#img'), 6.45, .7);
+  smear(c1a, 6.9);
+  const c1b = cap('#g1', 'جمله یا تصویریه که<br>توجه مخاطب رو جلب می‌کنه', 1000);
+  type(c1b, 7.2, 1.2);
+  // جذب به مرکز و باز شدن چشم
+  tl.to('#bub', { x: 230, scale: .2, autoAlpha: 0, transformOrigin: '300px 762px', duration: .6, ease: 'power3.in' }, 8.3);
+  tl.to('#img', { x: -230, scale: .2, autoAlpha: 0, transformOrigin: '784px 762px', duration: .6, ease: 'power3.in' }, 8.3);
+  tl.fromTo(D, { scale: 1 }, { scale: 1.6, duration: .25, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 8.9);
+  draw($('#eye'), 9.0, .7, 'power3.out');
+  tl.to(D, { x: CX - 40, duration: .35, ease: 'power2.inOut' }, 9.8).to(D, { x: CX + 40, duration: .45, ease: 'power2.inOut' }, 10.15).to(D, { x: CX, duration: .3, ease: 'power2.inOut' }, 10.6);
+  tl.fromTo('#eye', { scaleY: 1 }, { scaleY: .05, duration: .09, yoyo: true, repeat: 1, ease: 'none', transformOrigin: '540px 760px', immediateRender: false }, 11.0);
+  smear(c1b, 10.4);
+  const c1c = cap('#g1', 'و بهش دلیل می‌ده<br>که به دیدن یا خوندن ادامه بده.', 1000);
+  type(c1c, 10.7, 1.3);
+  tl.to('#eye', { autoAlpha: 0, scale: .6, transformOrigin: '540px 760px', duration: .35, ease: 'power2.in' }, 11.5);
+  draw($('#play'), 11.6, .6, 'power3.out');
+  tl.fromTo('#play', { scale: 1 }, { scale: 1.08, duration: .3, yoyo: true, repeat: 1, transformOrigin: '540px 760px', ease: 'power2.out', immediateRender: false }, 12.2);
+
+  /* ================= S2 · مثال (13 – 24) ================= */
+  drop(c1c, 12.9);
+  tl.to('#play', { autoAlpha: 0, duration: .3 }, 12.9);
+  tl.to(D, { y: 600, duration: .35, ease: 'power2.out' }, 12.95).to(D, { y: 800, duration: .4, ease: 'power2.in' }, 13.3);
+  tl.set('#g1', { autoAlpha: 0 }, 13.4);
+  show('#g2', 13.3);
+  squash(13.7, .3);
+  const c2a = cap('#g2', 'به‌جای اینکه این‌طوری شروع کنی:', 1000);
+  type(c2a, 13.9, .9);
+  const c2q = cap('#g2', '«امروز می‌خوام درباره قلاب صحبت کنم»', 1100, 'q');
+  type(c2q, 14.7, 1.1);
+  // نقطه بزرگ می‌شه و خوابش می‌بره
+  tl.to(D, { scale: 4, duration: .6, ease: 'back.out(1.6)' }, 15.0);
+  tl.to('#sleep', { opacity: 1, duration: .3 }, 15.4);
+  ['#z1', '#z2', '#z3'].forEach((z, i) => tl.fromTo(z, { y: 30, autoAlpha: 0 }, { y: -40, autoAlpha: 1, duration: .8, ease: 'power1.out', repeat: 1, repeatDelay: .3 }, 15.6 + i * .25));
+  tl.set(['#z1', '#z2', '#z3'], { autoAlpha: 0 }, 18.0);
+  smear(c2a, 17.5); smear(c2q, 17.55);
+  const c2b = cap('#g2', 'بگو:', 1000);
+  const c2r = cap('#g2', '«چرا بعضی ویدیوها رو نمی‌تونی رد کنی؟»', 1100);
+  type(c2b, 17.8, .3); type(c2r, 18.1, 1.0);
+  // بیدار شدن
+  tl.set('#sleep', { opacity: 0 }, 18.0); tl.set('#awake', { opacity: 1 }, 18.0);
+  tl.fromTo(D, { y: 800 }, { y: 740, duration: .18, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 18.0);
+  tl.fromTo('#face', { y: 0 }, { y: -60, duration: .18, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, 18.0);
+  // تبدیل به گهواره‌ی نیوتن: سؤال ← کنجکاوی ← ادامه
+  tl.to('#awake', { opacity: 0, duration: .2 }, 19.3);
+  tl.to(D, { scale: 1, y: 880, duration: .45, ease: 'power3.inOut' }, 19.3);
+  const cr = $('#cradle'), pends = [];
+  for (let i = 0; i < 5; i++) { const p = document.createElement('div'); p.className = 'pend'; p.innerHTML = '<i></i><b></b>'; p.style.left = (CX + (i - 2) * 42) + 'px'; cr.append(p); pends.push(p); }
+  pends.forEach((p, i) => tl.fromTo(p, { y: -940 }, { y: 0, duration: .55, ease: 'power3.out' }, 19.65 + Math.abs(i - 2) * .08));
+  tl.set(D, { autoAlpha: 0 }, 20.05);
+  smear(c2b, 20.0); smear(c2r, 20.05);
+  const c2c = cap('#g2', 'سؤال ← کنجکاوی ← ادامه دادن', 1060);
+  type(c2c, 20.4, 1.0);
+  const A = 13, half = .38; let tt0 = 20.4;
+  for (let k = 0; k < 5; k++) {
+    const p = k % 2 === 0 ? pends[4] : pends[0], sgn = k % 2 === 0 ? -1 : 1;
+    tl.to(p, { rotation: sgn * A, duration: half, ease: 'power2.out' }, tt0).to(p, { rotation: 0, duration: half, ease: 'power2.in' }, tt0 + half);
+    tt0 += half * 2;
+  }
+  // آخرین گوی رها می‌شه و پرواز می‌کنه
+  tl.to(pends[4], { rotation: -A, duration: half, ease: 'power2.out' }, tt0);
+  const relX = CX + 2 * 42 + Math.sin(A * Math.PI / 180) * 880, relY = 880 - (1 - Math.cos(A * Math.PI / 180)) * 880;
+  tl.set(pends[4].querySelector('b'), { autoAlpha: 0 }, tt0 + half);
+  tl.set(D, { autoAlpha: 1, x: relX, y: relY }, tt0 + half);
+  panOut('#g2', tt0 + half - .05);
+  drop(c2c, tt0 + half - .1);
+  const T3 = tt0 + half; // ≈ 24.2
+
+  /* ================= S3 · نکته (24.2 – 33.5) ================= */
+  curve([[relX, relY], [1000, 300], [300, 260], [CX, 620]], T3, 1.0, 'power2.inOut');
+  show('#g3', T3 + .2);
+  tl.fromTo('#g3', { x: 1080 }, { x: 0, duration: .6, ease: 'power3.out' }, T3 + .2);
+  draw($('#post'), T3 + .4, .9, 'power2.inOut');
+  draw($('#pvid'), T3 + .7, .7); draw($('#ptri'), T3 + .9, .4);
+  ['#ptitle', '#pc1', '#pc2', '#pc3', '#pc4'].forEach((s, i) => draw($(s), T3 + 1.0 + i * .08, .5));
+  squash(T3 + 1.0, .2);
+  const c3a = cap('#g3', 'قلاب فقط برای<br>شروع ویدیو نیست؛', 1180);
+  type(c3a, T3 + 1.3, 1.0);
+  tl.to('#ptri', { fill: '#fff', duration: .25 }, T3 + 1.3);
+  tl.fromTo(D, { scale: 1 }, { scale: 1.5, duration: .2, yoyo: true, repeat: 1, immediateRender: false }, T3 + 1.3);
+  // پرش به تیتر و خط اول کپشن
+  curve([[CX, 620], [640, 560], [720, 700], [718, 800]], T3 + 2.6, .7, 'power2.inOut', .6);
+  tl.to('#ptitle', { opacity: 1, duration: .3 }, T3 + 3.3);
+  squash(T3 + 3.3, .25);
+  curve([[718, 800], [780, 780], [760, 860], [718, 870]], T3 + 4.2, .55, 'power2.inOut', .6);
+  tl.to('#pc1', { opacity: 1, duration: .3 }, T3 + 4.75);
+  squash(T3 + 4.75, .25);
+  smear(c3a, T3 + 4.4);
+  const c3b = cap('#g3', 'خط اول کپشن و تیتر پست هم<br>باید مخاطب رو به ادامه دادن ترغیب کنه.', 1180, 'sm');
+  type(c3b, T3 + 4.7, 1.5);
+  tl.to(D, { x: CX, y: 1000 + 0, duration: .6, ease: 'power3.inOut' }, T3 + 7.6);
+  // پست جمع می‌شه داخل نقطه
+  tl.to('#g3 svg', { scale: 0, transformOrigin: '540px 780px', autoAlpha: 0, duration: .55, ease: 'power3.in' }, T3 + 8.0);
+  tl.to(D, { x: CX, y: 780, duration: .55, ease: 'power3.in' }, T3 + 8.0);
+  drop(c3b, T3 + 8.0);
+  const T4 = T3 + 8.7; // ≈ 32.9
+
+  /* ================= S4 · تمرین (32.9 – 44) ================= */
+  tl.set('#g3', { autoAlpha: 0 }, T4);
+  show('#g4', T4);
+  squash(T4, .3);
+  const c4a = cap('#g4', 'قبل از انتشار پست بعدیت،', 1180);
+  type(c4a, T4 + .2, .9);
+  // نقطه سه تکه می‌شه: سه جمله‌ی اول
+  const bul = ['#b1', '#b2', '#b3'].map($), sents = ['#t1', '#t2', '#t3'].map($);
+  const by = [560, 740, 920], bx = 940;
+  bul.forEach((b, i) => tl.fromTo(b, { x: CX, y: 780, autoAlpha: 0, scale: 2 }, { x: bx, y: by[i], autoAlpha: 1, scale: 1, duration: .6, ease: 'power3.out' }, T4 + .9 + i * .15));
+  tl.to(D, { autoAlpha: 0, scale: .4, duration: .3 }, T4 + .9);
+  sents.forEach((s, i) => { tl.set(s, { '--p': '0%' }, 0); s.classList.add('cap'); s.style.left = 'auto'; s.style.right = '190px'; s.style.textAlign = 'right'; s.style.whiteSpace = 'normal'; s.style.fontSize = '40px'; s.style.lineHeight = '1.6'; s.style.color = '#8c8c8c'; type(s, T4 + 1.3 + i * .45, 1.1); });
+  smear(c4a, T4 + 3.0);
+  const c4b = cap('#g4', 'سه جمله‌ی اول متفاوت بنویس', 1180);
+  type(c4b, T4 + 3.3, .9);
+  const ring = $('#ring');
+  tl.fromTo(ring, { x: bx, y: by[0], autoAlpha: 0, scale: 1.6 }, { autoAlpha: 1, scale: 1, duration: .3 }, T4 + 4.4);
+  [[1, 4.9], [2, 5.4], [1, 5.9], [2, 6.4]].forEach(([k, d]) => tl.to(ring, { y: by[k], duration: .3, ease: 'back.out(1.8)' }, T4 + d));
+  tl.to([sents[0], sents[1], bul[0], bul[1]], { opacity: .22, duration: .4 }, T4 + 6.8);
+  tl.to(sents[2], { color: '#ffffff', duration: .4 }, T4 + 6.8);
+  tl.fromTo(ring, { scale: 1 }, { scale: 1.5, autoAlpha: 0, duration: .6, ease: 'power2.out', immediateRender: false }, T4 + 6.8);
+  tl.fromTo(bul[2], { scale: 1 }, { scale: 2.2, duration: .5, ease: 'elastic.out(1,.4)', immediateRender: false }, T4 + 6.8);
+  smear(c4b, T4 + 6.9);
+  const c4c = cap('#g4', 'و جذاب‌ترینش رو انتخاب کن.', 1180);
+  type(c4c, T4 + 7.2, .9);
+  // پایان: همه محو، نقطه می‌افته پایین (لوپ با بالا اومدن نقطه شروع می‌شه)
+  const END = TOTAL;
+  tl.to([sents[0], sents[1], bul[0], bul[1]], { autoAlpha: 0, duration: .3 }, END - 2.5);
+  drop(sents[2], END - 2.4); drop(c4c, END - 2.3);
+  tl.to(bul[2], { x: CX, y: CY, scale: 2.2, duration: .6, ease: 'power3.inOut' }, END - 2.2);
+  tl.set(bul[2], { autoAlpha: 0 }, END - 1.6);
+  tl.set(D, { autoAlpha: 1, scale: 1, x: CX, y: CY }, END - 1.6);
+  squash(END - 1.6, .25);
+  tl.fromTo(st, { x: CX, y: CY, scaleY: 0, rotation: 180, autoAlpha: 1 }, { scaleY: 1, duration: .5, ease: 'power2.in', immediateRender: false }, END - .95);
+  tl.to(D, { y: 2100, duration: .75, ease: 'power3.in' }, END - .95);
+  tl.to(st, { y: 2100 + 520, duration: .75, ease: 'power3.in' }, END - .95);
+  tl.set({}, {}, TOTAL);
+
+  window.__seek = t => { tl.seek(Math.min(t, TOTAL - 1e-4), false); };
+  window.__ready = true;
+  if (!MANUAL) { tl.play(0); stage.addEventListener('click', () => tl.paused(!tl.paused())); }
+})();
+</script>
+</body>
+</html>
