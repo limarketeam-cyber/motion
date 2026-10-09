@@ -1,11 +1,11 @@
 import numpy as np, wave
 from scipy.signal import butter, sosfilt, fftconvolve
 
-SR = 44100; T = 48.0; TAIL = 3.0
+SR = 44100; T = 46.0; TAIL = 3.0
 N = int((T + TAIL) * SR)
 rng = np.random.default_rng(11)
 BPM = 120; B = 60 / BPM; BAR = 4 * B
-CUTS = [5, 15, 27, 37]
+CUTS = [5, 15, 22, 34]
 
 def z(sec): return np.zeros(int(sec * SR))
 def tt(sec): return np.arange(int(sec * SR)) / SR
@@ -121,7 +121,7 @@ for c in CUTS + [T]:
 for c in [0] + CUTS: put(sfx, impact(), c, .9)
 
 # آرپژ پلاک روی قفل انتخاب
-LOCK = 43.65
+LOCK = 40.45
 for i, m in enumerate([81, 84, 88, 93, 88, 84, 81, 84, 88, 93, 96, 93]):
     put(music, pluck(m), LOCK + i * .125, .7)
 
@@ -141,18 +141,18 @@ put(sfx, thud(), 18.65, 1.1); put(sfx, swish(), 18.95); put(sfx, whoosh(.45, Tru
 for i in range(4): put(sfx, snap(84 + i * 2), 19.75 + i * .42, .7)
 put(sfx, tone(220, 1000, 1.0, .06), 20.5)
 for i in range(10): put(sfx, tick(), 20.5 + i * .09 * (1 + i * .08), .5)
-put(sfx, pop(88, .8), 21.3)
-for i, t in enumerate([22.3, 22.75, 23.1, 24.6, 25.4]): put(sfx, pop([69, 74, 76, 79, 81][i] + 12, .8 if i % 2 == 0 else .5), t)
-put(sfx, whoosh(.6, False, .8), 27.1); put(sfx, pop(72, .5), 27.05); put(sfx, swish(), 27.15); put(sfx, snap(84), 27.85); put(sfx, swish(), 28.5); put(sfx, zipup(), 28.8)
-for i, t in enumerate([29.9, 31.15, 32.6]): put(sfx, pop(76 + i * 4), t); put(sfx, clink(900 + i * 150), t + .05, .6)
-put(sfx, pop(72, .4), 34.0)
-for t in [37.5, 37.9, 38.3]: put(sfx, whoosh(.35, True, .7), t)
-put(sfx, pop(72, .5), 37.05); put(sfx, pop(74, .4), 37.2); put(sfx, swish(), 40.2)
-for i, t in enumerate([40.3, 40.9, 41.5, 42.1, 42.8]): put(sfx, snap(76 + i * 3), t, .7)
+put(sfx, pop(88, .5), 21.3)
+for i, t in enumerate([20.5, 20.7, 20.9, 21.1, 21.3]): put(sfx, pop([69, 74, 76, 79, 81][i] + 12, .6 if i % 2 == 0 else .4), t)
+put(sfx, whoosh(.6, False, .8), 22.1); put(sfx, pop(72, .5), 22.05); put(sfx, swish(), 22.4); put(sfx, snap(84), 24.1); put(sfx, swish(), 25.1); put(sfx, zipup(), 25.5)
+for i, t in enumerate([27.0, 28.35, 29.7]): put(sfx, pop(76 + i * 4), t); put(sfx, clink(900 + i * 150), t + .05, .6)
+put(sfx, pop(72, .4), 31.1)
+for t in [34.5, 34.9, 35.3]: put(sfx, whoosh(.35, True, .7), t)
+put(sfx, pop(72, .5), 34.05); put(sfx, pop(74, .4), 34.2); put(sfx, swish(), 37.25)
+for i, t in enumerate([37.35, 37.9, 38.5, 39.1, 39.75]): put(sfx, snap(76 + i * 3), t, .7)
 put(sfx, impact(), LOCK, .6); put(sfx, snap(88), LOCK - .05)
 for i, m in enumerate([81, 84, 88, 93]): put(sfx, bell(m), LOCK + i * .06)
-put(sfx, sparkle(1.4, 30), LOCK + .05); put(sfx, swish(), 44.25)
-put(sfx, whoosh(.6, True, .7), 47.35)
+put(sfx, sparkle(1.4, 30), LOCK + .05); put(sfx, swish(), 41.05)
+put(sfx, whoosh(.6, True, .7), 45.35)
 
 # ---------- mix ----------
 ir = rng.standard_normal(int(.9 * SR)) * np.exp(-np.arange(int(.9 * SR)) / SR / .25); ir = lp(ir, 5000); ir /= np.abs(ir).sum() ** .5 * 6
@@ -161,12 +161,15 @@ import wave as _w
 vw = _w.open('vo/vo_proc.wav'); vo = np.frombuffer(vw.readframes(vw.getnframes()), '<i2').astype(float) / 32768
 vo = np.pad(vo, (0, max(0, N - len(vo))))[:N]
 ve = lp(np.abs(vo), 6); ve = ve / (np.percentile(ve, 99) + 1e-9); ve = np.clip(ve * 1.6, 0, 1)
-vd = 1 - .75 * ve; sd = 1 - .45 * ve
-mix = (drums * .38 * vd + music * duck * .4 * vd) + sfx_w * .5 * sd + vo * 1.05
+vd = 1 - .9 * ve; sd = 1 - .72 * ve
+bed = (drums * .16 * vd + music * duck * .2 * vd) + sfx_w * .24 * sd
+mix = bed + vo * 1.0
+m_ = ve > .3
+print('VO/bed dB', round(20*np.log10(np.sqrt(np.mean(vo[m_]**2))/np.sqrt(np.mean(bed[m_]**2))),1), 'bed in gaps dB', round(20*np.log10(np.sqrt(np.mean(bed[~m_]**2))+1e-9),1), 'vo dB', round(20*np.log10(np.sqrt(np.mean(vo[m_]**2))),1))
 # دمِ صداها بعد از ۴۴ ثانیه به ابتدای فایل برمی‌گرده تا لوپ بی‌درز باشه
 L = int(T * SR); mix[:N - L] += mix[L:]; mix = mix[:L]
 mix = hp(mix, 30)
-mix = np.tanh(mix * 1.1) / np.tanh(1.1)
+mix = np.tanh(mix * 1.05) / np.tanh(1.05)
 mix /= np.abs(mix).max() / .93
 st = np.stack([mix, mix], 1)
 # پهنای استریو کوچک
