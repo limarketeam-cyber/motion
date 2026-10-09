@@ -88,6 +88,7 @@
   #bar i{display:block;height:100%;width:0;background:var(--accent);margin-right:0;margin-left:auto}
   #time{position:absolute;bottom:40px;left:50px;font-size:34px;color:var(--muted);font-variant-numeric:tabular-nums;direction:ltr}
   #hint{position:absolute;top:40px;right:50px;font-size:30px;color:var(--muted);opacity:.8}
+  .rec #hint,.rec #time,.rec #bar{display:none}
   @media (prefers-reduced-motion:reduce){.scene.on .a{animation-duration:.01s}}
 </style>
 </head>
@@ -175,7 +176,9 @@
   }
   addEventListener('resize', fit); fit();
 
-  let t = 0, playing = true, last = performance.now(), current = -1;
+  const REC = new URLSearchParams(location.search).has('rec');
+  if (REC) document.body.classList.add('rec');
+  let t = 0, playing = !REC, last = performance.now(), current = -1;
 
   function show(i){
     scenes.forEach((el, k) => {
@@ -216,6 +219,7 @@
   stage.addEventListener('click', toggle);
   stage.addEventListener('dblclick', restart);
   // برای ضبط/تست: ?t=20 مستقیم می‌پرد به آن ثانیه
+  window.__start = () => { t = 0; current = -1; playing = true; };
   const q = new URLSearchParams(location.search).get('t');
   if (q) t = +q;
 })();
