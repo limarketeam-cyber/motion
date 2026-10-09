@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قلاب (Hook) — موشن عمودی ریلز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;800;900&family=Aref+Ruqaa:wght@700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#f6f6f3;--ink:#0d0d0f;--blue:#1f63f2;--dark:#0b0b0d;--gray:#8d8d92;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center;font-family:"Vazirmatn",Tahoma,sans-serif;color:var(--ink)}
+  #stage{width:1080px;height:1920px;position:relative;overflow:hidden;flex:none;transform-origin:center;background:var(--paper)}
+  .mono{font-family:"JetBrains Mono","DejaVu Sans Mono",monospace;direction:ltr;letter-spacing:.04em}
+  .script{font-family:"Aref Ruqaa",serif;font-weight:700;color:var(--blue)}
+
+  .scene{position:absolute;inset:0;visibility:hidden;opacity:0;overflow:hidden}
+  .scene.on{visibility:visible;opacity:1;animation:sceneIn .5s both}
+  .scene.on.out{animation:sceneOut .35s forwards}
+  @keyframes sceneIn{from{opacity:0;filter:blur(14px)}to{opacity:1;filter:none}}
+  @keyframes sceneOut{to{opacity:0;filter:blur(14px)}}
+  .paper{background:var(--paper)} .blue{background:var(--blue);color:#fff} .dark{background:var(--dark);color:#f4f4f1}
+
+  .top{position:absolute;top:64px;left:50px;right:50px;display:flex;justify-content:space-between;direction:ltr;
+    font-size:22px;color:var(--gray);z-index:5}
+  .blue .top{color:rgba(255,255,255,.7)} .dark .top{color:#6d6d73}
+
+  .scene.on .a{animation:rise .7s cubic-bezier(.2,.9,.3,1) both;animation-delay:var(--d,0s)}
+  @keyframes rise{from{opacity:0;transform:translateY(46px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+  .scene.on .slam{animation:slam .55s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--d,0s)}
+  @keyframes slam{from{opacity:0;transform:scale(1.45);filter:blur(16px)}to{opacity:1;transform:none;filter:none}}
+  .w{display:inline-block;opacity:0}
+  .scene.on .w{animation:rise .55s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--d,0s) + var(--i)*.09s)}
+  .abs{position:absolute}
+  h1,h2{font-weight:900;line-height:1.3}
+  .ul{position:relative;display:inline-block}
+  .ul svg{position:absolute;left:-2%;bottom:-26px;width:104%;height:34px;overflow:visible}
+  .wire{fill:none;stroke-linecap:round;stroke-dasharray:var(--len,900);stroke-dashoffset:var(--len,900)}
+  .scene.on .wire{animation:draw var(--dur,.8s) ease forwards;animation-delay:var(--d,0s)}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .sel{background:rgba(31,99,242,.28);box-shadow:0 0 0 4px rgba(31,99,242,.28)}
+
+  /* mascot */
+  .mascot{position:absolute;width:600px;height:700px}
+  .mascot canvas{width:100%;height:100%;display:block}
+  .pupil{position:absolute;width:34px;height:34px;border-radius:50%;background:#0d0d0f;transform:translate(-50%,-50%)}
+  .pupil::after{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;top:5px;left:7px}
+  .scene.on .bob{animation:bob 2.6s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-16px) rotate(1.5deg)}}
+  .scene.on .look .pupil{animation:look 3s ease-in-out infinite}
+  @keyframes look{0%,100%{margin:-8px 0 0 -9px}50%{margin:10px 0 0 9px}}
+
+  /* S1 */
+  #s1 .rope{position:absolute;top:0;left:198px;width:5px;height:1090px;background:var(--ink)}
+  #s1.on .swing{animation:swing 2.4s ease-in-out infinite;transform-origin:200px 0}
+  @keyframes swing{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+
+  /* S2 */
+  .pcard{position:absolute;left:600px;top:710px;width:340px;height:450px;background:#fff;border-radius:30px;color:var(--ink);
+    padding:26px 28px 30px;box-shadow:0 40px 80px rgba(0,0,40,.35);transform:rotate(7deg)}
+  .scene.on .pcard{animation:cardIn .9s .5s cubic-bezier(.2,1.2,.3,1) both,floaty 3.2s 1.4s ease-in-out infinite}
+  @keyframes cardIn{from{opacity:0;transform:translateY(300px) rotate(-14deg)}to{opacity:1;transform:rotate(7deg)}}
+  @keyframes floaty{50%{transform:translateY(-18px) rotate(5deg)}}
+  .pcard .mono{font-size:20px;color:var(--gray);display:flex;justify-content:space-between}
+
+  /* S3 */
+  .c3{position:absolute;left:80px;width:920px;border-radius:30px;padding:38px 46px;font-size:48px;font-weight:800;line-height:1.6}
+  .c3 small{display:block;font-size:24px;margin-bottom:6px;font-weight:500}
+  .c3.bad{top:270px;background:#17171b;color:#6d6d73;box-shadow:inset 0 0 0 2px #26262c}
+  .c3.good{top:560px;background:#fff;color:var(--ink);box-shadow:0 0 0 5px var(--blue)}
+  .scene.on .c3.bad .st{background:linear-gradient(var(--blue),var(--blue)) 100% 55%/0 6px no-repeat;animation:strike .7s 2.4s forwards}
+  @keyframes strike{to{background-size:100% 6px}}
+  .scene.on .c3.good{animation:rise .7s 3.4s both,glow 1.8s 4.2s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:0 0 0 5px var(--blue),0 0 80px rgba(31,99,242,.55)}}
+
+  /* S4 */
+  .m4{position:absolute;left:70px;width:940px;background:#fff;border-radius:32px;box-shadow:0 20px 50px rgba(0,0,0,.09),inset 0 0 0 1px rgba(0,0,0,.06);padding:30px 38px}
+  .m4 .lab{font-size:22px;color:var(--gray);margin-bottom:12px}
+  .vid{height:230px;border-radius:20px;background:#0d0d0f;position:relative;overflow:hidden}
+  .vid i.play{position:absolute;left:50%;top:44%;width:0;height:0;border-left:44px solid #fff;border-top:28px solid transparent;border-bottom:28px solid transparent;transform:translate(-30%,-50%) scaleX(-1)}
+  .vid .tl{position:absolute;left:24px;right:24px;bottom:22px;height:10px;background:rgba(255,255,255,.2);border-radius:5px}
+  .vid .tl b{position:absolute;right:0;top:0;height:100%;width:0;background:var(--blue);border-radius:5px}
+  .scene.on .vid .tl b{animation:grow 1.2s var(--d) forwards}
+  @keyframes grow{to{width:26%}}
+
+  /* S5 */
+  .cand{position:absolute;left:80px;width:920px;padding:36px 46px;border-radius:30px;font-size:46px;font-weight:800;display:flex;justify-content:space-between;align-items:center;
+    background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.3)}
+  .cand .n{opacity:.7;font-size:26px}
+  .scene.on .cand.win{animation:rise .7s var(--d) both,pick .6s 4.6s forwards}
+  @keyframes pick{to{background:#fff;color:var(--ink);transform:scale(1.045);box-shadow:0 30px 70px rgba(0,0,60,.45)}}
+  .check{opacity:0;color:var(--blue);font-size:56px}
+  .scene.on .win .check{animation:rise .5s 5s both}
+
+  #bar{position:absolute;left:0;right:0;bottom:0;height:8px;background:rgba(0,0,0,.12);z-index:9}
+  #bar i{display:block;height:100%;width:0;background:var(--blue);margin-left:auto}
+  #hint{position:absolute;bottom:40px;right:56px;font-size:22px;color:var(--gray);z-index:9}
+  .rec #bar,.rec #hint{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ۰–۶ : قلاب -->
+  <section class="scene paper" id="s1">
+    <div class="top mono"><b>// 01 — hook</b><b>MOTION <span class="tc">00:00:00:00</span></b></div>
+    <div class="swing abs" style="inset:0">
+      <div class="rope"></div>
+      <svg class="abs" style="left:110px;top:1060px;width:180px;height:230px" viewBox="0 0 120 150" fill="none" stroke="#1f63f2" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="60" cy="14" r="9" stroke="#0d0d0f"/><path d="M60 24V100c0 28-38 28-38 0"/><path d="M22 100l-12-16M22 100l16-16"/>
+      </svg>
+    </div>
+    <div class="abs mono a" style="--d:.2s;right:80px;top:300px;font-size:26px;color:var(--gray);direction:rtl">// برای تولیدکننده‌های محتوا</div>
+    <div class="abs" style="left:0;right:0;top:360px;padding:0 80px;text-align:right">
+      <h1 class="slam" style="--d:.4s;font-size:158px">این ویدیو رو</h1>
+      <div style="height:270px;position:relative">
+        <span class="ul slam script" style="--d:1s;font-size:250px;line-height:1.1;position:absolute;right:0;top:0">تا آخر
+          <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path class="wire" d="M4 20 C80 4 190 28 296 8" stroke="#1f63f2" stroke-width="9" style="--len:330;--d:1.9s"/></svg></span>
+      </div>
+      <h1 class="slam" style="--d:1.5s;font-size:158px">ببین</h1>
+      <p class="a" style="--d:2.6s;font-size:54px;font-weight:500;color:#44444a;line-height:1.8;margin-top:30px">چون همین الان داری<br>یک <b style="color:var(--blue);font-weight:900">قلاب</b> رو تجربه می‌کنی</p>
+    </div>
+    <div class="mascot bob look a" style="--d:.8s;left:330px;top:1290px;transform-origin:50% 100%"><canvas></canvas><i class="pupil" style="left:38%;top:34%"></i><i class="pupil" style="left:61%;top:34%"></i></div>
+  </section>
+
+  <!-- ۶–۱۶ : تعریف -->
+  <section class="scene blue" id="s2">
+    <div class="top mono"><b>// 02 — definition</b><b>MOTION <span class="tc">00:00:06:00</span></b></div>
+    <div class="abs" style="left:0;right:0;top:220px;padding:0 80px;text-align:right">
+      <h2 style="font-size:130px"><span class="w" style="--i:0;--d:.2s">Hook</span> <span class="w" style="--i:1;--d:.2s">یعنی</span></h2>
+      <span class="ul w script" style="--i:3;--d:.2s;font-size:220px;color:#fff;line-height:1.2">قلاب
+        <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path class="wire" d="M4 20 C80 4 190 28 296 8" stroke="#fff" stroke-width="9" style="--len:330;--d:1.2s"/></svg></span>
+    </div>
+    <div class="pcard"><div class="mono"><span>// hook</span><span>01</span></div>
+      <svg viewBox="0 0 120 150" style="width:170px;height:215px;display:block;margin:20px auto 8px" fill="none" stroke="#1f63f2" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="14" r="9" stroke="#0d0d0f"/><path d="M60 24V100c0 28-38 28-38 0"/><path d="M22 100l-12-16M22 100l16-16"/></svg>
+      <div style="font-size:44px;font-weight:900">Hook</div><div style="font-size:26px;color:var(--gray)">توجه مخاطب ✓</div></div>
+    <div class="abs" style="left:70px;right:70px;top:1210px;font-size:56px;font-weight:500;line-height:1.8;text-align:right">
+      <span class="words" data-d="2.2">جمله یا تصویری که <b>توجه</b> رو جلب می‌کنه و بهش <b style="border-bottom:6px solid #fff">دلیل می‌ده</b> ادامه بدی</span>
+    </div>
+    <div class="mascot bob look a" style="--d:1.2s;left:-60px;top:1470px;transform-origin:50% 100%"><canvas></canvas><i class="pupil" style="left:38%;top:34%"></i><i class="pupil" style="left:61%;top:34%"></i></div>
+  </section>
+
+  <!-- ۱۶–۲۶ : مثال -->
+  <section class="scene dark" id="s3">
+    <div class="top mono"><b>// 03 — example</b><b>MOTION <span class="tc">00:00:16:00</span></b></div>
+    <div class="c3 bad a" style="--d:.4s"><small class="mono">✕ weak opening</small><span class="st">«امروز می‌خوام درباره قلاب صحبت کنم»</span></div>
+    <div class="c3 good"><small class="mono" style="color:var(--blue)">✓ with a hook</small>«چرا بعضی ویدیوها رو <span class="script" style="font-size:66px">نمی‌تونی رد کنی</span>؟»</div>
+    <svg viewBox="0 0 600 420" class="abs a" style="left:90px;top:860px;width:900px;height:630px;--d:.6s">
+      <g stroke="#26262c" stroke-width="2" fill="none"><path d="M40 20V360H580"/><path d="M40 120H580M40 240H580" stroke-dasharray="4 10"/></g>
+      <path class="wire" d="M40 40 C150 60 200 300 580 340" stroke="#6d6d73" stroke-width="4" style="--len:700;--d:1.2s"/>
+      <path class="wire" d="M40 40 C200 50 350 70 580 90" stroke="#1f63f2" stroke-width="7" style="--len:700;--d:3.8s"/>
+      <text x="40" y="400" fill="#6d6d73" font-size="22" class="mono">0s</text><text x="540" y="400" fill="#6d6d73" font-size="22" class="mono">3s</text>
+    </svg>
+    <div class="abs a" style="--d:.6s;left:90px;top:1500px;width:900px;text-align:center;font-size:32px;color:#6d6d73">ماندگاری مخاطب در ۳ ثانیه‌ی اول</div>
+    <div class="abs a" style="--d:6.2s;left:0;right:0;top:1590px;text-align:center;font-size:58px;font-weight:900">سؤال = <span class="script" style="font-size:86px">کنجکاوی</span> = ادامه دادن</div>
+  </section>
+
+  <!-- ۲۶–۳۶ : نکته -->
+  <section class="scene paper" id="s4">
+    <div class="top mono"><b>// 04 — tip</b><b>MOTION <span class="tc">00:00:26:00</span></b></div>
+    <div class="abs" style="left:0;right:0;top:210px;padding:0 70px;text-align:right">
+      <h2 style="font-size:104px"><span class="words" data-d=".2">قلاب فقط برای</span></h2>
+      <span class="ul slam script" style="--d:1s;font-size:190px;line-height:1.2">شروع ویدیو
+        <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path class="wire" d="M4 20 C80 4 190 28 296 8" stroke="#1f63f2" stroke-width="9" style="--len:330;--d:1.8s"/></svg></span>
+      <h2 style="font-size:104px;margin-top:20px"><span class="words" data-d="1.6">نیست</span></h2>
+    </div>
+    <div class="m4 a" style="--d:2.4s;top:760px"><div class="lab mono" style="direction:rtl;text-align:right">// ویدیو · ثانیه‌های اول</div>
+      <div class="vid"><i class="play"></i><div class="tl"><b style="--d:3s"></b></div></div></div>
+    <div class="m4 a" style="--d:3.8s;top:1100px"><div class="lab mono" style="direction:rtl;text-align:right">// کپشن · خط اول</div>
+      <div style="font-size:44px;font-weight:800;line-height:1.7"><span class="sel">خط اول کپشن، قلاب بذار!</span></div>
+      <div style="height:16px;border-radius:8px;background:#e6e6e2;margin-top:14px;width:80%"></div></div>
+    <div class="m4 a" style="--d:5.2s;top:1380px"><div class="lab mono" style="direction:rtl;text-align:right">// تیتر پست</div>
+      <div style="font-size:54px;font-weight:900;line-height:1.5"><span class="sel">تیتری که نذاره رد بشی</span></div></div>
+  </section>
+
+  <!-- ۳۶–۴۵ : CTA -->
+  <section class="scene blue" id="s5">
+    <div class="top mono"><b>// 05 — your turn</b><b>MOTION <span class="tc">00:00:36:00</span></b></div>
+    <div class="abs" style="left:0;right:0;top:210px;padding:0 70px;text-align:right">
+      <h2 style="font-size:100px"><span class="words" data-d=".2">قبل از انتشار پست بعدی</span></h2>
+    </div>
+    <div class="cand a" style="--d:1.2s;top:560px"><span>جمله‌ی اول — نسخه‌ی ۱</span><span class="n mono">01</span></div>
+    <div class="cand win" style="--d:1.6s;top:760px"><span>جمله‌ی اول — نسخه‌ی ۲</span><span class="check">✓</span></div>
+    <div class="cand a" style="--d:2s;top:960px"><span>جمله‌ی اول — نسخه‌ی ۳</span><span class="n mono">03</span></div>
+    <div class="abs a" style="--d:3.2s;left:70px;right:70px;top:1230px;text-align:right;font-size:70px;font-weight:900;line-height:1.55">
+      سه جمله بنویس،<br><span class="ul script" style="color:#fff;font-size:120px;line-height:1.2">جذاب‌ترینش
+        <svg viewBox="0 0 300 30" preserveAspectRatio="none"><path class="wire" d="M4 20 C80 4 190 28 296 8" stroke="#fff" stroke-width="8" style="--len:330;--d:4s"/></svg></span> رو انتخاب کن
+    </div>
+    <div class="mascot bob a" style="--d:2.6s;left:420px;top:1660px;transform-origin:50% 100%;width:480px;height:560px"><canvas></canvas><i class="pupil" style="left:38%;top:34%;width:28px;height:28px"></i><i class="pupil" style="left:61%;top:34%;width:28px;height:28px"></i></div>
+  </section>
+
+  <div id="hint">فاصله = توقف · R = از اول</div>
+  <div id="bar"><i></i></div>
+</div>
+
+<script>
+(() => {
+  const TOTAL = 45, FPS = 30, cuts = [0, 6, 16, 26, 36, TOTAL];
+  const scenes = [...document.querySelectorAll('.scene')];
+  const stage = document.getElementById('stage');
+  const bar = document.querySelector('#bar i');
+  const tcs = document.querySelectorAll('.tc');
+
+  /* ---------- شخصیت هاف‌تون (اورجینال) ---------- */
+  function mascot(){
+    const W = 600, H = 700, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    const lum = (v) => { const k = Math.round(v*255); return `rgb(${k},${k},${k})`; };
+    // بدن
+    let gr = g.createLinearGradient(0,470,0,700); gr.addColorStop(0,lum(.55)); gr.addColorStop(1,lum(.3));
+    g.fillStyle = gr; g.beginPath(); g.moveTo(40,700); g.bezierCurveTo(60,540,200,500,300,500); g.bezierCurveTo(400,500,540,540,560,700); g.fill();
+    // یقه
+    g.fillStyle = lum(.12); g.beginPath(); g.moveTo(215,520); g.quadraticCurveTo(300,590,385,520); g.lineTo(385,550); g.quadraticCurveTo(300,625,215,550); g.fill();
+    // گردن
+    gr = g.createLinearGradient(0,430,0,540); gr.addColorStop(0,lum(.35)); gr.addColorStop(1,lum(.8));
+    g.fillStyle = gr; g.fillRect(240,420,120,110);
+    // گوش‌ها
+    g.fillStyle = lum(.75); [[92,300],[508,300]].forEach(([x,y])=>{g.beginPath();g.ellipse(x,y,34,48,0,0,7);g.fill();});
+    // سر
+    gr = g.createRadialGradient(240,230,30,300,300,260); gr.addColorStop(0,lum(1)); gr.addColorStop(.6,lum(.88)); gr.addColorStop(1,lum(.5));
+    g.fillStyle = gr; g.beginPath(); g.ellipse(300,300,214,236,0,0,7); g.fill();
+    // گونه‌ها
+    g.fillStyle = 'rgba(0,0,0,.18)'; [[170,375],[430,375]].forEach(([x,y])=>{g.beginPath();g.ellipse(x,y,40,26,0,0,7);g.fill();});
+    // موهای فرفری
+    g.fillStyle = lum(.1);
+    const curls = []; for(let i=0;i<19;i++){ const a = Math.PI*(1.02+i*.0535); curls.push([300+Math.cos(a)*205, 270+Math.sin(a)*205, 52+((i*37)%24)]); }
+    curls.forEach(([x,y,r])=>{g.beginPath();g.arc(x,y,r,0,7);g.fill();});
+    for(let i=0;i<7;i++){ g.beginPath(); g.arc(150+i*50, 128+Math.abs(3-i)*14, 54, 0, 7); g.fill(); }
+    g.fillStyle = lum(.42); [[220,70,18],[330,60,16],[420,95,14],[160,125,13]].forEach(([x,y,r])=>{g.beginPath();g.arc(x,y,r,0,7);g.fill();});
+    // ابرو
+    g.strokeStyle = lum(.05); g.lineWidth = 16; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(190,238); g.quadraticCurveTo(228,212,266,232); g.stroke();
+    g.beginPath(); g.moveTo(334,232); g.quadraticCurveTo(372,212,410,238); g.stroke();
+    // چشم (سفیدی؛ مردمک جدا متحرک است)
+    g.fillStyle = '#fff'; g.strokeStyle = lum(.1); g.lineWidth = 7;
+    [[228,238],[372,238]].forEach(([x,y])=>{g.beginPath();g.ellipse(x,y,44,52,0,0,7);g.fill();g.stroke();});
+    // دهان
+    g.strokeStyle = lum(.05); g.lineWidth = 14; g.beginPath(); g.moveTo(228,382); g.quadraticCurveTo(300,452,372,382); g.stroke();
+    g.fillStyle = lum(.1); g.beginPath(); g.moveTo(236,390); g.quadraticCurveTo(300,445,364,390); g.quadraticCurveTo(300,410,236,390); g.fill();
+
+    // ---- هاف‌تون: نقطه‌های سیاه روی سلول‌های سفید ----
+    const src = g.getImageData(0,0,W,H).data, out = document.createElement('canvas'); out.width = W; out.height = H;
+    const o = out.getContext('2d'), S = 7;
+    for(let y=0;y<H;y+=S) for(let x=0;x<W;x+=S){
+      let l = 0, a = 0, n = 0;
+      for(let yy=0;yy<S;yy+=2) for(let xx=0;xx<S;xx+=2){ const i = ((y+yy)*W + x+xx)*4; l += src[i]; a += src[i+3]; n++; }
+      a /= n*255; if(a < .5) continue; l /= n*255;
+      o.fillStyle = '#fff'; o.fillRect(x,y,S,S);
+      const r = (1-l) * S * .72;
+      if(r > .5){ o.fillStyle = '#0d0d0f'; o.beginPath(); o.arc(x+S/2, y+S/2, r, 0, 7); o.fill(); }
+    }
+    return out;
+  }
+  const art = mascot();
+  document.querySelectorAll('.mascot canvas').forEach(cv => {
+    cv.width = art.width; cv.height = art.height; cv.getContext('2d').drawImage(art,0,0);
+  });
+
+  /* ---------- کلمه‌به‌کلمه ---------- */
+  document.querySelectorAll('.words').forEach(el => {
+    const d = el.dataset.d || 0; let i = 0;
+    const walk = n => [...n.childNodes].forEach(c => {
+      if (c.nodeType === 3) {
+        const f = document.createDocumentFragment();
+        c.textContent.split(/(\s+)/).forEach(p => {
+          if (!p.trim()) { f.append(p); return; }
+          const s = document.createElement('span'); s.className = 'w'; s.style.setProperty('--i', i++); s.style.setProperty('--d', d + 's'); s.textContent = p; f.append(s);
+        });
+        c.replaceWith(f);
+      } else walk(c);
+    });
+    walk(el);
+  });
+
+  const fit = () => stage.style.transform = `scale(${Math.min(innerWidth/1080, innerHeight/1920)})`;
+  addEventListener('resize', fit); fit();
+
+  const q = new URLSearchParams(location.search);
+  const REC = q.has('rec'), MANUAL = q.has('manual');
+  if (REC) document.body.classList.add('rec');
+  let t = +(q.get('t') || 0), playing = !REC, last = performance.now(), current = -1;
+  const p2 = n => String(n).padStart(2,'0');
+  const fmt = x => { const s = Math.floor(x), f = Math.floor((x - s) * FPS); return `00:${p2(Math.floor(s/60))}:${p2(s%60)}:${p2(f)}`; };
+  const show = i => { scenes.forEach((el,k) => { el.classList.remove('out','on'); if (k===i){ void el.offsetWidth; el.classList.add('on'); } }); current = i; };
+
+  function frame(now){
+    const dt = Math.max(0, Math.min(.1, (now-last)/1000)); last = now;
+    if (playing){ t += dt; if (t >= TOTAL){ t = 0; current = -1; } }
+    const i = cuts.findIndex((c,k) => t >= c && t < cuts[k+1]);
+    if (i !== current) show(i);
+    if (t > cuts[i+1] - .35) scenes[i].classList.add('out');
+    document.querySelectorAll('.scene.on, .scene.on *').forEach(el => el.style.animationPlayState = playing ? 'running' : 'paused');
+    bar.style.width = (t/TOTAL*100) + '%';
+    tcs.forEach(e => e.textContent = fmt(t));
+    requestAnimationFrame(frame);
+  }
+  if (!MANUAL) requestAnimationFrame(frame);
+
+  // رندر فریم‌به‌فریم برای MP4
+  window.__seek = x => {
+    t = Math.min(x, TOTAL - 1e-3); playing = false;
+    const i = cuts.findIndex((c,k) => t >= c && t < cuts[k+1]);
+    if (i !== current) show(i);
+    const outAt = cuts[i+1] - .35;
+    if (t > outAt) scenes[i].classList.add('out');
+    document.getAnimations().forEach(an => {
+      an.pause();
+      an.currentTime = (an.animationName === 'sceneOut' ? t - outAt : t - cuts[i]) * 1000;
+    });
+    tcs.forEach(e => e.textContent = fmt(t));
+  };
+
+  addEventListener('keydown', e => { if (e.code === 'Space'){ e.preventDefault(); playing = !playing; } if (e.key.toLowerCase()==='r'){ t = 0; current = -1; playing = true; } });
+  stage.addEventListener('click', () => playing = !playing);
+})();
+</script>
+</body>
+</html>
