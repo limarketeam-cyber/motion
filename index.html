@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قلاب (Hook) — موشن آموزشی ۴۵ ثانیه‌ای</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1226; --bg2:#1b1f45; --ink:#ffffff; --muted:#aab0d6;
+    --accent:#ffc83d; --good:#3ddc97; --bad:#ff5d73; --hook:#7c5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center;font-family:"Vazirmatn",Tahoma,sans-serif;color:var(--ink)}
+
+  /* قاب ۹:۱۶ مناسب ریلز / اینستاگرام — مقیاس خودکار */
+  #stage{width:1080px;height:1920px;position:relative;overflow:hidden;flex:none;
+    background:radial-gradient(120% 80% at 50% 0%,var(--bg2),var(--bg));transform-origin:center}
+  .scene{position:absolute;inset:0;padding:140px 90px 160px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;gap:48px;opacity:0;visibility:hidden}
+  .scene.on{visibility:visible;opacity:1}
+  .scene.on.out{animation:sceneOut .4s forwards}
+  @keyframes sceneOut{to{opacity:0;transform:translateY(-40px)}}
+
+  .tag{font-size:40px;font-weight:700;color:var(--accent);letter-spacing:0;
+    background:rgba(255,200,61,.12);border:2px solid rgba(255,200,61,.5);padding:10px 34px;border-radius:999px}
+  h1,h2{font-weight:900;line-height:1.5}
+  h1{font-size:88px} h2{font-size:78px}
+  p.big{font-size:64px;font-weight:700;line-height:1.7}
+  .hl{color:var(--accent)}
+  .muted{color:var(--muted)}
+
+  /* ورود با تأخیر: هر عنصر .a با --d وارد می‌شود */
+  .scene.on .a{animation:pop .6s cubic-bezier(.2,1.3,.4,1) both;animation-delay:var(--d,0s)}
+  @keyframes pop{from{opacity:0;transform:translateY(60px) scale(.9)}to{opacity:1;transform:none}}
+
+  /* ---- صحنه ۱: قلاب ---- */
+  .hookwrap{position:relative;width:420px;height:560px}
+  .line{position:absolute;left:50%;top:-400px;width:6px;height:700px;background:#d9dcff;transform:translateX(-50%)}
+  .hookwrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  #s1.on .hookwrap{animation:swing 2.2s ease-in-out infinite;transform-origin:50% -400px}
+  @keyframes swing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  .eye{position:absolute;right:-70px;bottom:20px;font-size:110px}
+  #s1.on .eye{animation:bite 1s 2.4s both}
+  @keyframes bite{from{opacity:0;transform:translate(120px,0) scale(.4)}to{opacity:1;transform:none}}
+
+  /* ---- صحنه ۲: تعریف ---- */
+  .def-icons{display:flex;gap:40px;font-size:120px}
+  .def-icons span{background:rgba(255,255,255,.07);border-radius:36px;padding:20px 38px}
+  .arrow{font-size:90px;color:var(--accent)}
+  #s2.on .arrow{animation:nudge 1s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateX(-24px)}}
+
+  /* ---- صحنه ۳: مثال ---- */
+  .card{width:100%;border-radius:44px;padding:44px 50px;font-size:56px;font-weight:700;line-height:1.7;position:relative}
+  .card small{display:block;font-size:36px;margin-bottom:10px;font-weight:900}
+  .card.bad{background:rgba(255,93,115,.12);border:3px solid var(--bad)}
+  .card.bad small{color:var(--bad)}
+  .card.good{background:rgba(61,220,151,.13);border:3px solid var(--good)}
+  .card.good small{color:var(--good)}
+  .strike{position:relative;display:inline-block}
+  #s3.on .strike::after{content:"";position:absolute;right:0;top:55%;height:6px;background:var(--bad);width:0;
+    animation:strike .6s 2.2s forwards}
+  @keyframes strike{to{width:100%}}
+  #s3.on .good{animation:pop .6s 3.2s both, glow 1.4s 3.8s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:0 0 70px rgba(61,220,151,.55)}}
+
+  /* ---- صحنه ۴: نکته (۳ جایگاه قلاب) ---- */
+  .spots{display:flex;flex-direction:column;gap:30px;width:100%}
+  .spot{display:flex;align-items:center;gap:36px;background:rgba(255,255,255,.07);border-radius:40px;
+    padding:36px 44px;font-size:54px;font-weight:700;text-align:right}
+  .spot .ic{font-size:84px;flex:none}
+  .spot b{color:var(--accent)}
+
+  /* ---- صحنه ۵: CTA ---- */
+  .picks{display:flex;flex-direction:column;gap:26px;width:100%}
+  .pick{border-radius:36px;padding:32px 44px;font-size:52px;font-weight:700;background:rgba(255,255,255,.07);
+    border:3px solid transparent;text-align:right;display:flex;justify-content:space-between;align-items:center}
+  .pick .n{font-size:44px;color:var(--muted)}
+  #s5.on .pick.win{animation:pop .6s 1.2s both, win .6s 5.2s forwards}
+  @keyframes win{to{border-color:var(--accent);background:rgba(255,200,61,.18);transform:scale(1.05)}}
+  .pick .star{opacity:0;font-size:60px}
+  #s5.on .pick.win .star{animation:pop .5s 5.5s both}
+
+  /* نوار پیشرفت و کنترل */
+  #bar{position:absolute;left:0;right:0;bottom:0;height:14px;background:rgba(255,255,255,.12)}
+  #bar i{display:block;height:100%;width:0;background:var(--accent);margin-right:0;margin-left:auto}
+  #time{position:absolute;bottom:40px;left:50px;font-size:34px;color:var(--muted);font-variant-numeric:tabular-nums;direction:ltr}
+  #hint{position:absolute;top:40px;right:50px;font-size:30px;color:var(--muted);opacity:.8}
+  @media (prefers-reduced-motion:reduce){.scene.on .a{animation-duration:.01s}}
+</style>
+</head>
+<body>
+<div id="stage" tabindex="0">
+
+  <!-- ۰–۶ ثانیه : قلاب -->
+  <section class="scene" id="s1">
+    <span class="tag a" style="--d:.1s">۲۷ · محتوا و شبکه‌های اجتماعی</span>
+    <div class="hookwrap">
+      <div class="line"></div>
+      <svg viewBox="0 0 420 560" fill="none" stroke="#7c5cff" stroke-width="30" stroke-linecap="round">
+        <circle cx="210" cy="40" r="22" stroke="#d9dcff" stroke-width="12"/>
+        <path d="M210 62 V360 C210 470 330 470 330 360"/>
+        <path d="M330 360 L296 322 M330 360 L366 322" stroke-width="22"/>
+      </svg>
+      <div class="eye">👁️</div>
+    </div>
+    <h1 class="a" style="--d:.6s">این ویدیو رو <span class="hl">تا آخر</span> ببین</h1>
+    <p class="big muted a" style="--d:1.8s">چون همین الان داری یک قلاب رو تجربه می‌کنی 🎣</p>
+  </section>
+
+  <!-- ۶–۱۶ : تعریف -->
+  <section class="scene" id="s2">
+    <span class="tag a" style="--d:0s">تعریف</span>
+    <h2 class="a" style="--d:.2s">Hook یعنی <span class="hl">قلاب</span></h2>
+    <div class="def-icons a" style="--d:1s"><span>💬</span><span>🖼️</span></div>
+    <div class="arrow a" style="--d:1.6s">⬅</div>
+    <p class="big a" style="--d:2s">جمله یا تصویری که <span class="hl">توجه</span> رو می‌گیره</p>
+    <p class="big a" style="--d:4.5s">و بهت <span class="hl">دلیل می‌ده</span> ادامه بدی</p>
+  </section>
+
+  <!-- ۱۶–۲۶ : مثال -->
+  <section class="scene" id="s3">
+    <span class="tag a" style="--d:0s">مثال</span>
+    <div class="card bad a" style="--d:.4s"><small>❌ شروع ضعیف</small>
+      <span class="strike">«امروز می‌خوام درباره قلاب صحبت کنم»</span></div>
+    <div class="card good a" style="--d:3.2s"><small>✅ شروع قلاب‌دار</small>
+      «چرا بعضی ویدیوها رو نمی‌تونی رد کنی؟»</div>
+    <p class="big muted a" style="--d:6s">سؤال = کنجکاوی = ادامه دادن</p>
+  </section>
+
+  <!-- ۲۶–۳۶ : نکته -->
+  <section class="scene" id="s4">
+    <span class="tag a" style="--d:0s">نکته</span>
+    <h2 class="a" style="--d:.2s">قلاب فقط برای <span class="hl">شروع ویدیو</span> نیست</h2>
+    <div class="spots">
+      <div class="spot a" style="--d:1.6s"><span class="ic">🎬</span><span>ثانیه‌های اول <b>ویدیو</b></span></div>
+      <div class="spot a" style="--d:3.4s"><span class="ic">✍️</span><span>خط اول <b>کپشن</b></span></div>
+      <div class="spot a" style="--d:5.2s"><span class="ic">📰</span><span><b>تیتر</b> پست</span></div>
+    </div>
+  </section>
+
+  <!-- ۳۶–۴۵ : CTA -->
+  <section class="scene" id="s5">
+    <span class="tag a" style="--d:0s">تمرین</span>
+    <h2 class="a" style="--d:.2s">قبل از انتشار پست بعدی</h2>
+    <div class="picks">
+      <div class="pick a" style="--d:.7s"><span>جمله‌ی اول — نسخه ۱</span><span class="n">۱</span></div>
+      <div class="pick win a" style="--d:1.1s"><span>جمله‌ی اول — نسخه ۲</span><span class="star">⭐</span></div>
+      <div class="pick a" style="--d:1.5s"><span>جمله‌ی اول — نسخه ۳</span><span class="n">۳</span></div>
+    </div>
+    <p class="big a" style="--d:3s">سه جمله بنویس، <span class="hl">جذاب‌ترین</span> رو انتخاب کن 🎯</p>
+  </section>
+
+  <div id="hint">فاصله = توقف/ادامه · R = از اول</div>
+  <div id="time">0:00 / 0:45</div>
+  <div id="bar"><i></i></div>
+</div>
+
+<script>
+(() => {
+  const TOTAL = 45;
+  // زمان شروع هر صحنه (ثانیه)
+  const cuts = [0, 6, 16, 26, 36, TOTAL];
+  const scenes = [...document.querySelectorAll('.scene')];
+  const stage = document.getElementById('stage');
+  const bar = document.querySelector('#bar i');
+  const timeEl = document.getElementById('time');
+
+  // مقیاس‌دهی قاب ۱۰۸۰×۱۹۲۰ به اندازه‌ی صفحه
+  function fit(){
+    const s = Math.min(innerWidth/1080, innerHeight/1920);
+    stage.style.transform = `scale(${s})`;
+  }
+  addEventListener('resize', fit); fit();
+
+  let t = 0, playing = true, last = performance.now(), current = -1;
+
+  function show(i){
+    scenes.forEach((el, k) => {
+      el.classList.remove('out');
+      el.classList.toggle('on', k === i);
+      if (k === i) { void el.offsetWidth; } // ری‌استارت انیمیشن‌ها
+    });
+    current = i;
+  }
+  function fmt(x){ const s = Math.floor(x); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+
+  function frame(now){
+    const dt = Math.max(0, Math.min(.1, (now - last)/1000)); last = now;
+    if (playing){
+      t += dt;
+      if (t >= TOTAL){ t = 0; current = -1; }          // حلقه‌ی بی‌پایان
+    }
+    let i = cuts.findIndex((c, k) => t >= c && t < cuts[k+1]);
+    if (i !== current) show(i);
+    // محو شدن نرم صحنه در نیم‌ثانیه‌ی آخر
+    if (t > cuts[i+1] - .4) scenes[i].classList.add('out');
+    scenes.forEach(el => el.style.animationPlayState = playing ? 'running' : 'paused');
+    stage.classList.toggle('paused', !playing);
+    document.querySelectorAll('.scene.on .a, .scene.on .hookwrap, .scene.on .eye, .scene.on .arrow, .scene.on .pick, .scene.on .card, .scene.on .strike')
+      .forEach(el => el.style.animationPlayState = playing ? 'running' : 'paused');
+    bar.style.width = (t/TOTAL*100) + '%';
+    timeEl.textContent = `${fmt(t)} / ${fmt(TOTAL)}`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const toggle = () => playing = !playing;
+  const restart = () => { t = 0; current = -1; playing = true; };
+  addEventListener('keydown', e => {
+    if (e.code === 'Space'){ e.preventDefault(); toggle(); }
+    if (e.key.toLowerCase() === 'r') restart();
+  });
+  stage.addEventListener('click', toggle);
+  stage.addEventListener('dblclick', restart);
+  // برای ضبط/تست: ?t=20 مستقیم می‌پرد به آن ثانیه
+  const q = new URLSearchParams(location.search).get('t');
+  if (q) t = +q;
+})();
+</script>
+</body>
+</html>
