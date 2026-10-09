@@ -27,6 +27,9 @@
   @keyframes drift2{50%{transform:translate(-30px,50px) rotate(30deg)}}
   @keyframes drift3{50%{transform:translate(-20px,-40px) rotate(60deg)}}
 
+  /* پرده‌ی لوپ: آخر ویدیو با لایم بسته می‌شه و اول ویدیو از همون لایم باز می‌شه */
+  #loopwipe{position:absolute;inset:0;background:var(--lime);z-index:40;pointer-events:none;display:none;
+    -webkit-mask:radial-gradient(circle at 50% 52%,transparent var(--r),#000 calc(var(--r) + 2px));mask:radial-gradient(circle at 50% 52%,transparent var(--r),#000 calc(var(--r) + 2px))}
   /* ثابت‌ها */
   #prog{position:absolute;top:56px;left:var(--edge);right:var(--edge);height:8px;background:#222;border-radius:4px;z-index:30;direction:ltr}
   #prog i{display:block;height:100%;width:0;background:var(--lime);border-radius:4px}
@@ -173,6 +176,7 @@
 <body>
 <div id="stage">
   <div id="bg"></div><div class="f r" id="f1"></div><div class="f s" id="f2"></div><div class="f s" id="f3"></div>
+  <div id="loopwipe"></div>
   <div id="prog"><i></i></div>
   <div id="handle" class="mono">
     <svg viewBox="0 0 120 150" fill="none" stroke="#e9ff3b" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="60" cy="14" r="9"/><path d="M60 24V100c0 28-38 28-38 0"/><path d="M22 100l-12-16M22 100l16-16"/></svg>
@@ -329,6 +333,15 @@
   const REC = q.has('rec'), MANUAL = q.has('manual');
   if (REC) document.body.classList.add('rec');
   let t = +(q.get('t') || 0), playing = !REC, last = performance.now(), current = -1;
+  const lw = document.getElementById('loopwipe'), OPEN = .62, CLOSE = .65;
+  const ease = x => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+  const loopWipe = tt => {
+    let rr = null;
+    if (tt < OPEN) rr = 1500 * ease(tt / OPEN);
+    else if (tt > TOTAL - CLOSE) rr = 1500 * (1 - ease((tt - (TOTAL - CLOSE)) / CLOSE));
+    if (rr === null) { lw.style.display = 'none'; return; }
+    lw.style.display = 'block'; lw.style.setProperty('--r', rr + 'px');
+  };
   const show = i => { scenes.forEach((el,k) => { el.classList.remove('on'); if (k===i){ void el.offsetWidth; el.classList.add('on'); } }); current = i; };
 
   function frame(now){
@@ -337,7 +350,7 @@
     const i = cuts.findIndex((c,k) => t >= c && t < cuts[k+1]);
     if (i !== current) show(i);
     document.querySelectorAll('.scene.on, .scene.on *').forEach(el => el.style.animationPlayState = playing ? 'running' : 'paused');
-    bar.style.width = (t/TOTAL*100) + '%';
+    bar.style.width = (t/TOTAL*100) + '%'; loopWipe(t);
     requestAnimationFrame(frame);
   }
   if (!MANUAL) requestAnimationFrame(frame);
@@ -351,7 +364,7 @@
       const bgAnim = !an.effect || !an.effect.target || !an.effect.target.closest || !an.effect.target.closest('.scene');
       an.currentTime = bgAnim ? t * 1000 : (t - cuts[i]) * 1000;
     });
-    bar.style.width = (t/TOTAL*100) + '%';
+    bar.style.width = (t/TOTAL*100) + '%'; loopWipe(t);
   };
   addEventListener('keydown', e => { if (e.code === 'Space'){ e.preventDefault(); playing = !playing; } if (e.key.toLowerCase()==='r'){ t = 0; current = -1; playing = true; } });
   stage.addEventListener('click', () => playing = !playing);
