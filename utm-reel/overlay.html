@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="fa">
+<head>
+<meta charset="utf-8">
+<title>UTM Reel Overlay</title>
+<!--
+  Motion overlay for the UTM talking-head reel (ruby.explains brand).
+  Transparent 1080x1920 stage, rendered frame-by-frame by render.mjs via window.__seek(t),
+  then composited over the graded footage. Times are seconds into the source video
+  (see timing.md for where each one comes from).
+  Open directly in a browser to preview: click / Space = play-pause, R = restart.
+-->
+<style>
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Regular.woff2) format('woff2');font-weight:400}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Medium.woff2) format('woff2');font-weight:500}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Bold.woff2) format('woff2');font-weight:700}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Black.woff2) format('woff2');font-weight:900}
+@font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2');font-weight:600}
+
+:root{
+  --paper:#F5F6F8; --white:#FFFFFF; --ink:#15171C; --ink-2:#3A3E48; --ink-3:#6B7080;
+  --line:#DADDE3; --yellow:#ECFF52; --stripe-a:#E3E5E9; --stripe-b:#ECEEF1;
+}
+html,body{margin:0;background:transparent}
+body.preview{background:#7a7468;display:grid;place-items:center;min-height:100vh;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Vazirmatn,sans-serif;color:var(--ink);transform-origin:center}
+*{box-sizing:border-box}
+.fa{direction:rtl;font-family:Vazirmatn,sans-serif}
+.en{direction:ltr;font-family:'IBM Plex Mono',monospace;unicode-bidi:isolate}
+.h{opacity:0}
+
+/* top band: inside 4:5 crop, above the head */
+.top{position:absolute;left:0;top:300px;width:1080px;display:flex;flex-direction:column;align-items:center;gap:16px;pointer-events:none}
+.tbox{background:var(--paper);border:3px solid var(--ink);padding:10px 30px 16px;font-weight:900;font-size:58px;line-height:1.3;letter-spacing:-1px;direction:rtl;white-space:nowrap}
+.tbox.inv{background:var(--ink);color:var(--white);display:flex;align-items:center;gap:16px;font-size:46px}
+.tbox.inv .ic{color:var(--yellow);width:46px;height:46px}
+
+/* bottom band: left 72, keeps clear of the right 160px and bottom 320px */
+.bot{position:absolute;left:72px;width:860px;bottom:330px}
+.card{background:var(--white);border:3px solid var(--ink);padding:28px 32px}
+.ic{display:inline-block;width:44px;height:44px;background:currentColor;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;flex:none}
+.mk{background:linear-gradient(var(--yellow),var(--yellow)) no-repeat 0 60%/0% 82%;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 6px}
+.row{display:flex;gap:16px}
+.rtl{direction:rtl}
+.pill{background:var(--paper);border:3px solid var(--ink);font-weight:700;font-size:34px;padding:6px 20px 10px;direction:rtl;white-space:nowrap}
+.lbl{font-weight:700;font-size:32px;color:var(--ink-3);direction:rtl}
+
+/* S1 browser bar */
+.bhead{display:flex;gap:12px;margin-bottom:20px}
+.bhead span{width:20px;height:20px;border-radius:50%;border:3px solid var(--ink)}
+.addr{display:flex;gap:16px;align-items:flex-start;background:var(--paper);border:2px solid var(--ink);padding:16px 20px;font-size:36px;font-weight:500;line-height:1.45}
+.addr .ic{width:36px;height:36px;margin-top:8px;color:var(--ink-3)}
+.addr .txt{word-break:break-all;min-height:52px}
+.caret{display:inline-block;width:3px;height:40px;background:var(--ink);vertical-align:-6px;margin-left:2px}
+
+/* S2 term */
+.cat{display:flex;align-items:center;gap:12px;font-weight:700;font-size:32px;color:var(--ink-2);direction:rtl}
+.cat i{width:20px;height:20px;background:var(--yellow);border:2px solid var(--ink)}
+.termFa{font-weight:900;font-size:104px;line-height:1.1;letter-spacing:-2px;direction:rtl;margin:18px 0 22px}
+.termEn{display:inline-block;background:var(--yellow);border:3px solid var(--ink);font-weight:600;font-size:56px;padding:6px 22px}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-top:2px solid var(--line)}
+.prow .en{font-size:38px;font-weight:500}
+.prow .en b{font-weight:600}
+.prow .fa{font-weight:700;font-size:32px;color:var(--ink-3)}
+
+/* tiles */
+.tiles{display:flex;gap:16px;direction:rtl}
+.tile{position:relative;flex:1;background:var(--white);border:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 10px 24px;font-weight:700;font-size:34px;text-align:center;line-height:1.3}
+.tile .ic{width:72px;height:72px}
+.tile .tag{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:22px;font-weight:600;background:var(--ink);color:var(--yellow);padding:4px 10px}
+.tile .mono{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:24px;font-weight:500;color:var(--ink-2);display:flex;gap:8px;align-items:center}
+.tile .mono .ic{width:26px;height:26px}
+.badge{position:absolute;top:-26px;left:-20px;width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--white);font-weight:900;font-size:42px;display:grid;place-items:center;line-height:1}
+.linkpill{display:inline-flex;gap:14px;align-items:center;background:var(--ink);color:var(--white);font-size:40px;font-weight:600;padding:12px 28px}
+.linkpill .ic{width:40px;height:40px;color:var(--yellow)}
+.fork{position:relative;height:64px}
+.fork div{position:absolute;background:var(--ink)}
+
+/* steps */
+.steps{display:flex;align-items:center;direction:rtl}
+.steps .s{width:84px;height:84px;border:3px solid var(--ink);background:var(--paper);display:grid;place-items:center;font-weight:900;font-size:46px;line-height:1}
+.steps .c{width:72px;height:3px;background:var(--ink)}
+.shead{display:flex;align-items:center;gap:16px;direction:rtl;margin-bottom:16px}
+.shead .n{width:56px;height:56px;background:var(--ink);color:var(--white);display:grid;place-items:center;font-weight:900;font-size:34px}
+.shead .t{font-weight:700;font-size:32px;color:var(--ink-3)}
+.smain{font-weight:900;font-size:52px;line-height:1.35;direction:rtl;letter-spacing:-1px;margin-bottom:22px}
+.chip2{display:flex;align-items:center;gap:12px;background:var(--paper);border:3px solid var(--ink);font-weight:700;font-size:36px;padding:10px 22px 12px;direction:rtl}
+.chip2 .ic{width:40px;height:40px}
+
+/* builder */
+.bhdr{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--white);padding:14px 22px;margin:0 0 6px}
+.bhdr .en{font-size:38px;font-weight:600}
+.bhdr .free{background:var(--paper);color:var(--ink);font-weight:700;font-size:28px;padding:2px 14px 6px;direction:rtl}
+.frow{display:flex;align-items:center;gap:18px;padding:10px 0;direction:ltr}
+.frow .k{width:290px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:25px;font-weight:500;color:var(--ink-3)}
+.frow .v{flex:1;height:62px;border:2px solid var(--ink);background:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:32px;font-weight:500;padding:9px 16px;display:flex;gap:12px;align-items:center;white-space:nowrap}
+.frow .v .alt{background:var(--white);border:2px solid var(--ink);padding:0 12px;font-size:28px}
+
+/* step 3 links */
+.lrow{display:flex;align-items:center;gap:16px;border:2px solid var(--ink);background:var(--paper);padding:14px 18px;margin-top:14px;direction:ltr}
+.lrow .u{flex:1;font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:500;white-space:nowrap;overflow:hidden}
+.lrow .u b{font-weight:600}
+.lrow .ic{width:40px;height:40px}
+.lrow .dest{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);font-weight:700;font-size:28px;padding:4px 14px 8px;direction:rtl}
+.lrow .dest .ic{width:30px;height:30px;color:var(--yellow)}
+.cpy{position:relative;width:40px;height:40px}
+.cpy .ic{position:absolute;inset:0}
+
+/* analytics */
+.ga-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.ga-h .en{font-size:36px;font-weight:600;display:flex;gap:12px;align-items:center}
+.ga-h .eg{font-weight:700;font-size:26px;color:var(--ink-3);border:2px solid var(--line);padding:0 12px 4px}
+.brow{display:flex;align-items:center;gap:18px;padding:12px 0;direction:ltr}
+.brow .k{width:120px;font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:500}
+.brow .track{flex:1;height:52px;background:var(--paper);border:2px solid var(--ink);position:relative}
+.brow .bar{position:absolute;left:0;top:0;bottom:0;background:var(--ink);transform-origin:left;transform:scaleX(0)}
+.brow .num{width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:32px;font-weight:600}
+
+/* lost data */
+.stack{display:flex;height:96px;border:3px solid var(--ink);position:relative;direction:ltr;margin:18px 0 14px}
+.stack > div.seg{display:grid;place-items:center;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600}
+.stripes{position:absolute;top:0;bottom:0;right:0;width:72%;background:repeating-linear-gradient(135deg,var(--stripe-a) 0 18px,var(--stripe-b) 18px 36px);border-left:3px solid var(--ink);display:grid;place-items:center;font-weight:900;font-size:56px;color:var(--ink-3);transform-origin:right}
+.lost{display:flex;justify-content:space-between;direction:rtl;font-weight:700;font-size:32px}
+.lost .k{color:var(--ink-3)}
+
+/* checklist */
+.ci{display:flex;align-items:center;gap:22px;direction:rtl;padding:16px 0}
+.ci + .ci{border-top:2px solid var(--line)}
+.ci .bx{position:relative;width:56px;height:56px;border:3px solid var(--ink);flex:none;background:var(--paper)}
+.ci .bx .fill{position:absolute;inset:-3px;background:var(--ink);display:grid;place-items:center;color:var(--white)}
+.ci .bx .fill .ic{width:38px;height:38px}
+.ci .tx{font-weight:700;font-size:40px;line-height:1.35}
+.ci .tx .en{font-weight:600;font-size:36px}
+
+/* end card */
+.endc{display:flex;flex-direction:column;gap:18px}
+.endc .m{display:flex;align-items:center;gap:20px;direction:rtl;font-weight:900;font-size:52px;letter-spacing:-1px}
+.endc .m .ic{width:60px;height:60px}
+.endc .rule{height:3px;background:var(--ink);transform-origin:right}
+.endc .hd{display:flex;justify-content:space-between;align-items:center}
+.endc .hd .en{font-size:34px;font-weight:500}
+.endc .hd .fa{font-weight:700;font-size:30px;color:var(--ink-3)}
+
+/* section wipe */
+#wipe{position:absolute;inset:0;background:var(--yellow)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== S1 hook: address bar ===== -->
+  <div class="top"><div class="tbox h" id="s1t1">این حروف عجیب ته لینک چیه؟</div></div>
+  <div class="top"><div class="tbox h" id="s1t2">چندتا کاراکتر، <span class="mk" id="s1t2m">کلی اطلاعات</span></div></div>
+  <div class="bot" id="s1">
+    <div class="row rtl" style="margin-bottom:18px">
+      <div class="pill h s1p">از کجا اومده؟</div>
+      <div class="pill h s1p">کدوم کمپین؟</div>
+      <div class="pill h s1p">کدوم پست؟</div>
+    </div>
+    <div class="card h" id="s1bar">
+      <div class="bhead"><span></span><span></span><span></span></div>
+      <div class="addr en"><i class="ic" style="--ic:url(icons/lock.svg)"></i><div class="txt"><span id="u1"></span><span id="uqWrap" class="mk" style="padding:0"><span id="uq" class="mk" style="padding:0"></span><span id="u2"></span></span><span class="caret" id="caret"></span></div></div>
+    </div>
+  </div>
+
+  <!-- ===== S2 term + definition ===== -->
+  <div class="bot" id="s2term">
+    <div class="card h" id="s2card">
+      <div class="cat h" id="s2cat"><i></i>دیجیتال</div>
+      <div class="termFa" id="s2fa" style="clip-path:inset(0 0 0 100%)">پارامترهای UTM</div>
+      <div class="termEn en" id="s2en" style="clip-path:inset(0 100% 0 0)">UTM Parameters</div>
+    </div>
+  </div>
+  <div class="top"><div class="tbox h" id="s2t1">پارامترهای <span class="en">UTM</span></div></div>
+  <div class="bot">
+    <div class="card h" id="s2params">
+      <div class="lbl" style="margin-bottom:10px">اطلاعاتی که ته لینک اضافه میشه</div>
+      <div class="prow h s2r"><span class="en"><b>utm_source</b>=<span id="s2src" class="mk" style="padding:0">instagram</span></span><span class="fa">منبع</span></div>
+      <div class="prow h s2r"><span class="en"><b>utm_medium</b>=story</span><span class="fa">جای انتشار</span></div>
+      <div class="prow h s2r"><span class="en"><b>utm_campaign</b>=yalda</span><span class="fa">اسم کمپین</span></div>
+    </div>
+  </div>
+  <div class="top"><div class="tbox h" id="s2t2">از کجا اومدن؟</div></div>
+  <div class="bot">
+    <div class="tiles">
+      <div class="tile h s2tile"><i class="ic" style="--ic:url(icons/smartphone.svg)"></i>استوری اینستاگرام</div>
+      <div class="tile h s2tile"><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>کمپین تبلیغاتی</div>
+      <div class="tile h s2tile"><i class="ic" style="--ic:url(icons/share-2.svg)"></i>کانال‌های دیگه</div>
+    </div>
+  </div>
+  <div class="top"><div class="tbox h" id="s2t3">البته یه شرط داره</div></div>
+  <div class="bot">
+    <div class="card h" id="s2info">
+      <div class="row rtl" style="align-items:center;gap:22px">
+        <i class="ic" style="--ic:url(icons/chart-column.svg);width:72px;height:72px"></i>
+        <div class="fa" style="font-weight:900;font-size:46px;line-height:1.35">ابزار تحلیل سایتت باید درست تنظیم شده باشه</div>
+      </div>
+      <div class="row" style="margin-top:20px;align-items:center;gap:14px">
+        <span class="en" style="font-size:34px;font-weight:600">Google Analytics</span>
+        <span id="s2chk" class="h" style="display:grid;place-items:center;width:46px;height:46px;background:var(--ink);color:var(--white)"><i class="ic" style="--ic:url(icons/check.svg);width:32px;height:32px"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== S3 use case ===== -->
+  <div class="top"><div class="tbox h" id="s3t1">یه لینک، سه جا</div></div>
+  <div class="top"><div class="tbox h" id="s3t2">کدومش بیشتر آورده؟</div></div>
+  <div class="top"><div class="tbox h" id="s3t3">اینجاست که <span class="mk en" id="s3t3m">UTM</span> به کارت میاد</div></div>
+  <div class="bot" id="s3">
+    <div style="display:flex;justify-content:center"><div class="linkpill en h" id="s3link"><i class="ic" style="--ic:url(icons/store.svg)"></i>myshop.ir</div></div>
+    <div class="fork" id="s3fork">
+      <div style="left:429px;top:0;width:3px;height:32px;transform-origin:top" class="fk v"></div>
+      <div style="left:143px;top:30px;width:575px;height:3px;transform-origin:center" class="fk hz"></div>
+      <div style="left:143px;top:30px;width:3px;height:34px;transform-origin:top" class="fk v"></div>
+      <div style="left:429px;top:30px;width:3px;height:34px;transform-origin:top" class="fk v"></div>
+      <div style="left:715px;top:30px;width:3px;height:34px;transform-origin:top" class="fk v"></div>
+    </div>
+    <div class="tiles">
+      <div class="tile h s3tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/user.svg)"></i>بیو<span class="tag h">utm_content=bio</span></div>
+      <div class="tile h s3tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/smartphone.svg)"></i>استوری<span class="tag h">utm_content=story</span></div>
+      <div class="tile h s3tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>تبلیغ<span class="tag h">utm_content=ad</span></div>
+    </div>
+  </div>
+
+  <!-- ===== S4 how-to ===== -->
+  <div class="top" style="top:300px"><div class="tbox h" id="s4t1">ساختنش ساده‌ست، فقط ۳ قدم</div></div>
+  <div class="top" style="top:440px">
+    <div class="steps" id="steps">
+      <div class="s h">۱</div><div class="c h"></div><div class="s h">۲</div><div class="c h"></div><div class="s h">۳</div>
+    </div>
+  </div>
+  <!-- step 1 -->
+  <div class="bot">
+    <div class="card h" id="st1">
+      <div class="shead"><div class="n">۱</div><div class="t">قدم اول</div></div>
+      <div class="smain" id="st1m" style="clip-path:inset(0 0 0 100%)">مشخص کن لینک کجا منتشر میشه</div>
+      <div class="row rtl">
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/smartphone.svg)"></i>استوری</div>
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/user.svg)"></i>بیو</div>
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>تبلیغات</div>
+      </div>
+    </div>
+  </div>
+  <!-- step 2 -->
+  <div class="bot">
+    <div class="card h" id="st2">
+      <div class="shead"><div class="n">۲</div><div class="t">قدم دوم · ابزار رایگان گوگل</div></div>
+      <div class="bhdr" id="st2h" style="clip-path:inset(0 100% 0 0)"><span class="en">Campaign URL Builder</span><span class="free">رایگان</span></div>
+      <div class="frow h st2r"><span class="k">website URL</span><span class="v" id="f1"></span></div>
+      <div class="frow h st2r"><span class="k">campaign source</span><span class="v" id="f2"></span></div>
+      <div class="frow h st2r"><span class="k">campaign name</span><span class="v" id="f3"></span></div>
+      <div class="frow h st2r"><span class="k"><span class="mk" id="f4k">campaign content</span></span><span class="v"><span id="f4"></span><span class="alt h" id="f4b">bio</span></span></div>
+    </div>
+  </div>
+  <!-- step 3 -->
+  <div class="bot">
+    <div class="card h" id="st3">
+      <div class="shead"><div class="n">۳</div><div class="t">قدم سوم</div></div>
+      <div class="smain" id="st3m" style="clip-path:inset(0 0 0 100%);margin-bottom:6px">لینک‌ها رو بردار و منتشر کن</div>
+      <div class="lrow h st3r">
+        <span class="cpy"><i class="ic c1" style="--ic:url(icons/copy.svg)"></i><i class="ic c2 h" style="--ic:url(icons/check.svg)"></i></span>
+        <span class="u">myshop.ir/?…&amp;<b>utm_content=story</b></span>
+        <span class="dest h"><i class="ic" style="--ic:url(icons/smartphone.svg)"></i>استوری</span>
+      </div>
+      <div class="lrow h st3r">
+        <span class="cpy"><i class="ic c1" style="--ic:url(icons/copy.svg)"></i><i class="ic c2 h" style="--ic:url(icons/check.svg)"></i></span>
+        <span class="u">myshop.ir/?…&amp;<b>utm_content=bio</b></span>
+        <span class="dest h"><i class="ic" style="--ic:url(icons/user.svg)"></i>بیو</span>
+      </div>
+    </div>
+  </div>
+  <!-- analytics -->
+  <div class="bot">
+    <div class="card h" id="ga">
+      <div class="ga-h"><span class="en"><i class="ic" style="--ic:url(icons/chart-column.svg)"></i>Google Analytics</span><span class="eg fa">مثال</span></div>
+      <div class="lbl" style="margin-bottom:6px">ورودی هر لینک</div>
+      <div class="brow"><span class="k">story</span><span class="track"><span class="bar" id="gb1" style="width:100%"></span></span><span class="num" id="gn1">0</span></div>
+      <div class="brow"><span class="k">bio</span><span class="track"><span class="bar" id="gb2" style="width:34%"></span></span><span class="num" id="gn2">0</span></div>
+    </div>
+  </div>
+
+  <!-- ===== S5 common mistake ===== -->
+  <div class="top">
+    <div class="tbox inv h" id="s5chip"><i class="ic" style="--ic:url(icons/x.svg)"></i>اشتباه رایج</div>
+    <div class="tbox h" id="s5t1">یه لینک یکسان برای همه‌جا</div>
+  </div>
+  <div class="top"><div class="tbox h" id="s5t2">بدون ردیابی، اطلاعات گم میشه</div></div>
+  <div class="bot">
+    <div class="tiles">
+      <div class="tile h s5tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/user.svg)"></i>بیو<span class="mono"><i class="ic" style="--ic:url(icons/copy.svg)"></i>myshop.ir</span></div>
+      <div class="tile h s5tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/smartphone.svg)"></i>استوری<span class="mono"><i class="ic" style="--ic:url(icons/copy.svg)"></i>myshop.ir</span></div>
+      <div class="tile h s5tile"><span class="badge h">؟</span><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>تبلیغ<span class="mono"><i class="ic" style="--ic:url(icons/copy.svg)"></i>myshop.ir</span></div>
+    </div>
+  </div>
+  <div class="bot">
+    <div class="card h" id="s5lost">
+      <div class="lbl">ورودی‌های سایتت</div>
+      <div class="stack">
+        <div class="seg" style="flex:1;background:var(--ink)">story</div>
+        <div class="seg" style="flex:1;background:var(--ink-2)">bio</div>
+        <div class="seg" style="flex:1;background:var(--ink-3)">ad</div>
+        <div class="stripes" id="s5str">؟</div>
+      </div>
+      <div class="lost h" id="s5lbl"><span class="k">نامعلوم</span><span>بخش مهمی از اطلاعات از دست رفته</span></div>
+    </div>
+  </div>
+
+  <!-- ===== S6 CTA ===== -->
+  <div class="top"><div class="tbox h" id="s6t1">تمرین این هفته</div></div>
+  <div class="bot">
+    <div class="card h" id="s6card">
+      <div class="ci h s6i"><div class="bx"><div class="fill h"><i class="ic" style="--ic:url(icons/check.svg)"></i></div></div><div class="tx">دو لینک <span class="en">UTM</span> جدا بساز: استوری و بیو</div></div>
+      <div class="ci h s6i"><div class="bx"><div class="fill h"><i class="ic" style="--ic:url(icons/check.svg)"></i></div></div><div class="tx">چند روز بعد، آمارشون رو مقایسه کن</div></div>
+      <div class="ci h s6i"><div class="bx"><div class="fill h"><i class="ic" style="--ic:url(icons/check.svg)"></i></div></div><div class="tx">ببین کدوم <span class="mk" id="s6m">بیشتر</span> بازدیدکننده آورده</div></div>
+    </div>
+  </div>
+  <div class="bot">
+    <div class="card h endc" id="end">
+      <div class="m"><i class="ic" style="--ic:url(icons/bookmark.svg)"></i>ذخیره‌ش کن، بعداً لازمت میشه</div>
+      <div class="rule" id="endrule"></div>
+      <div class="hd"><span class="en">ruby.explains</span><span class="fa">بفرست برای دوستت که سایت داره</span></div>
+    </div>
+  </div>
+
+  <div id="wipe"></div>
+</div>
+
+<script src="gsap.min.js"></script>
+<script>
+(async () => {
+  const RENDER = new URLSearchParams(location.search).has('render');
+  const TOTAL = 107.15;
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  if (!RENDER) {
+    document.body.classList.add('preview');
+    const fit = () => { const k = Math.min(innerWidth / 1080, innerHeight / 1920); $('#stage').style.transform = `scale(${k})`; };
+    fit(); addEventListener('resize', fit);
+  }
+  await document.fonts.ready;
+
+  // Brand easing: enter = easeOutQuart, exit = easeInCubic, move/wipe = easeInOutCubic
+  const E_IN = 'power3.out', E_OUT = 'power2.in', E_MOVE = 'power2.inOut';
+  const tl = gsap.timeline({ paused: true });
+  gsap.set('#wipe', { x: 1080 });
+  const els = x => [].concat(x).flatMap(s => typeof s === 'string' ? $$(s) : [s]);
+
+  // rise 48px + fade in (400ms); stagger in seconds between siblings
+  const rise = (x, t, st = 0) => els(x).forEach((e, i) =>
+    tl.fromTo(e, { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: .4, ease: E_IN }, t + i * st));
+  // exit: rise 24px up + fade (240ms), reverse order of entrance
+  const out = (x, t, st = 0) => els(x).reverse().forEach((e, i) =>
+    tl.to(e, { opacity: 0, y: -24, duration: .24, ease: E_OUT }, t + i * st));
+  const hide = (x, t) => tl.set(els(x), { opacity: 0 }, t);
+  const pop = (x, t, st = 0) => els(x).forEach((e, i) =>
+    tl.fromTo(e, { opacity: 0, scale: .96 }, { opacity: 1, scale: 1, duration: .24, ease: E_IN }, t + i * st));
+  // Persian text wipes right→left, English left→right
+  const wipeFa = (x, t, d = .4) => tl.fromTo(x, { clipPath: 'inset(0% 0% 0% 100%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: d, ease: E_MOVE }, t);
+  const wipeEn = (x, t, d = .4) => tl.fromTo(x, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: d, ease: E_MOVE }, t);
+  // yellow marker grows left→right behind a word (400ms)
+  const mark = (x, t) => tl.fromTo(x, { backgroundSize: '0% 82%' }, { backgroundSize: '100% 82%', duration: .4, ease: E_MOVE }, t);
+  const unmark = (x, t) => tl.to(x, { backgroundSize: '0% 82%', duration: .24, ease: E_OUT }, t);
+  const type = (x, text, t, d) => { const e = $(x), o = { n: 0 }; e.textContent = '';
+    tl.to(o, { n: text.length, duration: d, ease: 'none', onUpdate: () => { e.textContent = text.slice(0, Math.round(o.n)); } }, t); };
+  const count = (x, to, t, d) => { const e = $(x), o = { n: 0 };
+    tl.to(o, { n: to, duration: d, ease: E_IN, onUpdate: () => { e.textContent = Math.round(o.n).toLocaleString('en-US'); } }, t); };
+  // section change: full-frame yellow panel sweeps right→left; content is swapped while covered
+  const sweep = (t, half = .4) => {
+    tl.fromTo('#wipe', { x: 1080 }, { x: 0, duration: half, ease: E_MOVE, immediateRender: false }, t)
+      .to('#wipe', { x: -1080, duration: half, ease: E_MOVE }, t + half);
+    return t + half; // moment of full cover
+  };
+
+  /* ---------- S1  0.5 – 14.1  hook ---------- */
+  wipeFa('#s1t1', .5); tl.set('#s1t1', { opacity: 1 }, .5);
+  rise('#s1bar', .7);
+  type('#u1', 'myshop.ir/product', 1.4, 1.0);          // «آخر بعضی لینک‌ها»
+  type('#uq', '?', 4.1, .05); mark('#uq', 4.15);        // «علامت سؤال»
+  type('#u2', 'utm_source=instagram&utm_medium=story&utm_campaign=yalda', 4.6, 1.5); // «کلی حرف و عدد عجیب»
+  tl.to('#caret', { opacity: 0, duration: .01, repeat: 26, yoyo: true, repeatDelay: .25 }, 6.2);
+  out('#s1t1', 6.9);
+  // «ولی همون چندتا کاراکتر…»
+  unmark('#uq', 8.8);
+  mark('#uqWrap', 8.9);
+  wipeFa('#s1t2', 9.0); tl.set('#s1t2', { opacity: 1 }, 9.0); mark('#s1t2m', 10.9);
+  unmark('#uqWrap', 10.9);
+  rise('.s1p', 11.0, .15);                              // «اطلاعات مهمی درباره بازدیدکننده‌ها»
+  const C1 = sweep(14.0);
+  hide(['#s1t2', '#s1bar', ...$$('.s1p')], C1);
+
+  /* ---------- S2  14.8 – 31.6  term + definition ---------- */
+  tl.set('#s2card', { opacity: 1 }, C1);
+  tl.set('#s2cat', { opacity: 1 }, C1);
+  wipeFa('#s2fa', 14.85);                               // «بهشون می‌گن پارامترهای UTM»
+  wipeEn('#s2en', 15.45);
+  out('#s2card', 17.15);
+  rise('#s2t1', 17.35);
+  rise('#s2params', 17.45); rise('.s2r', 17.7, .15);    // «اطلاعاتی که به انتهای لینک اضافه می‌شن»
+  mark('#s2src', 19.5); // «تا بتونی بفهمی … از کجا اومدن»
+  out(['#s2params', '#s2t1'], 23.45);
+  rise('#s2t2', 23.6);
+  rise($$('.s2tile')[0], 23.85);
+  rise($$('.s2tile')[1], 25.2); rise($$('.s2tile')[2], 26.35); // استوری / کمپین / کانال‌ها
+  out([...$$('.s2tile'), '#s2t2'], 27.55, .04);
+  rise('#s2t3', 27.85); rise('#s2info', 28.0);         // «البته به شرطی که…»
+  pop('#s2chk', 30.4);                                  // «درست تنظیم شده باشه»
+  const C2 = sweep(31.62);
+  hide(['#s2t3', '#s2info'], C2);
+
+  /* ---------- S3  32.4 – 43.2  use case ---------- */
+  tl.set('#s3t1', { opacity: 1 }, C2); wipeFa('#s3t1', C2);
+  rise('#s3link', 32.5);
+  tl.fromTo('#s3fork .fk.v', { scaleY: 0 }, { scaleY: 1, duration: .3, ease: E_MOVE, stagger: 0 }, 33.4);
+  tl.fromTo('#s3fork .fk.hz', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 33.5);
+  rise($$('.s3tile')[0], 34.15); rise($$('.s3tile')[1], 35.35); rise($$('.s3tile')[2], 36.5);
+  out('#s3t1', 37.55); rise('#s3t2', 37.75);            // «از کجا می‌فهمی کدومشون…»
+  pop('.s3tile .badge', 39.0, .15);
+  out('#s3t2', 41.35); rise('#s3t3', 41.5); mark('#s3t3m', 41.9);  // «اینجاست که UTM به کارت میاد»
+  out('.s3tile .badge', 41.5);
+  rise('.s3tile .tag', 42.0, .15);
+  const C3 = sweep(43.18, .3);
+  hide(['#s3t3', '#s3link', ...$$('.s3tile'), ...$$('#s3fork .fk')], C3);
+
+  /* ---------- S4  43.5 – 79.6  how-to ---------- */
+  tl.set('#s4t1', { opacity: 1 }, C3); wipeFa('#s4t1', C3);
+  const S = $$('#steps .s'), Cn = $$('#steps .c');
+  rise([S[0], Cn[0], S[1], Cn[1], S[2]], 45.45, .08);   // «فقط سه مرحله داره»
+  out('#s4t1', 46.6);
+  const stepOn = (i, t) => { tl.to(S[i], { backgroundColor: '#ECFF52', duration: .24, ease: E_IN }, t);
+    if (i) tl.to(S[i - 1], { backgroundColor: '#15171C', color: '#FFFFFF', duration: .24, ease: E_IN }, t); };
+
+  // step 1  46.83 – 52.9
+  stepOn(0, 46.8);
+  rise('#st1', 46.85); wipeFa('#st1m', 47.6);
+  rise($$('.st1c')[0], 50.55); rise($$('.st1c')[1], 51.55); rise($$('.st1c')[2], 52.2);
+  out('#st1', 52.95);
+
+  // step 2  53.35 – 68.8
+  stepOn(1, 53.3);
+  rise('#st2', 53.4);
+  wipeEn('#st2h', 54.85, .5);                           // «Campaign URL Builder»
+  rise('.st2r', 55.6, .15);
+  type('#f1', 'https://myshop.ir', 58.6, .8);           // «آدرس سایتت رو وارد کن»
+  type('#f2', 'instagram', 60.7, .6);                   // «منبع ورودی»
+  type('#f3', 'yalda_sale', 61.9, .7);                  // «اسم کمپین»
+  mark('#f4k', 65.9);                                   // «توی بخش Content»
+  type('#f4', 'story', 66.6, .4);
+  pop('#f4b', 67.5);                                    // «اسم‌های متفاوت بذار»
+  unmark('#f4k', 68.3);
+  out('#st2', 68.75);
+
+  // step 3  68.94 – 74.7
+  stepOn(2, 68.95);
+  rise('#st3', 69.0); wipeFa('#st3m', 70.1);
+  rise('.st3r', 70.3, .15);                             // «لینک‌های جدید رو بردار»
+  $$('.st3r').forEach((r, i) => { const t = 71.2 + i * .15;
+    tl.set(r.querySelector('.c1'), { opacity: 0 }, t); tl.set(r.querySelector('.c2'), { opacity: 1 }, t); });
+  rise($$('.st3r .dest')[0], 72.6); rise($$('.st3r .dest')[1], 73.0); // «هرکدوم رو جای خودش منتشر کن»
+  out('#st3', 74.85);
+
+  // analytics  75.0 – 79.6
+  rise('#ga', 75.1);
+  tl.to('#gb1', { scaleX: 1, duration: .7, ease: E_IN }, 77.6);
+  tl.to('#gb2', { scaleX: 1, duration: .7, ease: E_IN }, 77.68);
+  count('#gn1', 1240, 77.6, .7); count('#gn2', 420, 77.68, .7);   // «هر لینک چقدر ورودی داشته»
+  const C4 = sweep(79.6);
+  hide(['#ga', ...S, ...Cn], C4);
+
+  /* ---------- S5  80.4 – 93.75  common mistake ---------- */
+  tl.set('#s5chip', { opacity: 1 }, C4); wipeFa('#s5chip', C4);
+  rise('#s5t1', 81.6);                                  // «یه لینک یکسان»
+  rise('.s5tile', 82.6, .5);                            // «همه‌جا کپی می‌کنن»
+  pop('.s5tile .badge', 86.3, .15);                     // «انتظار دارن دقیق بفهمن…»
+  out([...$$('.s5tile'), '#s5t1', '#s5chip'], 88.6, .03);
+  rise('#s5t2', 88.85);                                 // «بدون ردیابی درست…»
+  rise('#s5lost', 89.0);
+  tl.fromTo('#s5str', { scaleX: 0 }, { scaleX: 1, duration: .7, ease: E_MOVE }, 90.6); // «بخش مهمی از اطلاعات…»
+  rise('#s5lbl', 91.1);
+  const C5 = sweep(93.75, .35);
+  hide(['#s5t2', '#s5lost'], C5);
+
+  /* ---------- S6  94.1 – 107.15  CTA ---------- */
+  tl.set('#s6t1', { opacity: 1 }, C5); wipeFa('#s6t1', C5);
+  tl.set('#s6card', { opacity: 1 }, C5);
+  const I = $$('.s6i');
+  rise(I[0], 94.5);
+  pop(I[0].querySelector('.fill'), 97.3);               // «جدا بساز»
+  rise(I[1], 98.8); pop(I[1].querySelector('.fill'), 100.45);   // «مقایسه کن»
+  rise(I[2], 100.6); mark('#s6m', 102.2); pop(I[2].querySelector('.fill'), 103.55);
+  out(['#s6card', '#s6t1'], 104.15);
+  rise('#end', 104.4);
+  tl.fromTo('#endrule', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 104.6); // rules draw from the right
+  tl.set({}, {}, TOTAL);
+
+  window.__total = TOTAL;
+  window.__seek = t => { tl.seek(Math.min(t, TOTAL - 1e-4), false); };
+  window.__ready = true;
+  if (!RENDER) {
+    tl.play(0);
+    addEventListener('click', () => tl.paused(!tl.paused()));
+    addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); tl.paused(!tl.paused()); } if (e.key.toLowerCase() === 'r') tl.restart(); });
+  }
+})();
+</script>
+</body>
+</html>
