@@ -1,0 +1,17 @@
+:root{
+  --space-1:8px;
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:20px;
+  --space-5:28px;
+  --space-6:36px;
+  --space-7:48px;
+  --space-8:72px;
+  --pad-post:72px;        /* outer margin on 1080 canvas */
+  --grid-cell:54px;       /* background grid = 1080/20 */
+  --post-w:1080px;
+  --post-h:1350px;
+  --reels-h:1920px;
+  --reels-safe-top:285px; /* 4:5 grid crop starts here */
+  --reels-safe-h:1350px;
+}

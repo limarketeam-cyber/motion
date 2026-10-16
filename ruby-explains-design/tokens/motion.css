@@ -1,0 +1,21 @@
+:root{
+  /* easing — no bounce, no elastic, no overshoot */
+  --ease-enter:cubic-bezier(.25,1,.5,1);   /* = easeOutQuart: everything that appears */
+  --ease-exit:cubic-bezier(.32,0,.67,0);   /* = easeInCubic: everything that leaves */
+  --ease-move:cubic-bezier(.65,0,.35,1);   /* = easeInOutCubic: wipes, shapes changing place */
+  /* durations (30fps: 4 / 7 / 12 / 21 / 24 frames) */
+  --dur-xs:120ms;   /* captions, number ticks */
+  --dur-s:240ms;    /* exits, chips */
+  --dur-m:400ms;    /* text reveal, wipes (per half) */
+  --dur-l:700ms;    /* shapes */
+  --dur-wipe:800ms; /* lime panel: 400 cover + 400 reveal */
+  /* choreography */
+  --stagger:80ms;        /* between lines / sibling elements */
+  --stagger-chip:150ms;  /* between list chips / steps */
+  --rise-in:48px;        /* enter travel on 1080 canvas */
+  --rise-out:24px;       /* exit travel (upwards) */
+  --grid-drift:54px;     /* background moves one cell per loop */
+  --hold-title:1800ms;   /* min time a title stays still */
+  --hold-per-word:250ms; /* body text read time */
+  --fps:30;
+}

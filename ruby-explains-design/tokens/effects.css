@@ -1,0 +1,10 @@
+:root{
+  --stroke:3px;
+  --stroke-hair:2px;
+  --radius-none:0;
+  --radius-pill:999px;
+  --grid-bg:linear-gradient(var(--grid-line) 2px,transparent 2px),linear-gradient(90deg,var(--grid-line) 2px,transparent 2px);
+  --stripe-bg:repeating-linear-gradient(135deg,var(--stripe-a) 0 20px,var(--stripe-b) 20px 40px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --dur:180ms;
+}

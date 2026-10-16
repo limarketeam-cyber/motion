@@ -1,0 +1,27 @@
+:root{
+  /* base */
+  --paper:#F5F6F8;
+  --white:#FFFFFF;
+  --ink:#15171C;
+  --ink-2:#3A3E48;
+  --ink-3:#6B7080;
+  --line:#DADDE3;
+  --grid:#E4E6EA;
+  --yellow:#ECFF52;
+  --lime:var(--yellow); /* legacy alias */
+  --stripe-a:#E3E5E9;
+  --stripe-b:#ECEEF1;
+  /* semantic */
+  --surface-post:var(--paper);
+  --surface-box:var(--white);
+  --surface-inverse:var(--ink);
+  --text-primary:var(--ink);
+  --text-body:var(--ink-2);
+  --text-muted:var(--ink-3);
+  --text-on-inverse:var(--white);
+  --accent:var(--yellow);
+  --text-on-accent:var(--ink);
+  --border-strong:var(--ink);
+  --border-soft:var(--line);
+  --grid-line:var(--grid);
+}

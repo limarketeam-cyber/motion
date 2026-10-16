@@ -1,0 +1,22 @@
+:root{
+  --font-fa:"Vazirmatn",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  /* sizes are for the real 1080px-wide canvas */
+  --type-display:160px;      /* term, text-only post (900) */
+  --type-display-reels:136px;/* term on reels cover (900) */
+  --type-display-s:116px;    /* term, photo post (900) */
+  --type-term-en:48px;       /* English term in mono (500) */
+  --type-term-en-s:40px;
+  --type-body:38px;          /* definition (400) */
+  --type-box:36px;           /* formula / example value (700) */
+  --type-meta:28px;          /* footer + CTA line (500) */
+  --type-label:26px;         /* category, No., mono labels */
+  --type-micro:22px;
+  --lh-display:1.05;
+  --lh-body:1.85;
+  --tracking-display:-2px;
+  --weight-display:900;
+  --weight-strong:700;
+  --weight-medium:500;
+  --weight-body:400;
+}

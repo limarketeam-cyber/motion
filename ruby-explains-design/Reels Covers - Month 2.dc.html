@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="styles.css">
+<style>body{margin:0;background:#E7E7E3;-webkit-font-smoothing:antialiased}a{color:#15171C}a:hover{color:#6B7080}</style>
+</helmet>
+<div dir="rtl" style="font-family:var(--font-fa);color:var(--ink);padding:64px;display:flex;flex-direction:column;gap:48px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:900px">
+    <div dir="ltr" style="font-family:var(--font-mono);font-size:13px;color:var(--ink-3);text-align:right">ruby.explains · REELS COVERS · No.029–058</div>
+    <div style="font-size:32px;font-weight:800">کاور ریلزهای ماه دوم</div>
+    <div style="font-size:16px;line-height:1.8;color:var(--ink-2)">۳۰ کاور ۱۰۸۰×۱۹۲۰ در سیستم «خط‌کش». هر حوزه یک شکل زرد ثابت دارد: دیجیتال مارکتینگ دایره، برندینگ مربع، فروش و رشد میله‌ها. چون هر هفته به ترتیب دوشنبه/سه‌شنبه/چهارشنبه منتشر می‌شود، هر ردیف گرید پروفایل یک هفته است و هر شکل در ستون خودش تکرار می‌شود. همه‌ی متن‌ها داخل برش ۴:۵ گرید هستند.</div>
+  </div>
+  <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="10">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:18px;font-weight:700">{{ w.label }}</div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+        <sc-for list="{{ w.items }}" as="c" hint-placeholder-count="3">
+          <div style="zoom:{{ zoom }};box-shadow:0 2px 6px rgba(0,0,0,.12)">
+            <div id="cover-{{ c.no }}" style="width:1080px;height:1920px;position:relative;overflow:hidden;box-sizing:border-box;background-color:var(--paper);background-image:var(--grid-bg);background-size:var(--grid-cell) var(--grid-cell)">
+              <sc-if value="{{ c.circle }}" hint-placeholder-val="{{ true }}">
+                <div style="position:absolute;width:940px;height:940px;border-radius:50%;background:var(--lime);top:170px;left:-370px"></div>
+              </sc-if>
+              <sc-if value="{{ c.square }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;width:760px;height:760px;background:var(--lime);top:190px;left:-300px"></div>
+              </sc-if>
+              <sc-if value="{{ c.bars }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:200px;left:0;display:flex;flex-direction:column;gap:28px">
+                  <div style="width:860px;height:150px;background:var(--lime)"></div>
+                  <div style="width:580px;height:150px;background:var(--lime)"></div>
+                  <div style="width:300px;height:150px;background:var(--lime)"></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ safe }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:285px;left:0;right:0;height:1350px;border-top:3px dashed var(--ink-3);border-bottom:3px dashed var(--ink-3)"></div>
+              </sc-if>
+              <div style="position:absolute;top:285px;left:0;right:0;height:1350px;padding:96px 84px;box-sizing:border-box;display:flex;flex-direction:column">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="font-family:var(--font-fa);font-size:34px;font-weight:700;background:var(--ink);color:var(--white);padding:12px 28px">ریلز · {{ c.cat }}</div>
+                  <div dir="ltr" style="font-family:var(--font-mono);font-size:34px;font-weight:500">{{ c.num }}</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:36px">
+                  <div style="display:flex"><div dir="ltr" style="font-family:var(--font-mono);font-size:48px;font-weight:500;line-height:1.3;background:var(--white);border:3px solid var(--ink);padding:6px 22px">{{ c.en }}</div></div>
+                  <div style="font-size:{{ c.fs }}px;font-weight:900;line-height:1.12;letter-spacing:-2px;text-wrap:balance">{{ c.fa }}</div>
+                  <sc-if value="{{ c.hasSub }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:56px;font-weight:700;line-height:1.4;color:var(--ink-2);text-wrap:balance">{{ c.sub }}</div>
+                  </sc-if>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;border-top:3px solid var(--ink);padding-top:32px;font-size:34px">
+                  <div dir="ltr" style="font-family:var(--font-mono)">ruby.explains</div>
+                  <div style="font-weight:500">{{ c.day }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;zoom&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[0.2,0.3,0.5,1],&quot;default&quot;:0.3,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;نمایش&quot;},&quot;showSafeZone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;نمایش&quot;},&quot;category&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;all&quot;,&quot;digital&quot;,&quot;branding&quot;,&quot;sales&quot;],&quot;default&quot;:&quot;all&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;نمایش&quot;}}">
+const RAW = [
+  [29,'پارامترهای UTM','ردیابی دقیق منبع فروش','UTM Parameters'],
+  [30,'داستان برند','','Brand Story'],
+  [31,'امتیازدهی به سرنخ','','Lead Scoring'],
+  [32,'نرخ ترک سبد خرید','','Cart Abandonment Rate'],
+  [33,'هویت بصری برند','فراتر از لوگو','Visual Identity System'],
+  [34,'پرورش سرنخ','','Lead Nurturing'],
+  [35,'مخاطب مشابه در تبلیغات','','Lookalike Audience'],
+  [36,'آرکی‌تایپ برند','','Brand Archetype'],
+  [37,'فروش مکمل و فروش بیشتر','','Cross-sell & Up-sell'],
+  [38,'بهینه‌سازی پروفایل گوگل‌مپ کسب‌وکار','','Google Business Profile'],
+  [39,'تمایز برند از رقبا','فراتر از USP','Brand Differentiation'],
+  [40,'CRM ساده برای کسب‌وکار کوچیک','حتی یه گوگل‌شیت','CRM'],
+  [41,'قیف محتوا','','TOFU / MOFU / BOFU'],
+  [42,'سازگاری برند در همه‌ی کانال‌ها','','Brand Consistency'],
+  [43,'نرخ برد معامله','','Win Rate'],
+  [44,'نرخ باز شدن و کلیک ایمیل','','Email Open Rate & CTR'],
+  [45,'تجربه برند در نقاط تماس مشتری','','Brand Experience'],
+  [46,'کوتاه کردن چرخه‌ی فروش','','Sales Cycle'],
+  [47,'رسانه‌ی خودی، کسب‌شده و پولی','','Owned vs Earned vs Paid'],
+  [48,'ریبرندینگ','بدون از دست دادن مشتری قدیمی','Rebranding'],
+  [49,'رفع اعتراض مشتری','','Objection Handling'],
+  [50,'طراحی صفحه‌ی فرود تبدیل‌محور','','Landing Page Conversion'],
+  [51,'روان‌شناسی رنگ در برندینگ','','Color Psychology'],
+  [52,'برنامه‌ی ارجاع مشتری','','Referral Program'],
+  [53,'تقسیم‌بندی مخاطب بر اساس رفتار','','Behavioral Segmentation'],
+  [54,'برند کارفرما','چرا برای کسب‌وکار کوچیک هم مهمه','Employer Branding'],
+  [55,'دقیقاً کجای قیف فروش گیر کردی','','Sales Funnel Diagnosis'],
+  [56,'یه دنباله‌ی ساده‌ی اتوماسیون بازاریابی','','Marketing Automation'],
+  [57,'تن صدای برند در ویدیو','','Brand Voice in Video'],
+  [58,'پیش‌بینی فروش ساده','برای کسب‌وکار کوچیک','Sales Forecasting']
+];
+const CATS = [
+  { cat:'دیجیتال مارکتینگ', day:'دوشنبه', key:'digital' },
+  { cat:'برندینگ', day:'سه‌شنبه', key:'branding' },
+  { cat:'فروش و رشد', day:'چهارشنبه', key:'sales' }
+];
+const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+const fa = n => String(n).replace(/\d/g, d => FA_DIGITS[d]);
+const size = t => { const l = t.length; return l <= 10 ? 200 : l <= 16 ? 168 : l <= 24 ? 136 : 116; };
+
+class Component extends DCLogic {
+  renderVals() {
+    const filter = this.props.category ?? 'all';
+    const covers = RAW.map(([no, faT, sub, en], i) => {
+      const c = CATS[i % 3];
+      return { no, num: 'No.0' + no, fa: faT, sub, hasSub: !!sub, en, cat: c.cat, day: c.day, key: c.key,
+        fs: size(faT), circle: c.key === 'digital', square: c.key === 'branding', bars: c.key === 'sales' };
+    });
+    const weeks = [];
+    for (let w = 0; w < 10; w++) {
+      const items = covers.slice(w * 3, w * 3 + 3).filter(c => filter === 'all' || c.key === filter);
+      if (items.length) weeks.push({ label: 'هفته ' + fa(w + 1), items });
+    }
+    return { weeks, zoom: this.props.zoom ?? 0.3, safe: this.props.showSafeZone ?? false };
+  }
+}
+</script>
+</body>
+</html>
