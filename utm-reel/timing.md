@@ -29,8 +29,8 @@ then matched to the script by hand. All times are seconds in the source.
 | 80.4 | اشتباه خیلی‌ها اینه… | «اشتباه رایج» + same link in 3 tiles (82.6+), «؟» at 86.3 |
 | 88.8 | درحالی‌که بدون ردیابی درست… | traffic bar goes 72% «نامعلوم» (90.6) |
 | 93.75–94.45 | (pause) | section wipe |
-| 94.5 / 98.8 / 100.6 | CTA lines | checklist, ticks at 97.3 / 100.45 / 103.55 |
-| 104.4 | (end) | save CTA + ruby.explains handle |
+| 94.5 / 98.8 / 100.6 | CTA lines | checklist, ticks at 97.3 / 100.45 / 103.4 |
+| 103.95 | (end) | save CTA + ruby.explains handle; video cut at 105.0 (1:45) |
 
 ## Rebuild
 ```
@@ -38,5 +38,5 @@ then matched to the script by hand. All times are seconds in the source.
 NODE_PATH=$(npm root -g) node render.mjs frames/ 30 4
 ffmpeg -i graded.mp4 -framerate 30 -i frames/f%05d.png \
   -filter_complex "[0:v][1:v]overlay=eof_action=pass,format=yuv420p[v]" \
-  -map "[v]" -map 0:a -c:v libx264 -preset slow -crf 20 -c:a aac -b:a 160k -shortest utm-reel.mp4
+  -map "[v]" -map 0:a -t 105 -af afade=t=out:st=104.7:d=0.3 -c:v libx264 -preset slow -crf 20 -c:a aac -b:a 160k utm-reel.mp4
 ```

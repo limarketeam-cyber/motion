@@ -330,7 +330,7 @@ body.preview{background:#7a7468;display:grid;place-items:center;min-height:100vh
 <script>
 (async () => {
   const RENDER = new URLSearchParams(location.search).has('render');
-  const TOTAL = 107.15;
+  const TOTAL = 105.0;
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   if (!RENDER) {
     document.body.classList.add('preview');
@@ -486,10 +486,10 @@ body.preview{background:#7a7468;display:grid;place-items:center;min-height:100vh
   rise(I[0], 94.5);
   pop(I[0].querySelector('.fill'), 97.3);               // «جدا بساز»
   rise(I[1], 98.8); pop(I[1].querySelector('.fill'), 100.45);   // «مقایسه کن»
-  rise(I[2], 100.6); mark('#s6m', 102.2); pop(I[2].querySelector('.fill'), 103.55);
-  out(['#s6card', '#s6t1'], 104.15);
-  rise('#end', 104.4);
-  tl.fromTo('#endrule', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 104.6); // rules draw from the right
+  rise(I[2], 100.6); mark('#s6m', 102.2); pop(I[2].querySelector('.fill'), 103.4);
+  out(['#s6card', '#s6t1'], 103.8);
+  rise('#end', 103.95);
+  tl.fromTo('#endrule', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 104.15); // rules draw from the right
   tl.set({}, {}, TOTAL);
 
   window.__total = TOTAL;
