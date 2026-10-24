@@ -39,3 +39,12 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
 - Text slabs track the lapel mic (`teaser_mic.js`, smoothed per shot) to cover it.
 - Editing fixes: orange flash frames removed, 3-frame soft blend on mid-sentence cuts,
   camera punch-in changes only between sentences.
+
+### Teaser v4 (current `samsung-vietnam-teaser.mp4`, 37.9s)
+- `teaser4.html` + `teaser_edl2.json`: natural pauses kept inside sentences (no
+  mid-sentence jump cuts); the source's orange light-leak frames removed.
+- Chest text: one fixed position for the whole video — centred, at lapel-mic height;
+  style = white words + key word in a red pill.
+- Tiles sit behind the speaker; each placed so its icon and caption are never covered
+  by head/body in any frame it is shown (only ~15% of the tile edge tucks behind).
+- SFX cues are remapped to the new cut (`teaser4_sfx_mapped.json`).
