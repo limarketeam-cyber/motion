@@ -12,11 +12,11 @@
   --orange:#ff7a1a; --board:#eceef2; --grid:#dde1e8; --ink:#16161d; --green:#22c55e; --red:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#000;width:1080px;height:1080px;overflow:hidden}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
 body{font-family:"Vazirmatn",sans-serif}
-#stage{position:relative;width:1080px;height:1080px;overflow:hidden;background:#000}
-#cam{position:absolute;inset:0;transform-origin:540px 400px}
-#vid{position:absolute;inset:0;width:1080px;height:1080px;display:block}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 560px}
+#vid{position:absolute;inset:0;width:1080px;height:1920px;display:block}
 .layer{position:absolute;inset:0;pointer-events:none}
 .abs{position:absolute}
 .hide{opacity:0}
@@ -33,7 +33,7 @@ body{font-family:"Vazirmatn",sans-serif}
   font-weight:800;font-size:26px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
 
 /* ---------- kinetic text on the chest ---------- */
-.kt{position:absolute;isolation:isolate;left:0;right:0;top:560px;text-align:center;opacity:0;
+.kt{position:absolute;isolation:isolate;left:0;right:0;top:1040px;text-align:center;opacity:0;
   font-weight:900;font-size:96px;line-height:1.15;color:#fff;letter-spacing:-1px;
   text-shadow:0 0 3px rgba(0,0,0,.9),0 8px 26px rgba(0,0,0,.75),0 2px 0 rgba(0,0,0,.4)}
 .kt::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:240px;transform:translate(-50%,-50%);
@@ -49,7 +49,7 @@ body{font-family:"Vazirmatn",sans-serif}
   color:var(--ink);overflow:hidden}
 
 /* call card */
-#call{left:40px;top:96px;width:330px;padding:24px 24px 26px}
+#call{left:40px;top:250px;width:330px;padding:24px 24px 26px}
 #call .t1{font-size:24px;color:#8a8f99;font-weight:700}
 #call .t2{font-size:44px;font-weight:900;margin-top:2px}
 #call .av{position:absolute;left:22px;top:22px;width:78px;height:78px;border-radius:50%;
@@ -62,7 +62,7 @@ body{font-family:"Vazirmatn",sans-serif}
 #call .b.r img{transform:rotate(135deg)}
 
 /* phone mock (back of a Galaxy A) */
-#phone{position:absolute;left:792px;top:70px;width:220px;height:440px;opacity:0}
+#phone{position:absolute;left:800px;top:300px;width:220px;height:440px;opacity:0}
 #phone .body{position:absolute;inset:0;border-radius:36px;
   background:linear-gradient(150deg,#cfd6ff 0%,#a9b4f5 40%,#7d87e6 100%);
   box-shadow:0 30px 60px rgba(0,0,0,.5), inset 0 0 0 3px rgba(255,255,255,.55), inset -10px -12px 30px rgba(40,40,120,.35)}
@@ -81,7 +81,7 @@ body{font-family:"Vazirmatn",sans-serif}
   padding:8px 20px 10px;border-radius:14px;box-shadow:0 12px 26px rgba(0,0,0,.45);white-space:nowrap}
 
 /* spec card */
-#spec{left:676px;top:50px;width:384px;padding:20px 20px 12px}
+#spec{left:700px;top:250px;width:360px;padding:20px 20px 12px}
 #spec .hd{font-size:27px;white-space:nowrap;font-weight:900;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 #spec .row{display:flex;align-items:center;gap:14px;padding:12px 10px;border-radius:18px;margin-bottom:8px;
   background:#f3f5fb;opacity:0}
@@ -101,17 +101,17 @@ body{font-family:"Vazirmatn",sans-serif}
   background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);
   background-size:72px 72px}
 .shape{position:absolute}
-.scene{position:absolute;inset:0;opacity:0}
+.scene{position:absolute;inset:0;top:160px;opacity:0}
 .bcard{position:absolute;background:#fff;border-radius:26px;box-shadow:0 24px 54px rgba(40,40,110,.22);overflow:hidden;opacity:0}
 .bcard img.shot{display:block;width:100%}
 .hl{position:absolute;background:rgba(255,212,59,.55);mix-blend-mode:multiply;border-radius:4px;transform-origin:left center;transform:scaleX(0)}
-.note{position:absolute;color:var(--violet);font-weight:900;font-size:44px;line-height:1.2;opacity:0;text-align:right}
+.note{position:absolute;color:var(--violet);font-weight:900;font-size:48px;line-height:1.2;opacity:0;text-align:right}
 .tile{position:absolute;width:170px;height:170px;border-radius:34px;background:#fff;box-shadow:0 18px 40px rgba(40,40,110,.22);
   display:grid;place-items:center;opacity:0}
 .tile svg{width:140px;height:30px;fill:var(--blue)}
 .arrow{position:absolute;overflow:visible}
 .num{position:absolute;display:flex;align-items:center;gap:16px;opacity:0}
-.num .c{width:86px;height:86px;border-radius:50%;background:var(--violet);color:#fff;font-size:58px;font-weight:900;
+.num .c{width:96px;height:96px;border-radius:50%;background:var(--violet);color:#fff;font-size:58px;font-weight:900;
   display:grid;place-items:center;box-shadow:0 12px 26px rgba(108,76,245,.45)}
 .num .t{font-size:52px;font-weight:900;color:var(--ink)}
 .bemo{position:absolute;opacity:0;filter:drop-shadow(0 18px 18px rgba(40,40,110,.28))}
@@ -124,16 +124,16 @@ body{font-family:"Vazirmatn",sans-serif}
   box-shadow:0 18px 40px rgba(40,40,110,.22);font-weight:900;font-size:46px;color:var(--ink);opacity:0;white-space:nowrap}
 .pill img{width:64px;height:64px}
 .quote{position:absolute;background:#fff;border-radius:26px;box-shadow:0 24px 54px rgba(40,40,110,.22);padding:30px 36px;opacity:0}
-.quote .en{direction:ltr;text-align:left;font-family:Georgia,"DejaVu Serif",serif;font-size:36px;line-height:1.35;color:#222;font-style:italic}
+.quote .en{direction:ltr;text-align:left;font-family:Georgia,"DejaVu Serif",serif;font-size:42px;line-height:1.35;color:#222;font-style:italic}
 .quote .en mark{background:linear-gradient(transparent 12%,rgba(255,212,59,.8) 12%,rgba(255,212,59,.8) 92%,transparent 92%);
   background-size:0% 100%;background-repeat:no-repeat;color:inherit}
-.quote .fa{margin-top:16px;font-size:34px;font-weight:800;color:var(--violet);line-height:1.45}
+.quote .fa{margin-top:18px;font-size:40px;font-weight:800;color:var(--violet);line-height:1.45}
 .quote .src{margin-top:14px;direction:ltr;text-align:left;font-size:22px;font-weight:700;color:#8a8f99;font-family:"Vazirmatn",sans-serif}
 .stamp{position:absolute;opacity:0;border:8px solid var(--blue);color:var(--blue);border-radius:20px;padding:10px 26px 14px;
   font-weight:900;font-size:46px;background:rgba(255,255,255,.92);white-space:nowrap}
 .check{position:absolute;opacity:0}
 /* list inside board card */
-.steps .st{display:flex;align-items:center;gap:16px;font-size:40px;font-weight:900;padding:16px 8px;border-bottom:3px dashed #e4e7ef;opacity:0}
+.steps .st{display:flex;align-items:center;gap:16px;font-size:46px;font-weight:900;padding:16px 8px;border-bottom:3px dashed #e4e7ef;opacity:0}
 .steps .st:last-child{border-bottom:0}
 .steps .st img{width:58px;height:58px}
 /* shop rows */
@@ -142,13 +142,13 @@ body{font-family:"Vazirmatn",sans-serif}
 .shop .r{display:flex;align-items:center;gap:20px;padding:18px 28px;border-bottom:2px solid #eef0f5;opacity:0}
 .shop .r .f{width:84px;height:63px;border-radius:10px;overflow:hidden;flex:none;box-shadow:0 4px 10px rgba(0,0,0,.18)}
 .shop .r .f img{width:100%;height:100%;object-fit:cover}
-.shop .r .m{direction:ltr;font-size:38px;font-weight:900;flex:1;text-align:left}
+.shop .r .m{direction:ltr;font-size:44px;font-weight:900;flex:1;text-align:left}
 .shop .r .p{font-size:32px;font-weight:900;color:#fff;background:var(--green);border-radius:14px;padding:6px 18px 8px}
 
 /* board subtitle (same look as the burned-in one) */
-#bsub{position:absolute;left:0;right:0;top:826px;text-align:center;opacity:0}
-#bsub span{display:inline-block;background:rgba(0,0,0,.72);color:#fff;font-weight:800;font-size:34px;
-  padding:4px 16px 8px;border-radius:10px}
+#bsub{position:absolute;left:0;right:0;top:1490px;text-align:center;opacity:0}
+#bsub span{display:inline-block;background:rgba(0,0,0,.72);color:#fff;font-weight:800;font-size:44px;
+  padding:6px 20px 12px;border-radius:10px}
 
 /* flash for transitions */
 #flash{position:absolute;inset:0;background:#fff;opacity:0}
@@ -161,12 +161,12 @@ body{font-family:"Vazirmatn",sans-serif}
   <!-- ====== overlays on the speaker ====== -->
   <div class="layer" id="fx">
     <!-- hook -->
-    <div class="flag" id="f1" style="left:58px;top:120px;width:200px;height:150px"><img src="assets/flags/vn.svg"><div class="cap">ویتنام</div></div>
-    <div class="flag" id="f2" style="left:812px;top:84px;width:200px;height:150px"><img src="assets/flags/cn.svg"><div class="cap">چین</div></div>
-    <div class="flag" id="f3" style="left:836px;top:290px;width:190px;height:142px"><img src="assets/flags/in.svg"><div class="cap">هند</div></div>
-    <div class="flag" id="f4" style="left:90px;top:318px;width:170px;height:128px"><img src="assets/flags/kr.svg"><div class="cap">کره</div></div>
-    <div class="emo" id="e_shield" style="left:70px;top:140px;width:220px;height:220px"><img src="assets/emoji/shield.png"></div>
-    <div class="emo" id="e_q1" style="left:790px;top:110px;width:230px;height:230px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="flag" id="f1" style="left:46px;top:300px;width:220px;height:165px"><img src="assets/flags/vn.svg"><div class="cap">ویتنام</div></div>
+    <div class="flag" id="f2" style="left:812px;top:250px;width:220px;height:165px"><img src="assets/flags/cn.svg"><div class="cap">چین</div></div>
+    <div class="flag" id="f3" style="left:830px;top:490px;width:200px;height:150px"><img src="assets/flags/in.svg"><div class="cap">هند</div></div>
+    <div class="flag" id="f4" style="left:70px;top:540px;width:190px;height:142px"><img src="assets/flags/kr.svg"><div class="cap">کره</div></div>
+    <div class="emo" id="e_shield" style="left:50px;top:320px;width:260px;height:260px"><img src="assets/emoji/shield.png"></div>
+    <div class="emo" id="e_q1" style="left:780px;top:280px;width:270px;height:270px"><img src="assets/emoji/red_question_mark.png"></div>
 
     <!-- story -->
     <div class="card" id="call">
@@ -188,16 +188,16 @@ body{font-family:"Vazirmatn",sans-serif}
       <div class="cam" style="top:162px"></div>
       <div class="logo"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
     </div>
-    <div class="emo" id="e_ex" style="left:70px;top:120px;width:230px;height:230px"><img src="assets/emoji/double_exclamation_mark.png"></div>
-    <div class="flag" id="fvn" style="left:52px;top:110px;width:290px;height:218px"><img src="assets/flags/vn.svg"></div>
-    <div class="sticker" id="st_vn" style="left:70px;top:345px;direction:ltr">Made in Vietnam</div>
-    <div class="emo" id="e_monkey" style="left:790px;top:100px;width:240px;height:240px"><img src="assets/emoji/hear-no-evil_monkey.png"></div>
+    <div class="emo" id="e_ex" style="left:50px;top:300px;width:260px;height:260px"><img src="assets/emoji/double_exclamation_mark.png"></div>
+    <div class="flag" id="fvn" style="left:40px;top:280px;width:300px;height:225px"><img src="assets/flags/vn.svg"></div>
+    <div class="sticker" id="st_vn" style="left:56px;top:530px;direction:ltr">Made in Vietnam</div>
+    <div class="emo" id="e_monkey" style="left:785px;top:300px;width:260px;height:260px"><img src="assets/emoji/hear-no-evil_monkey.png"></div>
 
     <!-- point 2 -->
-    <div class="emo" id="g1" style="left:70px;top:110px;width:200px;height:200px"><img src="assets/emoji/gear.png"></div>
-    <div class="emo" id="g2" style="left:800px;top:90px;width:210px;height:210px"><img src="assets/emoji/gear.png"></div>
-    <div class="emo" id="g3" style="left:880px;top:300px;width:130px;height:130px"><img src="assets/emoji/gear.png"></div>
-    <div class="emo" id="fac2" style="left:90px;top:320px;width:150px;height:150px"><img src="assets/emoji/factory.png"></div>
+    <div class="emo" id="g1" style="left:50px;top:300px;width:230px;height:230px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="g2" style="left:790px;top:260px;width:240px;height:240px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="g3" style="left:880px;top:520px;width:140px;height:140px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="fac2" style="left:70px;top:570px;width:180px;height:180px"><img src="assets/emoji/factory.png"></div>
 
     <!-- four things -->
     <div class="card" id="spec">
@@ -211,16 +211,16 @@ body{font-family:"Vazirmatn",sans-serif}
       </div><div class="lb">حافظه</div><img class="ok" src="assets/emoji/check_mark_button.png"></div>
       <div class="row star" id="r4"><div class="n">۴</div><div class="ic"><img src="assets/emoji/shield.png"></div><div class="lb">گارانتی</div><span class="tag">مهم‌ترین</span></div>
     </div>
-    <div class="emo" id="e_shield2" style="left:60px;top:120px;width:250px;height:250px"><img src="assets/emoji/shield.png"></div>
+    <div class="emo" id="e_shield2" style="left:40px;top:320px;width:270px;height:270px"><img src="assets/emoji/shield.png"></div>
 
     <!-- ending -->
-    <div class="emo" id="e_cart" style="left:70px;top:120px;width:230px;height:230px"><img src="assets/emoji/shopping_cart.png"></div>
-    <div class="emo" id="e_money1" style="left:790px;top:110px;width:220px;height:220px"><img src="assets/emoji/money_with_wings.png"></div>
-    <div class="emo" id="e_money2" style="left:70px;top:150px;width:180px;height:180px"><img src="assets/emoji/money_with_wings.png"></div>
-    <div class="emo" id="e_think" style="left:800px;top:110px;width:220px;height:220px"><img src="assets/emoji/thinking_face.png"></div>
-    <div class="emo" id="e_scale" style="left:60px;top:120px;width:240px;height:240px"><img src="assets/emoji/balance_scale.png"></div>
-    <div class="emo" id="e_q2" style="left:780px;top:90px;width:260px;height:260px"><img src="assets/emoji/red_question_mark.png"></div>
-    <div class="emo" id="e_q3" style="left:90px;top:120px;width:150px;height:150px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="emo" id="e_cart" style="left:50px;top:320px;width:260px;height:260px"><img src="assets/emoji/shopping_cart.png"></div>
+    <div class="emo" id="e_money1" style="left:790px;top:280px;width:250px;height:250px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_money2" style="left:60px;top:340px;width:210px;height:210px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_think" style="left:790px;top:300px;width:250px;height:250px"><img src="assets/emoji/thinking_face.png"></div>
+    <div class="emo" id="e_scale" style="left:40px;top:320px;width:270px;height:270px"><img src="assets/emoji/balance_scale.png"></div>
+    <div class="emo" id="e_q2" style="left:770px;top:260px;width:290px;height:290px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="emo" id="e_q3" style="left:70px;top:330px;width:180px;height:180px"><img src="assets/emoji/red_question_mark.png"></div>
 
     <!-- kinetic texts -->
     <div class="kt" id="k1"><span class="w c">کشورِ</span><span class="w">سازنده</span></div>
@@ -243,20 +243,20 @@ body{font-family:"Vazirmatn",sans-serif}
   <!-- ====== board cutaways ====== -->
   <div id="board">
     <div class="grid"></div>
-    <svg class="shape" id="sh1" style="left:-60px;top:-40px;width:420px;height:380px" viewBox="0 0 420 380">
+    <svg class="shape" id="sh1" style="left:-80px;top:-60px;width:560px;height:507px" viewBox="0 0 420 380">
       <defs><linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b5bf0"/><stop offset="1" stop-color="#a5a3ff"/></linearGradient></defs>
       <path d="M0 0 L300 20 L120 360 Z" fill="url(#gv)" opacity=".95"/><path d="M230 0 L420 60 L260 200 Z" fill="#8e8cff" opacity=".55"/></svg>
-    <svg class="shape" id="sh2" style="right:-60px;bottom:-60px;width:460px;height:420px" viewBox="0 0 460 420">
+    <svg class="shape" id="sh2" style="right:-80px;bottom:-80px;width:610px;height:557px" viewBox="0 0 460 420">
       <path d="M460 420 L120 400 L360 40 Z" fill="url(#gv)" opacity=".95"/><path d="M200 420 L0 330 L170 230 Z" fill="#8e8cff" opacity=".5"/></svg>
 
     <!-- scene A: Samsung support page -->
     <div class="scene" id="sA">
-      <div class="tile" id="aTile" style="left:850px;top:70px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
-      <div class="note" id="aNote" style="right:262px;top:92px;width:560px">صفحه‌ی رسمی<br>پشتیبانی سامسونگ</div>
-      <svg class="arrow" id="aArr" style="left:760px;top:230px;width:150px;height:110px" viewBox="0 0 150 110">
+      <div class="tile" id="aTile" style="left:850px;top:220px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="aNote" style="right:262px;top:248px;width:560px">صفحه‌ی رسمی<br>پشتیبانی سامسونگ</div>
+      <svg class="arrow" id="aArr" style="left:760px;top:385px;width:150px;height:110px" viewBox="0 0 150 110">
         <path d="M120 4 C 120 60, 80 90, 20 96" fill="none" stroke="#ff7a1a" stroke-width="7" stroke-linecap="round" stroke-dasharray="14 12"/>
         <path d="M34 80 L16 97 L38 106" fill="none" stroke="#ff7a1a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="bcard" id="aCard" style="left:60px;top:300px;width:960px;padding:0 0 26px">
+      <div class="bcard" id="aCard" style="left:60px;top:500px;width:960px;padding:0 0 26px">
         <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
         <div style="position:relative;margin:18px 30px 0">
           <img class="shot" src="assets/ev/community_par.jpg">
@@ -265,26 +265,26 @@ body{font-family:"Vazirmatn",sans-serif}
         </div>
         <div class="fa" id="aFa" style="margin:16px 30px 0;font-size:34px;font-weight:800;color:var(--violet);line-height:1.45;opacity:0">«گوشی‌ای که توی کارخونه‌ی ویتنام ساخته شده، ذاتاً از نمونه‌ی ساخت اندونزی بهتر نیست.»</div>
       </div>
-      <div class="num" id="aNum" style="left:70px;top:150px"><div class="c">۳</div><div class="t">نکته</div></div>
+      <div class="num" id="aNum" style="left:50%;top:1030px;transform:translateX(-50%)"><div class="c">۳</div><div class="t">نکته</div></div>
     </div>
 
     <!-- scene B: factories -->
     <div class="scene" id="sB">
-      <div class="num" id="bNum" style="right:70px;top:70px"><div class="c">۱</div><div class="t">کارخونه‌ها</div></div>
-      <div class="bemo" id="bF1" style="left:130px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
-      <div class="bemo" id="bF2" style="left:440px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
-      <div class="bemo" id="bF3" style="left:750px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
-      <div class="bflag" id="bG1" style="left:175px;top:440px;width:110px;height:83px"><img src="assets/flags/cn.svg"></div>
-      <div class="bflag" id="bG2" style="left:485px;top:440px;width:110px;height:83px"><img src="assets/flags/in.svg"></div>
-      <div class="bflag" id="bG3" style="left:795px;top:440px;width:110px;height:83px"><img src="assets/flags/vn.svg"></div>
-      <div class="lbl" id="bL1" style="left:130px;top:535px;width:200px">چین</div>
-      <div class="lbl" id="bL2" style="left:440px;top:535px;width:200px">هند</div>
-      <div class="lbl" id="bL3" style="left:750px;top:535px;width:200px">ویتنام</div>
-      <div class="eq" id="bE1" style="left:355px;top:255px">=</div>
-      <div class="eq" id="bE2" style="left:665px;top:255px">=</div>
-      <div class="pill" id="bPill" style="left:50%;top:650px;transform:translateX(-50%)"><img src="assets/emoji/check_mark_button.png">کیفیت یکسان</div>
+      <div class="num" id="bNum" style="right:70px;top:230px"><div class="c">۱</div><div class="t">کارخونه‌ها</div></div>
+      <div class="bemo" id="bF1" style="left:80px;top:420px;width:240px;height:240px"><img src="assets/emoji/factory.png"></div>
+      <div class="bemo" id="bF2" style="left:420px;top:420px;width:240px;height:240px"><img src="assets/emoji/factory.png"></div>
+      <div class="bemo" id="bF3" style="left:760px;top:420px;width:240px;height:240px"><img src="assets/emoji/factory.png"></div>
+      <div class="bflag" id="bG1" style="left:135px;top:690px;width:130px;height:98px"><img src="assets/flags/cn.svg"></div>
+      <div class="bflag" id="bG2" style="left:475px;top:690px;width:130px;height:98px"><img src="assets/flags/in.svg"></div>
+      <div class="bflag" id="bG3" style="left:815px;top:690px;width:130px;height:98px"><img src="assets/flags/vn.svg"></div>
+      <div class="lbl" id="bL1" style="left:100px;top:808px;width:200px">چین</div>
+      <div class="lbl" id="bL2" style="left:440px;top:808px;width:200px">هند</div>
+      <div class="lbl" id="bL3" style="left:780px;top:808px;width:200px">ویتنام</div>
+      <div class="eq" id="bE1" style="left:330px;top:470px">=</div>
+      <div class="eq" id="bE2" style="left:668px;top:470px">=</div>
+      <div class="pill" id="bPill" style="left:50%;top:990px;transform:translateX(-50%)"><img src="assets/emoji/check_mark_button.png">کیفیت یکسان</div>
       <!-- evidence -->
-      <div class="quote" id="bQ" style="left:70px;top:250px;width:940px">
+      <div class="quote" id="bQ" style="left:70px;top:560px;width:940px">
         <div class="en">“The company has factories in several countries… <mark>Samsung maintains a single quality standard across all of its factories.</mark>”</div>
         <div class="fa">«سامسونگ توی همه‌ی کارخونه‌هاش یک استاندارد کیفیت داره.»</div>
         <div class="src">— SamMobile · where are Samsung phones made</div>
@@ -293,19 +293,19 @@ body{font-family:"Vazirmatn",sans-serif}
 
     <!-- scene C: quality control -->
     <div class="scene" id="sC">
-      <div class="num" id="cNum" style="right:70px;top:70px"><div class="c">۳</div><div class="t">کنترل کیفیت قبل از عرضه</div></div>
-      <div class="bemo" id="cPhone" style="left:80px;top:240px;width:330px;height:330px"><img src="assets/emoji/mobile_phone.png"></div>
-      <div class="bemo" id="cMag" style="left:200px;top:300px;width:220px;height:220px"><img src="assets/emoji/magnifying_glass_tilted_left.png"></div>
-      <div class="bcard steps" id="cList" style="left:470px;top:220px;width:540px;padding:14px 30px">
+      <div class="num" id="cNum" style="right:70px;top:230px"><div class="c">۳</div><div class="t">کنترل کیفیت قبل از عرضه</div></div>
+      <div class="bemo" id="cPhone" style="left:50px;top:420px;width:380px;height:380px"><img src="assets/emoji/mobile_phone.png"></div>
+      <div class="bemo" id="cMag" style="left:190px;top:490px;width:250px;height:250px"><img src="assets/emoji/magnifying_glass_tilted_left.png"></div>
+      <div class="bcard steps" id="cList" style="left:460px;top:420px;width:570px;padding:14px 30px">
         <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی اول</div>
         <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی دوم</div>
         <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی سوم</div>
       </div>
-      <div class="stamp" id="cStamp" style="left:300px;top:610px">استاندارد رسمی سامسونگ</div>
+      <div class="stamp" id="cStamp" style="left:230px;top:960px">استاندارد رسمی سامسونگ</div>
       <!-- evidence -->
-      <div class="tile" id="cTile" style="left:850px;top:200px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
-      <div class="note" id="cNote" style="right:262px;top:210px;width:600px">گزارش رسمی<br>سامسونگ ـ ۲۰۲۴</div>
-      <div class="quote" id="cQ" style="left:70px;top:420px;width:940px">
+      <div class="tile" id="cTile" style="left:850px;top:330px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="cNote" style="right:262px;top:350px;width:600px">گزارش رسمی<br>سامسونگ ـ ۲۰۲۴</div>
+      <div class="quote" id="cQ" style="left:70px;top:590px;width:940px">
         <div class="en">“…the highest quality products that satisfy customers are produced <mark>uniformly no matter where they are produced.</mark>”</div>
         <div class="fa">«محصولات، هر جا که تولید بشن، با یک کیفیت یکسان ساخته می‌شن.»</div>
         <div class="src">— Samsung Electronics Sustainability Report 2024</div>
@@ -314,13 +314,13 @@ body{font-family:"Vazirmatn",sans-serif}
 
     <!-- scene D: same price on Hamahang -->
     <div class="scene" id="sD">
-      <div class="bcard shop" id="dCard" style="left:110px;top:150px;width:860px">
+      <div class="bcard shop" id="dCard" style="left:90px;top:400px;width:900px">
         <div class="hd"><img src="assets/emoji/shopping_cart.png">سایت هماهنگ</div>
         <div class="r" id="dR1"><div class="f"><img src="assets/flags/vn.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
         <div class="r" id="dR2"><div class="f"><img src="assets/flags/in.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
         <div class="r" id="dR3" style="border-bottom:0"><div class="f"><img src="assets/flags/cn.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
       </div>
-      <div class="stamp" id="dStamp" style="left:340px;top:640px;border-color:var(--green);color:var(--green)">همه یک قیمت ✓</div>
+      <div class="stamp" id="dStamp" style="left:330px;top:960px;border-color:var(--green);color:var(--green)">همه یک قیمت ✓</div>
     </div>
 
     <div id="bsub"><span></span></div>

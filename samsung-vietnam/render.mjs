@@ -8,7 +8,7 @@ const only = process.argv[3] ? process.argv[3].split(',').map(Number) : null;
 fs.mkdirSync(out, { recursive: true });
 const browser = await chromium.launch();
 async function worker(list) {
-  const page = await browser.newPage({ viewport: { width: 1080, height: 1080 } });
+  const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   await page.goto('http://127.0.0.1:8765/index.html');
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
