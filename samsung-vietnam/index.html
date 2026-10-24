@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>سامسونگ ویتنام — موشن</title>
+<link rel="stylesheet" href="assets/fonts/vz-700.css">
+<link rel="stylesheet" href="assets/fonts/vz-800.css">
+<link rel="stylesheet" href="assets/fonts/vz-900.css">
+<style>
+:root{
+  --cyan:#3fe0ff; --yellow:#ffd43b; --blue:#1428a0; --violet:#6c4cf5; --violet2:#8e8cff;
+  --orange:#ff7a1a; --board:#eceef2; --grid:#dde1e8; --ink:#16161d; --green:#22c55e; --red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1080px;overflow:hidden}
+body{font-family:"Vazirmatn",sans-serif}
+#stage{position:relative;width:1080px;height:1080px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 400px}
+#vid{position:absolute;inset:0;width:1080px;height:1080px;display:block}
+.layer{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute}
+.hide{opacity:0}
+
+/* ---------- 3D emoji floaters ---------- */
+.emo{position:absolute;opacity:0;filter:drop-shadow(0 18px 22px rgba(0,0,0,.45))}
+.emo img{width:100%;height:100%;display:block}
+
+/* ---------- flags ---------- */
+.flag{position:absolute;opacity:0;border-radius:18px;overflow:hidden;border:6px solid #fff;
+  box-shadow:0 16px 34px rgba(0,0,0,.45)}
+.flag img{width:100%;height:100%;object-fit:cover;display:block}
+.flag .cap{position:absolute;left:0;right:0;bottom:0;padding:4px 0 6px;text-align:center;color:#fff;
+  font-weight:800;font-size:26px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+
+/* ---------- kinetic text on the chest ---------- */
+.kt{position:absolute;isolation:isolate;left:0;right:0;top:560px;text-align:center;opacity:0;
+  font-weight:900;font-size:96px;line-height:1.15;color:#fff;letter-spacing:-1px;
+  text-shadow:0 0 3px rgba(0,0,0,.9),0 8px 26px rgba(0,0,0,.75),0 2px 0 rgba(0,0,0,.4)}
+.kt::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:240px;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(0,0,0,.42),transparent);z-index:-1}
+.kt .w{display:inline-block;margin:0 10px}
+.kt .c{color:var(--cyan);text-shadow:0 0 3px rgba(0,0,0,.8),0 0 22px rgba(63,224,255,.85),0 0 48px rgba(63,224,255,.5)}
+.kt .y{color:var(--yellow);text-shadow:0 0 3px rgba(0,0,0,.8),0 0 22px rgba(255,212,59,.75),0 0 48px rgba(255,212,59,.45)}
+.kt .sm{font-size:64px}
+.kt.ltr{direction:ltr}
+
+/* ---------- white UI cards ---------- */
+.card{position:absolute;opacity:0;background:#fff;border-radius:30px;box-shadow:0 26px 60px rgba(0,0,0,.42);
+  color:var(--ink);overflow:hidden}
+
+/* call card */
+#call{left:40px;top:96px;width:330px;padding:24px 24px 26px}
+#call .t1{font-size:24px;color:#8a8f99;font-weight:700}
+#call .t2{font-size:44px;font-weight:900;margin-top:2px}
+#call .av{position:absolute;left:22px;top:22px;width:78px;height:78px;border-radius:50%;
+  background:linear-gradient(135deg,#dfe7ff,#b9c8ff);display:grid;place-items:center}
+#call .av img{width:62px}
+#call .btns{display:flex;justify-content:space-between;margin-top:22px;padding:0 18px}
+#call .b{width:84px;height:84px;border-radius:50%;display:grid;place-items:center}
+#call .b img{width:52px}
+#call .b.g{background:var(--green)} #call .b.r{background:var(--red)}
+#call .b.r img{transform:rotate(135deg)}
+
+/* phone mock (back of a Galaxy A) */
+#phone{position:absolute;left:792px;top:70px;width:220px;height:440px;opacity:0}
+#phone .body{position:absolute;inset:0;border-radius:36px;
+  background:linear-gradient(150deg,#cfd6ff 0%,#a9b4f5 40%,#7d87e6 100%);
+  box-shadow:0 30px 60px rgba(0,0,0,.5), inset 0 0 0 3px rgba(255,255,255,.55), inset -10px -12px 30px rgba(40,40,120,.35)}
+#phone .cam{position:absolute;left:26px;width:58px;height:58px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,#4a5068 0 22%,#111522 24% 56%,#c8cde6 58% 64%,#2b2f40 66%);
+  box-shadow:0 3px 6px rgba(0,0,0,.4)}
+#phone .logo{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;opacity:.55}
+#phone .logo svg{width:120px;height:20px;fill:#fff}
+#phone .chip{position:absolute;left:50%;top:-58px;transform:translateX(-50%);white-space:nowrap;direction:ltr;
+  background:#111;color:#fff;font-weight:900;font-size:34px;padding:6px 20px 8px;border-radius:16px;
+  box-shadow:0 10px 24px rgba(0,0,0,.45)}
+#phone .chip b{color:var(--cyan)}
+
+/* sticker */
+.sticker{position:absolute;opacity:0;background:var(--yellow);color:#111;font-weight:900;font-size:34px;
+  padding:8px 20px 10px;border-radius:14px;box-shadow:0 12px 26px rgba(0,0,0,.45);white-space:nowrap}
+
+/* spec card */
+#spec{left:676px;top:50px;width:384px;padding:20px 20px 12px}
+#spec .hd{font-size:27px;white-space:nowrap;font-weight:900;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+#spec .row{display:flex;align-items:center;gap:14px;padding:12px 10px;border-radius:18px;margin-bottom:8px;
+  background:#f3f5fb;opacity:0}
+#spec .n{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:900;font-size:28px;
+  display:grid;place-items:center;flex:none}
+#spec .ic{width:54px;height:54px;flex:none;display:grid;place-items:center}
+#spec .ic img,#spec .ic svg{width:54px;height:54px}
+#spec .lb{font-size:31px;font-weight:900;flex:1;white-space:nowrap}
+#spec .ok{width:40px;height:40px;flex:none}
+#spec .row.star{background:linear-gradient(90deg,#fff3c4,#ffe27a)}
+#spec .row.star .n{background:#111}
+#spec .tag{font-size:20px;font-weight:900;background:#111;color:var(--yellow);padding:2px 10px 4px;border-radius:10px}
+
+/* ---------- board (cutaway) ---------- */
+#board{position:absolute;inset:0;background:var(--board);overflow:hidden}
+#board .grid{position:absolute;inset:-60px;
+  background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);
+  background-size:72px 72px}
+.shape{position:absolute}
+.scene{position:absolute;inset:0;opacity:0}
+.bcard{position:absolute;background:#fff;border-radius:26px;box-shadow:0 24px 54px rgba(40,40,110,.22);overflow:hidden;opacity:0}
+.bcard img.shot{display:block;width:100%}
+.hl{position:absolute;background:rgba(255,212,59,.55);mix-blend-mode:multiply;border-radius:4px;transform-origin:left center;transform:scaleX(0)}
+.note{position:absolute;color:var(--violet);font-weight:900;font-size:44px;line-height:1.2;opacity:0;text-align:right}
+.tile{position:absolute;width:170px;height:170px;border-radius:34px;background:#fff;box-shadow:0 18px 40px rgba(40,40,110,.22);
+  display:grid;place-items:center;opacity:0}
+.tile svg{width:140px;height:30px;fill:var(--blue)}
+.arrow{position:absolute;overflow:visible}
+.num{position:absolute;display:flex;align-items:center;gap:16px;opacity:0}
+.num .c{width:86px;height:86px;border-radius:50%;background:var(--violet);color:#fff;font-size:58px;font-weight:900;
+  display:grid;place-items:center;box-shadow:0 12px 26px rgba(108,76,245,.45)}
+.num .t{font-size:52px;font-weight:900;color:var(--ink)}
+.bemo{position:absolute;opacity:0;filter:drop-shadow(0 18px 18px rgba(40,40,110,.28))}
+.bemo img{width:100%;height:100%;display:block}
+.bflag{position:absolute;opacity:0;border-radius:14px;overflow:hidden;border:5px solid #fff;box-shadow:0 12px 26px rgba(40,40,110,.25)}
+.bflag img{width:100%;height:100%;object-fit:cover;display:block}
+.lbl{position:absolute;font-weight:900;font-size:36px;color:var(--ink);text-align:center;opacity:0}
+.eq{position:absolute;font-weight:900;font-size:110px;color:var(--violet);opacity:0;line-height:1}
+.pill{position:absolute;display:flex;align-items:center;gap:14px;background:#fff;border-radius:999px;padding:12px 34px 14px 20px;
+  box-shadow:0 18px 40px rgba(40,40,110,.22);font-weight:900;font-size:46px;color:var(--ink);opacity:0;white-space:nowrap}
+.pill img{width:64px;height:64px}
+.quote{position:absolute;background:#fff;border-radius:26px;box-shadow:0 24px 54px rgba(40,40,110,.22);padding:30px 36px;opacity:0}
+.quote .en{direction:ltr;text-align:left;font-family:Georgia,"DejaVu Serif",serif;font-size:36px;line-height:1.35;color:#222;font-style:italic}
+.quote .en mark{background:linear-gradient(transparent 12%,rgba(255,212,59,.8) 12%,rgba(255,212,59,.8) 92%,transparent 92%);
+  background-size:0% 100%;background-repeat:no-repeat;color:inherit}
+.quote .fa{margin-top:16px;font-size:34px;font-weight:800;color:var(--violet);line-height:1.45}
+.quote .src{margin-top:14px;direction:ltr;text-align:left;font-size:22px;font-weight:700;color:#8a8f99;font-family:"Vazirmatn",sans-serif}
+.stamp{position:absolute;opacity:0;border:8px solid var(--blue);color:var(--blue);border-radius:20px;padding:10px 26px 14px;
+  font-weight:900;font-size:46px;background:rgba(255,255,255,.92);white-space:nowrap}
+.check{position:absolute;opacity:0}
+/* list inside board card */
+.steps .st{display:flex;align-items:center;gap:16px;font-size:40px;font-weight:900;padding:16px 8px;border-bottom:3px dashed #e4e7ef;opacity:0}
+.steps .st:last-child{border-bottom:0}
+.steps .st img{width:58px;height:58px}
+/* shop rows */
+.shop .hd{display:flex;align-items:center;gap:14px;padding:22px 28px;background:var(--blue);color:#fff;font-size:40px;font-weight:900}
+.shop .hd img{width:58px}
+.shop .r{display:flex;align-items:center;gap:20px;padding:18px 28px;border-bottom:2px solid #eef0f5;opacity:0}
+.shop .r .f{width:84px;height:63px;border-radius:10px;overflow:hidden;flex:none;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+.shop .r .f img{width:100%;height:100%;object-fit:cover}
+.shop .r .m{direction:ltr;font-size:38px;font-weight:900;flex:1;text-align:left}
+.shop .r .p{font-size:32px;font-weight:900;color:#fff;background:var(--green);border-radius:14px;padding:6px 18px 8px}
+
+/* board subtitle (same look as the burned-in one) */
+#bsub{position:absolute;left:0;right:0;top:826px;text-align:center;opacity:0}
+#bsub span{display:inline-block;background:rgba(0,0,0,.72);color:#fff;font-weight:800;font-size:34px;
+  padding:4px 16px 8px;border-radius:10px}
+
+/* flash for transitions */
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="cam"><img id="vid" alt=""></div>
+
+  <!-- ====== overlays on the speaker ====== -->
+  <div class="layer" id="fx">
+    <!-- hook -->
+    <div class="flag" id="f1" style="left:58px;top:120px;width:200px;height:150px"><img src="assets/flags/vn.svg"><div class="cap">ویتنام</div></div>
+    <div class="flag" id="f2" style="left:812px;top:84px;width:200px;height:150px"><img src="assets/flags/cn.svg"><div class="cap">چین</div></div>
+    <div class="flag" id="f3" style="left:836px;top:290px;width:190px;height:142px"><img src="assets/flags/in.svg"><div class="cap">هند</div></div>
+    <div class="flag" id="f4" style="left:90px;top:318px;width:170px;height:128px"><img src="assets/flags/kr.svg"><div class="cap">کره</div></div>
+    <div class="emo" id="e_shield" style="left:70px;top:140px;width:220px;height:220px"><img src="assets/emoji/shield.png"></div>
+    <div class="emo" id="e_q1" style="left:790px;top:110px;width:230px;height:230px"><img src="assets/emoji/red_question_mark.png"></div>
+
+    <!-- story -->
+    <div class="card" id="call">
+      <div class="av"><img src="assets/emoji/speaking_head.png"></div>
+      <div style="padding-left:96px;min-height:80px">
+        <div class="t1">تماس ورودی…</div>
+        <div class="t2">دوستم</div>
+      </div>
+      <div class="btns">
+        <div class="b g"><img src="assets/emoji/telephone_receiver.png"></div>
+        <div class="b r"><img src="assets/emoji/telephone_receiver.png"></div>
+      </div>
+    </div>
+    <div id="phone">
+      <div class="chip">Galaxy <b>A57</b></div>
+      <div class="body"></div>
+      <div class="cam" style="top:26px"></div>
+      <div class="cam" style="top:94px"></div>
+      <div class="cam" style="top:162px"></div>
+      <div class="logo"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+    </div>
+    <div class="emo" id="e_ex" style="left:70px;top:120px;width:230px;height:230px"><img src="assets/emoji/double_exclamation_mark.png"></div>
+    <div class="flag" id="fvn" style="left:52px;top:110px;width:290px;height:218px"><img src="assets/flags/vn.svg"></div>
+    <div class="sticker" id="st_vn" style="left:70px;top:345px;direction:ltr">Made in Vietnam</div>
+    <div class="emo" id="e_monkey" style="left:790px;top:100px;width:240px;height:240px"><img src="assets/emoji/hear-no-evil_monkey.png"></div>
+
+    <!-- point 2 -->
+    <div class="emo" id="g1" style="left:70px;top:110px;width:200px;height:200px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="g2" style="left:800px;top:90px;width:210px;height:210px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="g3" style="left:880px;top:300px;width:130px;height:130px"><img src="assets/emoji/gear.png"></div>
+    <div class="emo" id="fac2" style="left:90px;top:320px;width:150px;height:150px"><img src="assets/emoji/factory.png"></div>
+
+    <!-- four things -->
+    <div class="card" id="spec">
+      <div class="hd"><img src="assets/emoji/clipboard.png" style="width:44px">موقع مقایسه چک کن</div>
+      <div class="row" id="r1"><div class="n">۱</div><div class="ic"><img src="assets/emoji/mobile_phone.png"></div><div class="lb">مدل دقیق</div><img class="ok" src="assets/emoji/check_mark_button.png"></div>
+      <div class="row" id="r2"><div class="n">۲</div><div class="ic">
+        <svg viewBox="0 0 64 64"><rect x="4" y="18" width="56" height="26" rx="4" fill="#1f8f4e"/><rect x="10" y="22" width="10" height="14" rx="2" fill="#111"/><rect x="27" y="22" width="10" height="14" rx="2" fill="#111"/><rect x="44" y="22" width="10" height="14" rx="2" fill="#111"/><g fill="#f5c542"><rect x="8" y="44" width="4" height="7"/><rect x="15" y="44" width="4" height="7"/><rect x="22" y="44" width="4" height="7"/><rect x="29" y="44" width="4" height="7"/><rect x="38" y="44" width="4" height="7"/><rect x="45" y="44" width="4" height="7"/><rect x="52" y="44" width="4" height="7"/></g></svg>
+      </div><div class="lb">رم</div><img class="ok" src="assets/emoji/check_mark_button.png"></div>
+      <div class="row" id="r3"><div class="n">۳</div><div class="ic">
+        <svg viewBox="0 0 64 64"><path d="M14 6h28l12 12v40a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" fill="#2b59ff"/><rect x="18" y="12" width="5" height="12" rx="1" fill="#f5c542"/><rect x="26" y="12" width="5" height="12" rx="1" fill="#f5c542"/><rect x="34" y="12" width="5" height="12" rx="1" fill="#f5c542"/><rect x="18" y="36" width="30" height="16" rx="3" fill="#fff"/><text x="33" y="48.5" font-size="11" font-weight="900" text-anchor="middle" fill="#2b59ff" font-family="sans-serif">GB</text></svg>
+      </div><div class="lb">حافظه</div><img class="ok" src="assets/emoji/check_mark_button.png"></div>
+      <div class="row star" id="r4"><div class="n">۴</div><div class="ic"><img src="assets/emoji/shield.png"></div><div class="lb">گارانتی</div><span class="tag">مهم‌ترین</span></div>
+    </div>
+    <div class="emo" id="e_shield2" style="left:60px;top:120px;width:250px;height:250px"><img src="assets/emoji/shield.png"></div>
+
+    <!-- ending -->
+    <div class="emo" id="e_cart" style="left:70px;top:120px;width:230px;height:230px"><img src="assets/emoji/shopping_cart.png"></div>
+    <div class="emo" id="e_money1" style="left:790px;top:110px;width:220px;height:220px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_money2" style="left:70px;top:150px;width:180px;height:180px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_think" style="left:800px;top:110px;width:220px;height:220px"><img src="assets/emoji/thinking_face.png"></div>
+    <div class="emo" id="e_scale" style="left:60px;top:120px;width:240px;height:240px"><img src="assets/emoji/balance_scale.png"></div>
+    <div class="emo" id="e_q2" style="left:780px;top:90px;width:260px;height:260px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="emo" id="e_q3" style="left:90px;top:120px;width:150px;height:150px"><img src="assets/emoji/red_question_mark.png"></div>
+
+    <!-- kinetic texts -->
+    <div class="kt" id="k1"><span class="w c">کشورِ</span><span class="w">سازنده</span></div>
+    <div class="kt" id="k2"><span class="w y">کیفیت</span><span class="w">رو تضمین</span><br><span class="w sm">می‌کنه؟</span></div>
+    <div class="kt" id="k3"><span class="w">دوستم</span><span class="w c">زنگ زد</span></div>
+    <div class="kt ltr" id="k4"><span class="w">Galaxy</span><span class="w c">A57</span></div>
+    <div class="kt" id="k5"><span class="w">حتماً،</span><span class="w y">حتماً!</span></div>
+    <div class="kt" id="k6"><span class="w y">ویتنام</span><span class="w">باشه!</span></div>
+    <div class="kt" id="k7"><span class="w">گوشش</span><span class="w y">بدهکار</span><span class="w">نبود</span></div>
+    <div class="kt" id="k8"><span class="w sm">۲.</span><span class="w c">تکنولوژی</span><span class="w">تولید</span></div>
+    <div class="kt" id="k9"><span class="w">همه‌جا</span><span class="w y">یکسان</span></div>
+    <div class="kt" id="k10"><span class="w y">۴</span><span class="w">تا چیز رو</span><span class="w">چک کن</span></div>
+    <div class="kt" id="k11"><span class="w c">جای دیگه</span><span class="w">بخری؟</span></div>
+    <div class="kt" id="k12"><span class="w y">۲ تا ۳ میلیون</span><br><span class="w sm">بیشتر هزینه؟</span></div>
+    <div class="kt" id="k13"><span class="w">از خودت</span><span class="w c">بپرس</span></div>
+    <div class="kt" id="k14"><span class="w">این</span><span class="w y">اختلاف قیمت</span></div>
+    <div class="kt" id="k15"><span class="w">دقیقاً بابت</span><span class="w c">چیه؟</span></div>
+  </div>
+
+  <!-- ====== board cutaways ====== -->
+  <div id="board">
+    <div class="grid"></div>
+    <svg class="shape" id="sh1" style="left:-60px;top:-40px;width:420px;height:380px" viewBox="0 0 420 380">
+      <defs><linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b5bf0"/><stop offset="1" stop-color="#a5a3ff"/></linearGradient></defs>
+      <path d="M0 0 L300 20 L120 360 Z" fill="url(#gv)" opacity=".95"/><path d="M230 0 L420 60 L260 200 Z" fill="#8e8cff" opacity=".55"/></svg>
+    <svg class="shape" id="sh2" style="right:-60px;bottom:-60px;width:460px;height:420px" viewBox="0 0 460 420">
+      <path d="M460 420 L120 400 L360 40 Z" fill="url(#gv)" opacity=".95"/><path d="M200 420 L0 330 L170 230 Z" fill="#8e8cff" opacity=".5"/></svg>
+
+    <!-- scene A: Samsung support page -->
+    <div class="scene" id="sA">
+      <div class="tile" id="aTile" style="left:850px;top:70px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="aNote" style="right:262px;top:92px;width:560px">صفحه‌ی رسمی<br>پشتیبانی سامسونگ</div>
+      <svg class="arrow" id="aArr" style="left:760px;top:230px;width:150px;height:110px" viewBox="0 0 150 110">
+        <path d="M120 4 C 120 60, 80 90, 20 96" fill="none" stroke="#ff7a1a" stroke-width="7" stroke-linecap="round" stroke-dasharray="14 12"/>
+        <path d="M34 80 L16 97 L38 106" fill="none" stroke="#ff7a1a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="bcard" id="aCard" style="left:60px;top:300px;width:960px;padding:0 0 26px">
+        <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
+        <div style="position:relative;margin:18px 30px 0">
+          <img class="shot" src="assets/ev/community_par.jpg">
+          <div class="hl" id="aH1" style="left:51.3%;top:70.6%;width:44.5%;height:11.7%"></div>
+          <div class="hl" id="aH2" style="left:1.6%;top:86.9%;width:55%;height:11.7%"></div>
+        </div>
+        <div class="fa" id="aFa" style="margin:16px 30px 0;font-size:34px;font-weight:800;color:var(--violet);line-height:1.45;opacity:0">«گوشی‌ای که توی کارخونه‌ی ویتنام ساخته شده، ذاتاً از نمونه‌ی ساخت اندونزی بهتر نیست.»</div>
+      </div>
+      <div class="num" id="aNum" style="left:70px;top:150px"><div class="c">۳</div><div class="t">نکته</div></div>
+    </div>
+
+    <!-- scene B: factories -->
+    <div class="scene" id="sB">
+      <div class="num" id="bNum" style="right:70px;top:70px"><div class="c">۱</div><div class="t">کارخونه‌ها</div></div>
+      <div class="bemo" id="bF1" style="left:130px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
+      <div class="bemo" id="bF2" style="left:440px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
+      <div class="bemo" id="bF3" style="left:750px;top:220px;width:200px;height:200px"><img src="assets/emoji/factory.png"></div>
+      <div class="bflag" id="bG1" style="left:175px;top:440px;width:110px;height:83px"><img src="assets/flags/cn.svg"></div>
+      <div class="bflag" id="bG2" style="left:485px;top:440px;width:110px;height:83px"><img src="assets/flags/in.svg"></div>
+      <div class="bflag" id="bG3" style="left:795px;top:440px;width:110px;height:83px"><img src="assets/flags/vn.svg"></div>
+      <div class="lbl" id="bL1" style="left:130px;top:535px;width:200px">چین</div>
+      <div class="lbl" id="bL2" style="left:440px;top:535px;width:200px">هند</div>
+      <div class="lbl" id="bL3" style="left:750px;top:535px;width:200px">ویتنام</div>
+      <div class="eq" id="bE1" style="left:355px;top:255px">=</div>
+      <div class="eq" id="bE2" style="left:665px;top:255px">=</div>
+      <div class="pill" id="bPill" style="left:50%;top:650px;transform:translateX(-50%)"><img src="assets/emoji/check_mark_button.png">کیفیت یکسان</div>
+      <!-- evidence -->
+      <div class="quote" id="bQ" style="left:70px;top:250px;width:940px">
+        <div class="en">“The company has factories in several countries… <mark>Samsung maintains a single quality standard across all of its factories.</mark>”</div>
+        <div class="fa">«سامسونگ توی همه‌ی کارخونه‌هاش یک استاندارد کیفیت داره.»</div>
+        <div class="src">— SamMobile · where are Samsung phones made</div>
+      </div>
+    </div>
+
+    <!-- scene C: quality control -->
+    <div class="scene" id="sC">
+      <div class="num" id="cNum" style="right:70px;top:70px"><div class="c">۳</div><div class="t">کنترل کیفیت قبل از عرضه</div></div>
+      <div class="bemo" id="cPhone" style="left:80px;top:240px;width:330px;height:330px"><img src="assets/emoji/mobile_phone.png"></div>
+      <div class="bemo" id="cMag" style="left:200px;top:300px;width:220px;height:220px"><img src="assets/emoji/magnifying_glass_tilted_left.png"></div>
+      <div class="bcard steps" id="cList" style="left:470px;top:220px;width:540px;padding:14px 30px">
+        <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی اول</div>
+        <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی دوم</div>
+        <div class="st"><img src="assets/emoji/check_mark_button.png">مرحله‌ی سوم</div>
+      </div>
+      <div class="stamp" id="cStamp" style="left:300px;top:610px">استاندارد رسمی سامسونگ</div>
+      <!-- evidence -->
+      <div class="tile" id="cTile" style="left:850px;top:200px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="cNote" style="right:262px;top:210px;width:600px">گزارش رسمی<br>سامسونگ ـ ۲۰۲۴</div>
+      <div class="quote" id="cQ" style="left:70px;top:420px;width:940px">
+        <div class="en">“…the highest quality products that satisfy customers are produced <mark>uniformly no matter where they are produced.</mark>”</div>
+        <div class="fa">«محصولات، هر جا که تولید بشن، با یک کیفیت یکسان ساخته می‌شن.»</div>
+        <div class="src">— Samsung Electronics Sustainability Report 2024</div>
+      </div>
+    </div>
+
+    <!-- scene D: same price on Hamahang -->
+    <div class="scene" id="sD">
+      <div class="bcard shop" id="dCard" style="left:110px;top:150px;width:860px">
+        <div class="hd"><img src="assets/emoji/shopping_cart.png">سایت هماهنگ</div>
+        <div class="r" id="dR1"><div class="f"><img src="assets/flags/vn.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
+        <div class="r" id="dR2"><div class="f"><img src="assets/flags/in.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
+        <div class="r" id="dR3" style="border-bottom:0"><div class="f"><img src="assets/flags/cn.svg"></div><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
+      </div>
+      <div class="stamp" id="dStamp" style="left:340px;top:640px;border-color:var(--green);color:var(--green)">همه یک قیمت ✓</div>
+    </div>
+
+    <div id="bsub"><span></span></div>
+  </div>
+
+  <div id="flash"></div>
+</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <path id="samsung-path" d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/>
+</defs></svg>
+
+<script src="assets/gsap.min.js"></script>
+<script src="data.js"></script>
+<script>
+// ---------------------------------------------------------------
+// Everything is driven by one paused GSAP timeline, seeked per frame
+// by render.mjs. Times are seconds in the edited (1-minute) video.
+// SFX[] collects sound cues that the audio script mixes in.
+// ---------------------------------------------------------------
+const FPS = 30;
+const q = new URLSearchParams(location.search);
+const FRAMES = q.get('frames') || 'frames';
+const CUES = window.CUES || [];
+const PIECES = window.PIECES || [];
+const tl = gsap.timeline({paused:true});
+gsap.set('#board',{xPercent:110});
+const SFX = []; window.SFX = SFX;
+const $ = s => document.querySelector(s);
+const sfx = (t, type, g=1) => SFX.push({t:+t.toFixed(3), type, g});
+
+// pop in (with bounce) and out
+function pop(sel, t0, t1, o={}){
+  const rot = o.rot ?? 0, s = o.s ?? 1;
+  tl.fromTo(sel,{opacity:0,scale:0.2,rotation:rot-25,y:o.dy??30},
+    {opacity:1,scale:s,rotation:rot,y:0,duration:o.d??0.45,ease:o.ease??'back.out(2.4)'},t0);
+  if(o.float!==false){
+    tl.to(sel,{y:-14,duration:0.9,ease:'sine.inOut',repeat:Math.max(1,Math.floor((t1-t0-0.5)/0.9)),yoyo:true},t0+0.45);
+  }
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.3,rotation:rot+15,duration:0.22,ease:'power2.in'},t1-0.22);
+  if(o.snd!==false) sfx(t0, o.snd||'pop', o.g??1);
+}
+// kinetic text: words rise in one by one
+function kt(sel, t0, t1, o={}){
+  const el=$(sel); const words=el.querySelectorAll('.w');
+  tl.set(el,{opacity:1},t0);
+  tl.fromTo(words,{opacity:0,y:50,scale:1.35,filter:'blur(10px)'},
+    {opacity:1,y:0,scale:1,filter:'blur(0px)',duration:0.32,ease:'power3.out',stagger:o.st??0.09},t0);
+  if(o.shake){ tl.fromTo(el,{x:-10},{x:10,duration:0.05,repeat:7,yoyo:true,ease:'none'},t0+0.3); tl.set(el,{x:0},t0+0.72); }
+  tl.to(el,{opacity:0,y:-20,duration:0.16,ease:'power2.in'},t1-0.16);
+  sfx(t0,'swish',0.55);
+}
+function cardIn(sel,t0,t1,from={y:80}){
+  tl.fromTo(sel,{opacity:0,scale:0.85,...from},{opacity:1,scale:1,x:0,y:0,duration:0.45,ease:'back.out(1.6)'},t0);
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.9,y:-30,duration:0.22,ease:'power2.in'},t1-0.22);
+  sfx(t0,'whoosh',0.6);
+}
+// board in / out
+function boardIn(t){
+  tl.fromTo('#board',{xPercent:110,skewX:-6},{xPercent:0,skewX:0,duration:0.38,ease:'power3.out'},t-0.05);
+  tl.fromTo('#sh1',{x:-200,y:-120,rotation:-20},{x:0,y:0,rotation:0,duration:0.6,ease:'power3.out'},t);
+  tl.fromTo('#sh2',{x:200,y:160,rotation:20},{x:0,y:0,rotation:0,duration:0.6,ease:'power3.out'},t);
+  tl.fromTo('#board .grid',{x:0},{x:-72,duration:4,ease:'none'},t);
+  sfx(t-0.08,'whoosh',1);
+}
+function boardOut(t){
+  tl.to('#board',{xPercent:-110,skewX:6,duration:0.32,ease:'power3.in'},t-0.32); tl.set('#board',{xPercent:110,skewX:0},t);
+  sfx(t-0.3,'whoosh',0.9);
+}
+function scene(sel,t0,t1){
+  tl.set(sel,{opacity:1},t0); tl.set(sel,{opacity:0},t1);
+}
+function hl(sel,t,d=0.45){ tl.to(sel,{scaleX:1,duration:d,ease:'power2.out'},t); sfx(t,'marker',0.6); }
+function mark(sel,t,d=0.9){ tl.to(sel,{backgroundSize:'100% 100%',duration:d,ease:'power1.inOut'},t); sfx(t,'marker',0.6); }
+function stamp(sel,t,t1,rot=-6){
+  tl.fromTo(sel,{opacity:0,scale:2.4,rotation:rot-8},{opacity:1,scale:1,rotation:rot,duration:0.28,ease:'power4.in'},t);
+  tl.fromTo('#board',{x:0},{x:8,duration:0.04,repeat:5,yoyo:true},t+0.28); tl.set('#board',{x:0},t+0.52);
+  if(t1!=null) tl.to(sel,{opacity:0,duration:0.2},t1-0.2);
+  sfx(t+0.26,'thud',1);
+}
+const spin = (sel,t0,t1,dir=1)=>tl.fromTo(sel,{rotation:0},{rotation:360*dir*(t1-t0)/4,duration:t1-t0,ease:'none'},t0);
+
+// ====================== TIMELINE ======================
+// --- HOOK 0 – 4.33 : country vs quality
+kt('#k1',0.12,2.3);
+pop('#f1',0.35,2.3,{rot:-8}); pop('#f2',0.6,2.3,{rot:7}); pop('#f3',0.85,2.3,{rot:-5}); pop('#f4',1.1,2.3,{rot:6});
+kt('#k2',2.32,4.33);
+pop('#e_shield',2.45,4.33,{rot:-10}); pop('#e_q1',2.7,4.33,{rot:12});
+tl.to('#e_q1',{rotation:-6,duration:0.12,repeat:5,yoyo:true},3.3);
+
+// --- STORY 4.33 – 13.2
+cardIn('#call',4.55,6.5,{x:-120,y:0});
+tl.fromTo('#call .b.g',{scale:1},{scale:1.13,duration:0.25,repeat:6,yoyo:true,ease:'sine.inOut'},4.9);
+sfx(4.75,'ring',0.7);
+kt('#k3',4.6,6.45);
+tl.fromTo('#phone',{opacity:0,y:120,rotation:18,scale:0.6},{opacity:1,y:0,rotation:-6,scale:1,duration:0.55,ease:'back.out(1.8)'},6.6);
+tl.to('#phone',{y:-12,rotation:-3,duration:1,ease:'sine.inOut',repeat:4,yoyo:true},7.15);
+tl.to('#phone',{opacity:0,scale:0.5,y:-40,duration:0.22,ease:'power2.in'},11.75);
+sfx(6.6,'whoosh',0.8);
+kt('#k4',6.62,8.6);
+kt('#k5',8.7,11.15,{shake:true});
+pop('#e_ex',8.75,11.1,{rot:-8});
+kt('#k6',11.18,11.95);
+pop('#fvn',11.16,13.15,{rot:-6,s:1}); pop('#st_vn',11.4,13.15,{rot:-4,float:false,snd:'tick'});
+kt('#k7',12.0,13.15);
+pop('#e_monkey',11.98,13.15,{rot:8});
+
+// --- BOARD A 13.2 – 16.25 : Samsung support page, 3 points
+boardIn(13.2); scene('#sA',13.1,16.3);
+pop('#aTile',13.3,null,{float:false,snd:'pop'});
+tl.fromTo('#aNote',{opacity:0,x:40},{opacity:1,x:0,duration:0.35,ease:'power3.out'},13.42);
+tl.fromTo('#aArr',{opacity:0,clipPath:'inset(0 0 100% 0)'},{opacity:1,clipPath:'inset(0 0 0% 0)',duration:0.4,ease:'power2.out'},13.55);
+tl.fromTo('#aCard',{opacity:0,y:120,rotation:3},{opacity:1,y:0,rotation:0,duration:0.5,ease:'back.out(1.4)'},13.65);
+sfx(13.65,'whoosh',0.6);
+hl('#aH1',14.2); hl('#aH2',14.55);
+tl.fromTo('#aFa',{opacity:0,y:14},{opacity:1,y:0,duration:0.35},14.9);
+pop('#aNum',15.1,null,{float:false,s:1});
+
+// --- BOARD B 16.3 – 21.95 : point 1 — factories, same quality
+scene('#sB',16.3,21.95);
+tl.to('#sA',{opacity:0,duration:0.01},16.3);
+tl.fromTo('#bNum',{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:'power3.out'},16.32); sfx(16.32,'swish',0.6);
+['#bF1','#bF2','#bF3'].forEach((s,i)=>pop(s,16.6+i*0.28,null,{float:false}));
+['#bG1','#bG2','#bG3'].forEach((s,i)=>pop(s,16.8+i*0.28,null,{float:false,snd:false}));
+['#bL1','#bL2','#bL3'].forEach((s,i)=>tl.fromTo(s,{opacity:0,y:16},{opacity:1,y:0,duration:0.25},16.95+i*0.28));
+// keep factories visible until the quote; '=' then the pill
+pop('#bE1',17.9,null,{float:false,snd:'ding'}); pop('#bE2',18.1,null,{float:false,snd:false});
+pop('#bPill',18.35,null,{float:false,snd:'tick'});
+tl.to(['#bF1','#bF2','#bF3','#bG1','#bG2','#bG3','#bL1','#bL2','#bL3','#bE1','#bE2','#bPill'],{opacity:0,y:-40,duration:0.25,ease:'power2.in'},19.2);
+tl.fromTo('#bQ',{opacity:0,y:100},{opacity:1,y:0,duration:0.45,ease:'back.out(1.5)'},19.4); sfx(19.4,'whoosh',0.6);
+mark('#bQ mark',19.9,1.1);
+boardOut(22.02);
+
+// --- SPEAKER 22.02 – 26.95 : point 2 — same technology
+pop('#g1',22.1,26.85,{rot:0,float:false}); pop('#g2',22.3,26.85,{float:false}); pop('#g3',22.5,26.85,{float:false,snd:false});
+spin('#g1 img',22.1,26.9,1); spin('#g2 img',22.1,26.9,-1); spin('#g3 img',22.1,26.9,1.4);
+pop('#fac2',23.6,26.85,{rot:-6});
+kt('#k8',22.05,25.6);
+kt('#k9',25.68,26.9);
+
+// --- BOARD C 26.99 – 36.95 : point 3 — QC + official report
+boardIn(26.99); scene('#sC',26.9,36.95);
+tl.fromTo('#cNum',{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:'power3.out'},27.1);
+pop('#cPhone',27.25,null,{float:false});
+tl.fromTo('#cMag',{opacity:0,x:-80,y:-60},{opacity:1,x:0,y:0,duration:0.4,ease:'power3.out'},27.5);
+tl.to('#cMag',{x:-120,y:-110,duration:0.8,ease:'sine.inOut',repeat:4,yoyo:true},27.9);
+cardIn('#cList',27.6,null,{x:80,y:0});
+tl.to('#cList .st',{opacity:1,duration:0.25,stagger:0.75},28.4);
+[28.4,29.15,29.9].forEach(t=>sfx(t,'tick',1));
+stamp('#cStamp',32.0,33.35,-5);
+// swap to evidence
+tl.to(['#cPhone','#cMag','#cList','#cNum'],{opacity:0,y:-40,duration:0.25,ease:'power2.in'},33.3);
+pop('#cTile',33.55,null,{float:false});
+tl.fromTo('#cNote',{opacity:0,x:40},{opacity:1,x:0,duration:0.35,ease:'power3.out'},33.7);
+tl.fromTo('#cQ',{opacity:0,y:100},{opacity:1,y:0,duration:0.45,ease:'back.out(1.5)'},33.9); sfx(33.9,'whoosh',0.6);
+mark('#cQ mark',34.5,1.1);
+boardOut(37.06);
+
+// --- SPEAKER 37.06 – 47.44 : the 4 things to compare
+kt('#k10',37.1,38.7);
+cardIn('#spec',37.3,47.38,{x:120,y:0});
+[['#r1',38.8],['#r2',40.6],['#r3',42.3],['#r4',44.4]].forEach(([s,t])=>{
+  tl.fromTo(s,{opacity:0,x:60},{opacity:1,x:0,duration:0.3,ease:'back.out(2)'},t); sfx(t,'tick',1);
+});
+tl.fromTo('#r4',{scale:1},{scale:1.06,duration:0.3,repeat:5,yoyo:true,ease:'sine.inOut'},44.8);
+pop('#e_shield2',44.45,47.38,{rot:-8});
+sfx(44.45,'ding',0.8);
+
+// --- BOARD D 47.44 – 49.71 : same price on Hamahang
+boardIn(47.44); scene('#sD',47.3,49.75);
+cardIn('#dCard',47.6,null,{y:100});
+['#dR1','#dR2','#dR3'].forEach((s,i)=>{tl.fromTo(s,{opacity:0,x:60},{opacity:1,x:0,duration:0.25},47.95+i*0.22); sfx(47.95+i*0.22,'tick',0.8);});
+stamp('#dStamp',48.75,null,-4);
+boardOut(49.75);
+
+// --- SPEAKER 49.75 – 58.62 : the price question
+pop('#e_cart',49.8,51.95,{rot:-8});
+kt('#k11',49.8,51.95);
+kt('#k12',52.0,53.88);
+pop('#e_money1',52.05,53.85,{rot:10,snd:'cash'}); pop('#e_money2',52.3,53.85,{rot:-12,snd:false});
+tl.to(['#e_money1','#e_money2'],{x:'+=30',duration:0.5,repeat:3,yoyo:true,ease:'sine.inOut'},52.5);
+pop('#e_think',53.95,55.65,{rot:6});
+kt('#k13',53.95,55.68);
+pop('#e_scale',55.72,58.62,{rot:-6});
+tl.to('#e_scale',{rotation:6,duration:0.45,repeat:5,yoyo:true,ease:'sine.inOut'},56.2);
+kt('#k14',55.72,56.8);
+kt('#k15',56.82,58.62);
+pop('#e_q2',56.85,58.62,{rot:10,s:1.05}); pop('#e_q3',57.1,58.62,{rot:-14,snd:false});
+tl.to('#e_q2',{rotation:-4,duration:0.12,repeat:7,yoyo:true},57.4);
+
+// keep timeline as long as the video
+tl.set({}, {}, 58.62);
+
+// ---------- camera punch-ins on each jump cut ----------
+function camScale(t){
+  for(let i=PIECES.length-1;i>=0;i--){ const p=PIECES[i]; if(t>=p[3]-1e-6){
+      const base = (i%2)? 1.09 : 1.0; const k=Math.min(1,(t-p[3])/Math.max(0.5,p[2]-p[1]));
+      return base + 0.025*k; } }
+  return 1;
+}
+// ---------- board subtitle ----------
+function cueAt(t){ for(const c of CUES){ if(t>=c.a-0.02 && t<c.b) return c; } return null; }
+let lastSub=null;
+window.seekFrame = async function(i){
+  const t = i/FPS;
+  tl.seek(t,false);
+  $('#cam').style.transform = `scale(${camScale(t).toFixed(4)})`;
+  const c = cueAt(t); const bs=$('#bsub');
+  if(c){ if(lastSub!==c.k){ bs.firstElementChild.textContent=c.t; lastSub=c.k; } bs.style.opacity=1; }
+  else bs.style.opacity=0;
+  const img=$('#vid'); const src=`${FRAMES}/${String(i+1).padStart(5,'0')}.jpg`;
+  if(!img.src.endsWith(src)){ img.src=src; try{ await img.decode(); }catch(e){} }
+  return t;
+};
+window.DURATION = 58.62;
+</script>
+</body>
+</html>
