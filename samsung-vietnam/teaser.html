@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تیزر سامسونگ ویتنام</title>
+<link rel="stylesheet" href="assets/fonts/plex-500.css">
+<link rel="stylesheet" href="assets/fonts/plex-600.css">
+<link rel="stylesheet" href="assets/fonts/plex-700.css">
+<style>
+/* Hamahang Shop brand: deep red, white, charcoal; soft white-pink boards */
+:root{
+  --red:#b5141a; --red2:#e0262d; --redDeep:#5a0507; --ink:#1d1d1f; --mute:#8a8f99;
+  --path:#a9b5c0; --green:#1fb35b; --soft:#f6f7f9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:600}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 560px}
+#vid{position:absolute;inset:0;width:1080px;height:1920px;display:block}
+.layer{position:absolute;inset:0;pointer-events:none}
+
+/* 3D objects */
+.emo{position:absolute;opacity:0;filter:drop-shadow(0 18px 22px rgba(0,0,0,.45))}
+.emo img{width:100%;height:100%;display:block}
+
+/* flags */
+.flag{position:absolute;opacity:0;border-radius:18px;overflow:hidden;border:6px solid #fff;box-shadow:0 16px 34px rgba(0,0,0,.45)}
+.flag img{width:100%;height:100%;object-fit:cover;display:block}
+.flag .cap{position:absolute;left:0;right:0;bottom:0;padding:2px 0 6px;text-align:center;color:#fff;
+  font-weight:700;font-size:28px;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+
+/* kinetic text on the chest — white words, key word in a red brand pill */
+.kt{position:absolute;isolation:isolate;left:0;right:0;top:1040px;text-align:center;opacity:0;
+  font-weight:700;font-size:92px;line-height:1.3;color:#fff;
+  text-shadow:0 0 3px rgba(0,0,0,.85),0 8px 26px rgba(0,0,0,.7)}
+.kt::before{content:"";position:absolute;left:50%;top:50%;width:960px;height:260px;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);z-index:-1}
+.kt .w{display:inline-block;margin:0 10px}
+.kt .c,.kt .y{text-shadow:none;border-radius:22px;padding:0 26px 10px}
+.kt .c{background:var(--red);color:#fff;box-shadow:0 14px 34px rgba(120,0,0,.55)}
+.kt .y{background:#fff;color:var(--red);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.kt .sm{font-size:62px}
+.kt.ltr{direction:ltr}
+
+/* white UI cards */
+.card{position:absolute;opacity:0;background:#fff;border-radius:34px;box-shadow:0 26px 60px rgba(0,0,0,.42);color:var(--ink);overflow:hidden}
+
+/* One UI incoming call */
+#call{left:40px;top:250px;width:340px;padding:24px 24px 26px}
+#call .t1{font-size:24px;color:var(--mute);font-weight:500}
+#call .t2{font-size:46px;font-weight:700;margin-top:0}
+#call .av{position:absolute;left:22px;top:22px;width:80px;height:80px;border-radius:50%;background:#f1f1f4;display:grid;place-items:center}
+#call .av img{width:62px}
+#call .btns{display:flex;justify-content:space-between;margin-top:22px;padding:0 18px}
+#call .b{width:86px;height:86px;border-radius:50%;display:grid;place-items:center}
+#call .b img{width:52px}
+#call .b.g{background:var(--green)} #call .b.r{background:#e8453c}
+#call .b.r img{transform:rotate(135deg)}
+
+/* phone (back of a Galaxy A, graphite) */
+#phone{position:absolute;left:800px;top:300px;width:220px;height:440px;opacity:0}
+#phone .body{position:absolute;inset:0;border-radius:36px;
+  background:linear-gradient(150deg,#55575e 0%,#2c2d32 45%,#18191c 100%);
+  box-shadow:0 30px 60px rgba(0,0,0,.55), inset 0 0 0 3px rgba(255,255,255,.18), inset -10px -12px 30px rgba(0,0,0,.35)}
+#phone .cam{position:absolute;left:26px;width:58px;height:58px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,#4a5068 0 22%,#0c0d12 24% 56%,#9a9da8 58% 64%,#1b1c22 66%);box-shadow:0 3px 6px rgba(0,0,0,.5)}
+#phone .logo{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;opacity:.45}
+#phone .logo svg{width:120px;height:20px;fill:#fff}
+#phone .chip{position:absolute;left:50%;top:-62px;transform:translateX(-50%);white-space:nowrap;direction:ltr;
+  background:var(--red);color:#fff;font-weight:700;font-size:34px;padding:4px 22px 8px;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+
+.sticker{position:absolute;opacity:0;background:var(--red);color:#fff;font-weight:700;font-size:34px;
+  padding:6px 22px 10px;border-radius:14px;box-shadow:0 12px 26px rgba(0,0,0,.45);white-space:nowrap}
+
+/* One UI phone screen for the 4-item checklist */
+#spec{left:676px;top:200px;width:380px;height:720px;border-radius:58px;background:#111;padding:12px}
+#spec .scr{position:absolute;inset:12px;border-radius:48px;background:var(--soft);overflow:hidden;padding:26px 18px}
+#spec .sb{display:flex;justify-content:space-between;direction:ltr;font-size:20px;font-weight:600;color:var(--ink);padding:0 14px}
+#spec .punch{position:absolute;left:50%;top:24px;width:20px;height:20px;border-radius:50%;background:#111;transform:translateX(-50%)}
+#spec .back{direction:ltr;font-size:24px;font-weight:600;color:var(--ink);margin:30px 6px 0}
+#spec .ttl{text-align:center;direction:ltr;font-size:40px;font-weight:700;color:var(--ink);margin:26px 0 4px}
+#spec .sub{text-align:center;font-size:22px;color:var(--mute);font-weight:500;margin-bottom:22px}
+#spec .grp{background:#fff;border-radius:26px;padding:6px 8px}
+#spec .row{display:flex;align-items:center;gap:12px;padding:16px 10px;border-bottom:2px solid #f0f0f3;opacity:0}
+#spec .row:last-child{border-bottom:0}
+#spec .n{width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:24px;display:grid;place-items:center;flex:none}
+#spec .lb{font-size:31px;font-weight:700;flex:1;white-space:nowrap;color:var(--ink)}
+#spec .ok{width:36px;height:36px;flex:none}
+#spec .row.star{background:#fdecec;border-radius:18px}
+#spec .tag{font-size:19px;font-weight:700;background:var(--red);color:#fff;padding:2px 10px 5px;border-radius:10px}
+
+/* ---------- board (cutaway) in the Hamahang post style ---------- */
+#board{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(760px 620px at 85% 88%,rgba(255,105,105,.38),transparent 70%),
+             radial-gradient(700px 560px at 8% 6%,rgba(190,214,236,.55),transparent 70%),
+             linear-gradient(#fbfbfc,#f4f5f7)}
+#redbg{position:absolute;inset:0;opacity:0;
+  background:radial-gradient(900px 800px at 50% 35%,#d01a20 0%,#b5141a 45%,#7a0a0e 85%,#4a0507 100%)}
+.bignum{position:absolute;width:560px;height:560px;border-radius:50%;border:46px solid currentColor;filter:blur(8px);opacity:0;padding-bottom:40px;
+  display:grid;place-items:center;font-weight:700;font-size:250px;line-height:1;font-family:"IBM Plex Sans Arabic",sans-serif}
+.dpath{position:absolute;overflow:visible}
+.dpath path{fill:none;stroke:var(--path);stroke-width:7;stroke-linecap:round;stroke-dasharray:30 22}
+.scene{position:absolute;inset:0;top:160px;opacity:0}
+.bcard{position:absolute;background:#fff;border-radius:30px;box-shadow:0 24px 60px rgba(30,30,40,.16);overflow:hidden;opacity:0}
+.bcard img.shot{display:block;width:100%}
+.hl{position:absolute;background:rgba(224,38,45,.28);mix-blend-mode:multiply;border-radius:4px;transform-origin:left center;transform:scaleX(0)}
+.note{position:absolute;color:var(--ink);font-weight:700;font-size:50px;line-height:1.3;opacity:0;text-align:right}
+.note b{color:var(--red);font-weight:700}
+.tile{position:absolute;width:170px;height:170px;border-radius:36px;background:#fff;box-shadow:0 18px 40px rgba(30,30,40,.16);display:grid;place-items:center;opacity:0}
+.tile svg{width:140px;height:30px;fill:var(--ink)}
+.arrow{position:absolute;overflow:visible;opacity:0}
+.num{position:absolute;display:flex;align-items:center;gap:18px;opacity:0}
+.num .c{width:96px;height:96px;border-radius:50%;background:var(--red);color:#fff;font-size:56px;font-weight:700;display:grid;place-items:center;box-shadow:0 12px 26px rgba(181,20,26,.4)}
+.num .t{font-size:54px;font-weight:700;color:var(--ink)}
+.bemo{position:absolute;opacity:0;filter:drop-shadow(0 18px 18px rgba(30,30,40,.25))}
+.bemo img{width:100%;height:100%;display:block}
+.bflag{position:absolute;opacity:0;border-radius:14px;overflow:hidden;border:5px solid #fff;box-shadow:0 12px 26px rgba(30,30,40,.22)}
+.bflag img{width:100%;height:100%;object-fit:cover;display:block}
+.lbl{position:absolute;font-weight:700;font-size:38px;color:var(--ink);text-align:center;opacity:0}
+.eq{position:absolute;font-weight:700;font-size:120px;color:var(--red);opacity:0;line-height:1}
+.pill{position:absolute;display:flex;align-items:center;gap:14px;background:var(--red);border-radius:999px;padding:10px 36px 16px 22px;
+  box-shadow:0 18px 40px rgba(181,20,26,.35);font-weight:700;font-size:48px;color:#fff;opacity:0;white-space:nowrap}
+.pill img{width:62px;height:62px}
+.quote{position:absolute;background:#fff;border-radius:30px;box-shadow:0 24px 60px rgba(30,30,40,.16);padding:34px 40px;opacity:0}
+.quote .en{direction:ltr;text-align:left;font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:500;font-size:40px;line-height:1.45;color:#2a2a2e}
+.quote .en mark{background:linear-gradient(transparent 14%,rgba(224,38,45,.25) 14%,rgba(224,38,45,.25) 94%,transparent 94%);
+  background-size:0% 100%;background-repeat:no-repeat;color:var(--red);font-weight:700}
+.quote .fa{margin-top:20px;font-size:42px;font-weight:700;color:var(--ink);line-height:1.6;border-right:8px solid var(--red);padding-right:20px}
+.quote .src{margin-top:18px;direction:ltr;text-align:left;font-size:24px;font-weight:500;color:var(--mute)}
+.stamp{position:absolute;opacity:0;border:8px solid var(--red);color:var(--red);border-radius:22px;padding:8px 28px 16px;
+  font-weight:700;font-size:48px;background:rgba(255,255,255,.94);white-space:nowrap}
+.steps .st{display:flex;align-items:center;gap:16px;font-size:46px;font-weight:700;padding:18px 8px;border-bottom:3px dashed #e6e7eb;opacity:0;color:var(--ink)}
+.steps .st:last-child{border-bottom:0}
+.steps .st img{width:58px;height:58px}
+/* Hamahang site card */
+.shop .hd{display:flex;align-items:center;justify-content:space-between;padding:26px 32px;background:var(--ink);color:#fff;font-size:30px;font-weight:600;direction:ltr}
+.shop .hd .lg{width:230px;height:44px;background:#fff;-webkit-mask:url(assets/hamahang-logo.png) center/contain no-repeat;mask:url(assets/hamahang-logo.png) center/contain no-repeat}
+.shop .r{display:flex;align-items:center;gap:22px;padding:22px 32px;border-bottom:2px solid #f0f0f3;opacity:0}
+.shop .r .f{width:88px;height:66px;border-radius:12px;overflow:hidden;flex:none;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+.shop .r .f img{width:100%;height:100%;object-fit:cover}
+.shop .r .m{direction:ltr;font-size:46px;font-weight:700;flex:1;text-align:left;color:var(--ink)}
+.shop .r .p{font-size:32px;font-weight:700;color:#fff;background:var(--red);border-radius:14px;padding:4px 20px 10px}
+.headline{position:absolute;left:60px;right:60px;text-align:center;color:#fff;font-weight:700;font-size:76px;line-height:1.35;opacity:0}
+
+/* brand footer (as on the Hamahang posts) */
+.foot{position:absolute;left:70px;right:70px;bottom:70px;height:70px;display:flex;align-items:center;justify-content:space-between;
+  direction:ltr;font-weight:500;font-size:30px;color:var(--fc,#fff);border-top:2px solid var(--fl,rgba(255,255,255,.35));padding-top:22px}
+.foot .ig{display:flex;align-items:center;gap:12px}
+.foot .ig i{width:36px;height:36px;border:3px solid currentColor;border-radius:10px;position:relative;display:inline-block}
+.foot .ig i::after{content:"";position:absolute;inset:7px;border:3px solid currentColor;border-radius:50%}
+.foot .lg{width:200px;height:38px;background:currentColor;-webkit-mask:url(assets/hamahang-logo.png) center/contain no-repeat;mask:url(assets/hamahang-logo.png) center/contain no-repeat}
+#vfoot{position:absolute;left:0;right:0;bottom:0;height:330px;background:linear-gradient(transparent,rgba(0,0,0,.72));opacity:1}
+#board .foot{--fc:#3a3a3e;--fl:rgba(0,0,0,.18)}
+
+/* board subtitle (same look as the burned-in one) */
+#bsub{position:absolute;left:0;right:0;top:1490px;text-align:center;opacity:0}
+#bsub span{display:inline-block;background:rgba(0,0,0,.72);color:#fff;font-weight:600;font-size:44px;padding:4px 20px 14px;border-radius:10px}
+
+/* end card */
+#endc{position:absolute;inset:0;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;
+  background:radial-gradient(900px 800px at 50% 40%,#d01a20 0%,#b5141a 45%,#7a0a0e 85%,#4a0507 100%)}
+#endc .big{width:760px;height:144px;background:#fff;-webkit-mask:url(assets/hamahang-logo.png) center/contain no-repeat;mask:url(assets/hamahang-logo.png) center/contain no-repeat}
+#endc .site{direction:ltr;color:#fff;font-size:50px;font-weight:500}
+#endc .ig{direction:ltr;color:rgba(255,255,255,.85);font-size:40px;font-weight:500}
+
+/* ---------- teaser additions ---------- */
+#cam{transform-origin:540px 700px}
+.kt{top:1110px}
+.lock{position:absolute;display:flex;align-items:center;gap:14px;background:rgba(29,29,31,.92);color:#fff;border-radius:999px;
+  padding:10px 30px 16px 22px;font-size:40px;font-weight:700;white-space:nowrap;opacity:0;box-shadow:0 16px 36px rgba(0,0,0,.35)}
+.lock img{width:52px;height:52px}
+.blurbox{filter:blur(7px)}
+.tcard{position:absolute;width:280px;height:290px;background:#fff;border-radius:30px;box-shadow:0 22px 50px rgba(30,30,40,.16);opacity:0;padding:26px 24px}
+.tcard .n{width:74px;height:74px;border-radius:50%;background:var(--red);color:#fff;font-size:44px;font-weight:700;display:grid;place-items:center}
+.tcard .sk{height:20px;border-radius:10px;background:#e3e5ea;margin-top:20px;filter:blur(2px)}
+.tcard img{position:absolute;left:50%;bottom:24px;width:70px;transform:translateX(-50%)}
+.ph{position:absolute;width:420px;height:820px;border-radius:56px;background:#111;padding:12px;opacity:0;box-shadow:0 30px 70px rgba(0,0,0,.3)}
+.ph .scr{position:absolute;inset:12px;border-radius:46px;background:var(--soft);overflow:hidden;padding:28px 20px}
+.ph .punch{position:absolute;left:50%;top:22px;width:20px;height:20px;border-radius:50%;background:#111;transform:translateX(-50%)}
+.ph .sb{display:flex;justify-content:space-between;direction:ltr;font-size:20px;font-weight:600;color:var(--ink);padding:0 16px}
+.ph .ttl{text-align:center;direction:ltr;font-size:44px;font-weight:700;color:var(--ink);margin:54px 0 8px}
+.ph .ctry{display:flex;justify-content:center;align-items:center;gap:12px;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:30px}
+.ph .ctry img{width:60px;height:45px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.ph .grp{background:#fff;border-radius:28px;padding:6px 10px}
+.ph .row{display:flex;align-items:center;gap:14px;padding:22px 8px;border-bottom:2px solid #f0f0f3;opacity:0}
+.ph .row:last-child{border-bottom:0}
+.ph .row .n{width:46px;height:46px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:28px;display:grid;place-items:center;flex:none}
+.ph .row .bar{flex:1;height:22px;border-radius:11px;background:#dfe2e8;filter:blur(2px)}
+.ph .row img{width:40px;height:40px;flex:none}
+.vs{position:absolute;width:130px;height:130px;border-radius:50%;background:var(--red);color:#fff;font-size:54px;font-weight:700;direction:ltr;
+  display:grid;place-items:center;box-shadow:0 16px 40px rgba(181,20,26,.45);opacity:0;border:8px solid #fff}
+.ttlB{position:absolute;left:70px;right:70px;text-align:center;font-weight:700;font-size:64px;color:var(--ink);opacity:0;line-height:1.3}
+.ttlB b{color:var(--red);font-weight:700}
+/* full-video chip (lower third, inside the safe zone) */
+#fullchip{position:absolute;left:50%;top:1405px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;direction:rtl;
+  background:rgba(255,255,255,.95);color:var(--ink);border-radius:999px;padding:10px 18px 14px 30px;font-size:36px;font-weight:700;white-space:nowrap;
+  box-shadow:0 14px 34px rgba(0,0,0,.35);opacity:0}
+#fullchip .pl{width:58px;height:58px;border-radius:50%;background:var(--red);display:grid;place-items:center}
+#fullchip .pl i{display:block;width:0;height:0;border-left:20px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px}
+/* CTA end card */
+#cta{position:absolute;inset:0;opacity:0;background:radial-gradient(900px 900px at 50% 42%,#d01a20 0%,#b5141a 45%,#7a0a0e 85%,#4a0507 100%)}
+#cta .lg{position:absolute;left:50%;top:330px;width:420px;height:80px;transform:translateX(-50%);background:#fff;-webkit-mask:url(assets/hamahang-logo.png) center/contain no-repeat;mask:url(assets/hamahang-logo.png) center/contain no-repeat;opacity:0}
+#cta .l1{position:absolute;left:0;right:0;top:540px;text-align:center;color:rgba(255,255,255,.9);font-size:60px;font-weight:600;opacity:0}
+#cta .l2{position:absolute;left:0;right:0;top:640px;text-align:center;color:#fff;font-size:100px;font-weight:700;opacity:0}
+#cta .ap{position:absolute;left:120px;right:120px;top:880px;height:250px;background:#fff;border-radius:44px;display:flex;align-items:center;gap:34px;padding:0 44px;opacity:0;
+  box-shadow:0 30px 70px rgba(0,0,0,.4)}
+#cta .ap .pl{width:150px;height:150px;border-radius:50%;background:var(--red);display:grid;place-items:center;flex:none;box-shadow:0 12px 30px rgba(181,20,26,.45)}
+#cta .ap .pl i{display:block;width:0;height:0;border-left:52px solid #fff;border-top:34px solid transparent;border-bottom:34px solid transparent;margin-left:14px}
+#cta .ap .t1{font-size:56px;font-weight:700;color:var(--ink)}
+#cta .ap .t2{font-size:36px;font-weight:600;color:var(--mute);margin-top:6px}
+#cta .bio{position:absolute;left:50%;top:1215px;transform:translateX(-50%);border:4px solid rgba(255,255,255,.85);color:#fff;border-radius:999px;
+  padding:8px 40px 16px;font-size:46px;font-weight:700;white-space:nowrap;opacity:0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="cam"><img id="vid" alt=""></div>
+
+  <div class="layer" id="fx">
+    <!-- hook -->
+    <div class="flag" id="fvn" style="left:65px;top:300px;width:230px;height:172px"><img src="assets/flags/vn.svg"></div>
+    <div class="sticker" id="st_vn" style="left:70px;top:500px;direction:ltr;font-size:30px">Made in Vietnam</div>
+    <div class="emo" id="e_ex" style="left:790px;top:300px;width:220px;height:220px"><img src="assets/emoji/double_exclamation_mark.png"></div>
+    <!-- question -->
+    <div class="flag" id="f2" style="left:800px;top:290px;width:200px;height:150px"><img src="assets/flags/cn.svg"><div class="cap">چین</div></div>
+    <div class="flag" id="f3" style="left:810px;top:480px;width:190px;height:142px"><img src="assets/flags/in.svg"><div class="cap">هند</div></div>
+    <div class="flag" id="f1" style="left:70px;top:300px;width:200px;height:150px"><img src="assets/flags/vn.svg"><div class="cap">ویتنام</div></div>
+    <div class="flag" id="f4" style="left:80px;top:490px;width:180px;height:135px"><img src="assets/flags/kr.svg"><div class="cap">کره</div></div>
+    <div class="emo" id="e_shield" style="left:65px;top:330px;width:220px;height:220px"><img src="assets/emoji/shield.png"></div>
+    <div class="emo" id="e_q1" style="left:790px;top:300px;width:230px;height:230px"><img src="assets/emoji/red_question_mark.png"></div>
+    <!-- does it matter -->
+    <div class="emo" id="e_think" style="left:790px;top:300px;width:220px;height:220px"><img src="assets/emoji/thinking_face.png"></div>
+    <div class="emo" id="e_glob" style="left:65px;top:310px;width:220px;height:220px"><img src="assets/emoji/globe_showing_asia-australia.png"></div>
+    <div class="emo" id="e_fac" style="left:75px;top:320px;width:210px;height:210px"><img src="assets/emoji/factory.png"></div>
+    <!-- money question -->
+    <div class="emo" id="e_cart" style="left:65px;top:320px;width:220px;height:220px"><img src="assets/emoji/shopping_cart.png"></div>
+    <div class="emo" id="e_money1" style="left:790px;top:290px;width:220px;height:220px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_money2" style="left:75px;top:340px;width:190px;height:190px"><img src="assets/emoji/money_with_wings.png"></div>
+    <div class="emo" id="e_think2" style="left:790px;top:300px;width:220px;height:220px"><img src="assets/emoji/thinking_face.png"></div>
+    <div class="emo" id="e_scale" style="left:65px;top:320px;width:230px;height:230px"><img src="assets/emoji/balance_scale.png"></div>
+    <div class="emo" id="e_q2" style="left:780px;top:280px;width:240px;height:240px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="emo" id="e_q4" style="left:790px;top:290px;width:220px;height:220px"><img src="assets/emoji/red_question_mark.png"></div>
+    <div class="emo" id="e_q3" style="left:90px;top:330px;width:160px;height:160px"><img src="assets/emoji/red_question_mark.png"></div>
+
+    <!-- kinetic texts -->
+    <div class="kt" id="k1"><span class="w">حتماً،</span><span class="w y">حتماً!</span></div>
+    <div class="kt" id="k2"><span class="w c">ویتنام</span><span class="w">باشه!</span></div>
+    <div class="kt" id="k3"><span class="w c">کشورِ</span><span class="w">سازنده</span></div>
+    <div class="kt" id="k4"><span class="w y">کیفیت</span><span class="w">رو تضمین</span><br><span class="w sm">می‌کنه؟</span></div>
+    <div class="kt" id="k5"><span class="w">واقعاً</span><span class="w c">مهمه؟</span></div>
+    <div class="kt" id="k6"><span class="w">کجا</span><span class="w y">مونتاژ</span><span class="w">شده؟</span></div>
+    <div class="kt" id="k7"><span class="w c">جای دیگه</span><span class="w">بخری؟</span></div>
+    <div class="kt" id="k8"><span class="w y">۲ تا ۳ میلیون</span><br><span class="w sm">بیشتر هزینه؟</span></div>
+    <div class="kt" id="k9"><span class="w">از خودت</span><span class="w c">بپرس</span></div>
+    <div class="kt" id="k10"><span class="w">این</span><span class="w y">اختلاف قیمت</span></div>
+    <div class="kt" id="k11"><span class="w">دقیقاً بابت</span><span class="w c">چیه؟</span></div>
+
+    <div id="fullchip"><span class="pl"><i></i></span>ویدیوی کامل در آپارات</div>
+  </div>
+
+  <!-- ====== boards ====== -->
+  <div id="board">
+    <div class="bignum" id="n3" style="left:-210px;top:1000px;color:#9fb1c1">۳</div>
+    <div class="bignum" id="n4" style="right:-230px;top:180px;color:#f4ad3d">۴</div>
+
+    <!-- board 1: Samsung's official page + 3 locked points -->
+    <div class="scene" id="sA" style="top:0">
+      <div class="tile" id="aTile" style="left:830px;top:290px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="aNote" style="right:270px;top:310px;width:640px">صفحه‌ی <b>رسمی</b><br>پشتیبانی سامسونگ</div>
+      <svg class="arrow" id="aArr" style="left:740px;top:455px;width:150px;height:110px" viewBox="0 0 150 110">
+        <path d="M120 4 C 120 60, 80 90, 20 96" fill="none" stroke="#a9b5c0" stroke-width="7" stroke-linecap="round" stroke-dasharray="14 12"/>
+        <path d="M34 80 L16 97 L38 106" fill="none" stroke="#a9b5c0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="bcard" id="aCard" style="left:80px;top:580px;width:920px;padding:0 0 22px">
+        <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
+        <div style="position:relative;margin:18px 28px 0"><img class="shot blurbox" src="assets/ev/community_par.jpg"></div>
+        <div class="lock" id="aLock" style="left:50%;top:150px;transform:translateX(-50%)"><img src="assets/emoji/locked.png">توی ویدیوی کامل</div>
+      </div>
+      <svg class="arrow" id="aBr" style="left:0;top:905px;width:1080px;height:110px" viewBox="0 0 1080 110">
+        <path d="M540 0 V40 M220 40 H860 M220 40 V96 M540 40 V96 M860 40 V96" fill="none" stroke="#a9b5c0" stroke-width="7" stroke-linecap="round" stroke-dasharray="22 16"/></svg>
+      <div class="tcard" id="t1" style="left:720px;top:1020px"><div class="n">۱</div><div class="sk" style="width:90%"></div><div class="sk" style="width:70%"></div><img src="assets/emoji/locked.png"></div>
+      <div class="tcard" id="t2" style="left:400px;top:1020px"><div class="n">۲</div><div class="sk" style="width:85%"></div><div class="sk" style="width:60%"></div><img src="assets/emoji/locked.png"></div>
+      <div class="tcard" id="t3" style="left:80px;top:1020px"><div class="n">۳</div><div class="sk" style="width:95%"></div><div class="sk" style="width:65%"></div><img src="assets/emoji/locked.png"></div>
+    </div>
+
+    <!-- board 2: compare two phones — 4 locked things -->
+    <div class="scene" id="sB" style="top:0">
+      <div class="ttlB" id="bTtl" style="top:290px">موقع مقایسه، <b>۴ چیز</b> مهمه</div>
+      <div class="ph" id="ph1" style="left:600px;top:450px"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div>
+        <div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/flags/vn.svg">ویتنام</div>
+        <div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><img src="assets/emoji/locked.png"></div></div></div></div>
+      <div class="ph" id="ph2" style="left:60px;top:450px"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div>
+        <div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/flags/in.svg">هند</div>
+        <div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><img src="assets/emoji/locked.png"></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><img src="assets/emoji/locked.png"></div></div></div></div>
+      <div class="vs" id="vs" style="left:475px;top:795px">VS</div>
+    </div>
+  </div>
+
+  <!-- ====== CTA ====== -->
+  <div id="cta">
+    <div class="lg"></div>
+    <div class="l1">جواب این سؤال‌ها</div>
+    <div class="l2">توی ویدیوی کامل</div>
+    <div class="ap"><div class="pl"><i></i></div><div><div class="t1">آپارات گروه هماهنگ</div><div class="t2">ویدیوی کامل · ۲ دقیقه</div></div></div>
+    <div class="bio">لینک توی بیو 🔗</div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <path id="samsung-path" d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/>
+</defs></svg>
+<script src="assets/gsap.min.js"></script>
+<script src="teaser_data.js"></script>
+<script>
+const FPS = 30;
+const VIDEO_FRAMES = window.VIDEO_FRAMES;
+const FRAMES = new URLSearchParams(location.search).get('frames') || 'tframes';
+const PIECES = window.PIECES || [];
+const tl = gsap.timeline({paused:true});
+gsap.set('#board',{xPercent:110});
+const SFX = []; window.SFX = SFX;
+const $ = s => document.querySelector(s);
+const sfx = (t, type, g=1) => SFX.push({t:+Math.max(0,t).toFixed(3), type, g});
+
+function pop(sel, t0, t1, o={}){
+  const rot=o.rot??0, s=o.s??1;
+  tl.fromTo(sel,{opacity:0,scale:0.2,rotation:rot-25,y:o.dy??30},{opacity:1,scale:s,rotation:rot,y:0,duration:o.d??0.45,ease:o.ease??'back.out(2.4)'},t0);
+  if(o.float!==false) tl.to(sel,{y:-14,duration:0.9,ease:'sine.inOut',repeat:Math.max(1,Math.floor((t1-t0-0.5)/0.9)),yoyo:true},t0+0.45);
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.3,rotation:rot+15,duration:0.22,ease:'power2.in'},t1-0.22);
+  if(o.snd!==false) sfx(t0, o.snd||'pop', o.g??1);
+}
+function kt(sel,t0,t1,o={}){
+  const el=$(sel), words=el.querySelectorAll('.w');
+  tl.set(el,{opacity:1},t0);
+  tl.fromTo(words,{opacity:0,y:50,scale:1.35,filter:'blur(10px)'},{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:o.d??0.32,ease:'power3.out',stagger:o.st??0.09},t0);
+  if(o.shake){ tl.fromTo(el,{x:-10},{x:10,duration:0.05,repeat:7,yoyo:true,ease:'none'},t0+0.3); tl.set(el,{x:0},t0+0.72); }
+  tl.to(el,{opacity:0,y:-20,duration:0.16,ease:'power2.in'},t1-0.16);
+  if(o.snd!==false) sfx(t0,'swish',0.55);
+}
+function boardIn(t){ tl.fromTo('#board',{xPercent:110,skewX:-6},{xPercent:0,skewX:0,duration:0.38,ease:'power3.out'},t-0.05); sfx(t-0.08,'whoosh',1); }
+function boardOut(t){ tl.to('#board',{xPercent:-110,skewX:6,duration:0.32,ease:'power3.in'},t-0.32); tl.set('#board',{xPercent:110,skewX:0},t); sfx(t-0.3,'whoosh',0.9); }
+function scene(sel,t0,t1){ tl.set(sel,{opacity:1},t0); tl.set(sel,{opacity:0},t1); }
+function ring(sel,t0,t1){ tl.fromTo(sel,{opacity:0,scale:0.8,rotation:-20},{opacity:0.6,scale:1,rotation:0,duration:0.6,ease:'power3.out'},t0); tl.to(sel,{opacity:0,duration:0.2},t1-0.2); }
+function draw(sel,t,d=0.3){ tl.fromTo(sel,{opacity:1,clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:d,ease:'power2.out'},t); }
+
+// ===== HOOK 0 – 3.24 : the friend who insisted on "Made in Vietnam"
+tl.set('#k1',{opacity:1},0); tl.set('#k1 .w',{opacity:1},0);           // visible on the very first frame
+tl.fromTo('#k1 .y',{scale:1},{scale:1.15,duration:0.15,yoyo:true,repeat:1,ease:'sine.inOut'},0.15);
+tl.fromTo('#k1',{x:-10},{x:10,duration:0.05,repeat:9,yoyo:true,ease:'none'},0.9); tl.set('#k1',{x:0},1.4);
+tl.to('#k1',{opacity:0,y:-20,duration:0.16},2.34);
+sfx(0.02,'thud',0.9);
+tl.set('#fvn',{opacity:1,scale:1,rotation:-6},0);
+pop('#st_vn',0.35,3.2,{rot:-4,float:false,snd:'tick'});
+tl.to('#fvn',{y:-12,duration:0.9,repeat:2,yoyo:true,ease:'sine.inOut'},0.4); tl.to('#fvn',{opacity:0,scale:0.3,duration:0.22},2.98);
+pop('#e_ex',0.6,2.5,{rot:8});
+kt('#k2',2.5,3.22);
+
+// ===== QUESTION 3.24 – 7.57
+kt('#k3',3.3,5.52);
+pop('#f1',3.4,5.5,{rot:-8}); pop('#f2',3.6,5.5,{rot:7}); pop('#f3',3.85,5.5,{rot:-5}); pop('#f4',4.1,5.5,{rot:6});
+kt('#k4',5.56,7.55);
+pop('#e_shield',5.65,7.55,{rot:-10}); pop('#e_q1',5.85,7.55,{rot:12});
+tl.to('#e_q1',{rotation:-6,duration:0.12,repeat:5,yoyo:true},6.4);
+// persistent "full video on Aparat" chip from here on (speaker shots)
+tl.fromTo('#fullchip',{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'back.out(2)'},3.6); sfx(3.6,'tick',0.6);
+
+// ===== BOARD 1  7.57 – 12.83 : Samsung's own page says 3 things (locked)
+boardIn(7.6); scene('#sA',7.5,12.9);
+pop('#aTile',7.8,null,{float:false});
+tl.fromTo('#aNote',{opacity:0,x:40},{opacity:1,x:0,duration:0.35,ease:'power3.out'},7.95);
+tl.fromTo('#aArr',{opacity:0,clipPath:'inset(0 0 100% 0)'},{opacity:1,clipPath:'inset(0 0 0% 0)',duration:0.4},8.2);
+tl.fromTo('#aCard',{opacity:0,y:120,rotation:3},{opacity:1,y:0,rotation:0,duration:0.5,ease:'back.out(1.4)'},8.35); sfx(8.35,'whoosh',0.6);
+tl.fromTo('#aLock',{opacity:0,scale:0.6},{opacity:1,scale:1,duration:0.35,ease:'back.out(2.5)'},9.9); sfx(9.9,'thud',0.6);
+ring('#n3',11.6,12.9);
+draw('#aBr',11.7,0.3);
+['#t1','#t2','#t3'].forEach((s,i)=>{ tl.fromTo(s,{opacity:0,y:80,scale:0.8},{opacity:1,y:0,scale:1,duration:0.4,ease:'back.out(2)'},11.9+i*0.2); sfx(11.9+i*0.2,'pop',0.9); });
+boardOut(12.86);
+
+// ===== DOES IT MATTER?  12.86 – 18.0
+kt('#k5',12.9,16.25);
+pop('#e_think',13.0,16.2,{rot:6}); pop('#e_glob',13.2,16.2,{rot:-6});
+tl.to('#e_glob img',{rotation:360,duration:3,ease:'none'},13.2);
+kt('#k6',16.3,17.98);
+pop('#e_fac',16.35,17.95,{rot:-6}); pop('#e_q4',16.5,17.95,{rot:10});
+
+// ===== BOARD 2  18.0 – 23.03 : compare two phones — 4 locked things
+boardIn(18.03); scene('#sB',17.95,23.1);
+tl.fromTo('#bTtl',{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'power3.out'},18.25);
+tl.fromTo('#ph2',{opacity:0,x:-120,rotation:-6},{opacity:1,x:0,rotation:-3,duration:0.5,ease:'back.out(1.5)'},18.5);
+tl.fromTo('#ph1',{opacity:0,x:120,rotation:6},{opacity:1,x:0,rotation:3,duration:0.5,ease:'back.out(1.5)'},18.7); sfx(18.5,'whoosh',0.7);
+pop('#vs',19.4,null,{float:false,snd:'thud'});
+ring('#n4',21.0,23.1);
+['.r1','.r2','.r3','.r4'].forEach((r,i)=>{ tl.fromTo('#sB '+r,{opacity:0,x:40},{opacity:1,x:0,duration:0.25,ease:'back.out(2)'},21.05+i*0.33); sfx(21.05+i*0.33,'tick',1); });
+boardOut(23.06);
+
+// ===== THE PRICE QUESTION  23.06 – 31.66
+kt('#k7',23.1,25.3); pop('#e_cart',23.15,25.28,{rot:-8});
+kt('#k8',25.34,27.2);
+pop('#e_money1',25.4,27.18,{rot:10,snd:'cash'}); pop('#e_money2',25.6,27.18,{rot:-12,snd:false});
+tl.to(['#e_money1','#e_money2'],{x:'+=26',duration:0.5,repeat:2,yoyo:true,ease:'sine.inOut'},25.85);
+kt('#k9',27.26,29.0); pop('#e_think2',27.3,29.0,{rot:6});
+kt('#k10',29.05,30.12); pop('#e_scale',29.08,31.62,{rot:-6});
+tl.to('#e_scale',{rotation:6,duration:0.4,repeat:3,yoyo:true,ease:'sine.inOut'},29.5);
+kt('#k11',30.16,31.64);
+pop('#e_q2',30.2,31.62,{rot:10,s:1.05,snd:false}); pop('#e_q3',30.4,31.62,{rot:-14,snd:false});
+sfx(30.2,'pop',1);
+tl.to('#fullchip',{opacity:0,duration:0.2},31.5);
+
+// ===== CTA  31.66 – 36.5 : full video on Aparat
+tl.fromTo('#cta',{opacity:0,scale:1.08},{opacity:1,scale:1,duration:0.35,ease:'power3.out'},31.6); sfx(31.55,'whoosh',1); sfx(31.7,'thud',0.8);
+tl.fromTo('#cta .lg',{opacity:0,y:-20},{opacity:1,y:0,duration:0.35},31.85);
+tl.fromTo('#cta .l1',{opacity:0,y:30},{opacity:1,y:0,duration:0.35,ease:'power3.out'},32.0);
+tl.fromTo('#cta .l2',{opacity:0,scale:1.4},{opacity:1,scale:1,duration:0.4,ease:'back.out(2)'},32.3); sfx(32.3,'pop',1);
+tl.fromTo('#cta .ap',{opacity:0,y:120},{opacity:1,y:0,duration:0.5,ease:'back.out(1.6)'},32.8); sfx(32.8,'whoosh',0.7);
+tl.fromTo('#cta .ap .pl',{scale:1},{scale:1.12,duration:0.35,repeat:7,yoyo:true,ease:'sine.inOut'},33.3);
+tl.fromTo('#cta .bio',{opacity:0,y:30},{opacity:1,y:0,duration:0.35},33.5); sfx(33.5,'ding',0.8);
+tl.set({},{},36.5);
+
+function camScale(t){
+  for(let i=PIECES.length-1;i>=0;i--){ const p=PIECES[i]; if(t>=p[3]-1e-6){
+    const base=(i%2)?1.05:1.0; const k=Math.min(1,(t-p[3])/Math.max(0.5,p[2]-p[1])); return base+0.02*k; } }
+  return 1;
+}
+window.seekFrame = async function(i){
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false);
+  $('#cam').style.transform=`scale(${camScale(t).toFixed(4)})`;
+  const img=$('#vid'); const src=`${FRAMES}/${String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0')}.jpg`;
+  if(!img.src.endsWith(src)){ img.src=src; try{ await img.decode(); }catch(e){} }
+  return t;
+};
+window.DURATION=36.5; window.TOTAL_FRAMES=Math.round(36.5*FPS);
+</script>
+</body>
+</html>

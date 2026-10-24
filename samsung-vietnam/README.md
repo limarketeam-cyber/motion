@@ -10,3 +10,11 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
 `python3 audio.py speech.wav sfx.json mix.wav` → encode with ffmpeg.
 
 3D icons: Microsoft Fluent Emoji (MIT). Flags: flag-icons (MIT). Font: IBM Plex Sans Arabic (OFL). Logo: Hamahang (extracted from their own post).
+
+## Instagram teaser (for the full 2-min video on Aparat)
+- `samsung-vietnam-teaser.mp4` — 36.5s, 1080×1920, no subtitles
+- `teaser.html` + `teaser_edl.json` — teaser motion and cut list
+- Burned-in subtitles are removed by a 1.32× zoom anchored at the top of the frame
+  (`scale=1426:2534,crop=1080:1920:173:0`), so the head keeps its headroom.
+- Safe zone used for all text: x 64–1016, y 250–1500.
+- Render: `PAGE=teaser.html node render.mjs out` (frames in `tframes/`).
