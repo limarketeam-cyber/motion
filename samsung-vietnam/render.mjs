@@ -20,7 +20,7 @@ async function worker(list) {
   await page.close();
 }
 let frames = only;
-if (!frames) { const n = fs.readdirSync('frames').filter(f => f.endsWith('.jpg')).length; frames = [...Array(n).keys()]; }
+if (!frames) { const n = 1800; frames = [...Array(n).keys()]; }  // 60s incl. 1.4s end card
 const W = only ? 1 : 3, chunk = Math.ceil(frames.length / W);
 await Promise.all([...Array(W).keys()].map(w => worker(frames.slice(w * chunk, (w + 1) * chunk))));
 await browser.close();
