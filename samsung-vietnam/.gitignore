@@ -2,3 +2,4 @@ frames
 out/
 *.wav
 tframes
+tmasks

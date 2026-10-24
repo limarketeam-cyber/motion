@@ -18,3 +18,15 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
   (`scale=1426:2534,crop=1080:1920:173:0`), so the head keeps its headroom.
 - Safe zone used for all text: x 64–1016, y 250–1500.
 - Render: `PAGE=teaser.html node render.mjs out` (frames in `tframes/`).
+
+### Teaser v2 (current `samsung-vietnam-teaser.mp4`)
+- `teaser2.html` — overlays on the speaker use only white + red (flags excepted);
+  full-graphic boards use the Hamahang white→red post gradient with grain and black text.
+- Icons near the head sit **behind** the speaker (person cutout masks from rembg
+  `u2net_human_seg`, smoothed) with a light depth-of-field blur; masks go in `tmasks/`.
+- Chest text is positioned per line from the detected chin (+30px); an automatic
+  check over all frames found 0 text/face overlaps.
+- Glitch frames from the source's own transitions (colour flashes before B&W shots)
+  are replaced with the nearest clean frame; the low opening shot is reframed
+  (1.4× zoom, lifted 160px) so the text stays in the sweet spot below the chin.
+- Render: `PAGE=teaser2.html node render.mjs out`.

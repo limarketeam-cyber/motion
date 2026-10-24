@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تیزر سامسونگ ویتنام — نسخه ۲</title>
+<link rel="stylesheet" href="assets/fonts/plex-500.css">
+<link rel="stylesheet" href="assets/fonts/plex-600.css">
+<link rel="stylesheet" href="assets/fonts/plex-700.css">
+<style>
+/* Colour system 60 / 30 / 10: white / black / blue accent.
+   Full-graphic boards sit on the Hamahang white→red post gradient. */
+:root{ --w:#ffffff; --k:#111114; --b:#c8141b; --mute:#6c707a; --line:#c3cad3; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:600}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 700px}
+#vid,#vid2{position:absolute;inset:0;width:1080px;height:1920px;display:block}
+#actor{position:absolute;inset:0;-webkit-mask-size:1080px 1920px;mask-size:1080px 1920px;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+/* depth: things behind the speaker are slightly out of focus */
+#behind{position:absolute;inset:0;filter:blur(1.6px)}
+.layer{position:absolute;inset:0;pointer-events:none}
+
+/* icon badge on the speaker shot: white disc, black line icon, blue accent */
+.ib{position:absolute;opacity:0;width:200px;height:200px}
+.ib .disc{position:absolute;inset:0;border-radius:50%;background:var(--w);box-shadow:0 22px 44px rgba(0,0,0,.42);display:grid;place-items:center}
+.ib svg{width:120px;height:120px}
+.ib .disc.fl{overflow:hidden;border:8px solid #fff}
+.ib .disc.fl img{width:100%;height:100%;object-fit:cover}
+.ib .cap{position:absolute;left:50%;top:186px;transform:translateX(-50%);white-space:nowrap;background:var(--b);color:#fff;
+  font-weight:700;font-size:34px;padding:2px 22px 10px;border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+svg .k{fill:none;stroke:var(--k);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+svg .bl{fill:none;stroke:var(--b);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+svg .bf{fill:var(--b)} svg .kf{fill:var(--k)} svg .wf{fill:#fff}
+
+/* text on the speaker shot: white on blue */
+.kt{position:absolute;left:0;right:0;top:1130px;text-align:center;opacity:0;font-weight:700;font-size:86px;line-height:1}
+.kt .w{display:inline-block;margin:8px 6px;background:var(--b);color:#fff;padding:12px 26px 26px;border-radius:20px;box-shadow:0 16px 36px rgba(0,0,0,.35)}
+.kt .w.big{font-size:1.12em}
+.kt .sm{font-size:60px}
+.kt.ltr{direction:ltr}
+.tag{position:absolute;opacity:0;background:var(--b);color:#fff;font-weight:700;font-size:32px;padding:4px 22px 12px;border-radius:14px;white-space:nowrap;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+#fullchip{position:absolute;left:50%;top:1410px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;
+  background:var(--b);color:#fff;border-radius:999px;padding:8px 16px 14px 30px;font-size:36px;font-weight:700;white-space:nowrap;
+  box-shadow:0 14px 34px rgba(0,0,0,.35);opacity:0}
+#fullchip .pl{width:58px;height:58px;border-radius:50%;background:#fff;display:grid;place-items:center}
+#fullchip .pl i{display:block;width:0;height:0;border-left:20px solid var(--b);border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px}
+
+/* ---------- full-graphic boards: Hamahang white→red gradient + grain ---------- */
+.postbg{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(820px 700px at 78% 86%,rgba(236,70,70,.42),transparent 70%),
+             radial-gradient(640px 560px at 18% 70%,rgba(255,150,150,.30),transparent 72%),
+             radial-gradient(700px 600px at 12% 6%,rgba(214,226,238,.65),transparent 70%),
+             linear-gradient(#fdfdfe,#f6f6f8)}
+.postbg::after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+#board{position:absolute;inset:0;overflow:hidden}
+.bignum{position:absolute;width:560px;height:560px;border-radius:50%;border:46px solid currentColor;filter:blur(8px);opacity:0;
+  display:grid;place-items:center;font-weight:700;font-size:250px;line-height:1;padding-bottom:40px}
+.scene{position:absolute;inset:0;opacity:0}
+.arrow{position:absolute;overflow:visible;opacity:0}
+.dash{fill:none;stroke:var(--line);stroke-width:7;stroke-linecap:round;stroke-dasharray:22 16}
+.head{fill:none;stroke:var(--line);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.bcard{position:absolute;background:#fff;border-radius:30px;box-shadow:0 24px 60px rgba(30,30,40,.14);overflow:hidden;opacity:0}
+.bcard img.shot{display:block;width:100%}
+.blurbox{filter:blur(7px)}
+.note{position:absolute;color:var(--k);font-weight:700;font-size:52px;line-height:1.3;opacity:0;text-align:right}
+.note b{color:var(--b);font-weight:700}
+.tile{position:absolute;width:170px;height:170px;border-radius:36px;background:#fff;box-shadow:0 18px 40px rgba(30,30,40,.14);display:grid;place-items:center;opacity:0}
+.tile svg{width:140px;height:30px;fill:var(--k)}
+.lock{position:absolute;display:flex;align-items:center;gap:14px;background:var(--b);color:#fff;border-radius:999px;
+  padding:8px 30px 16px 20px;font-size:40px;font-weight:700;white-space:nowrap;opacity:0;box-shadow:0 16px 36px rgba(0,0,0,.3)}
+.lock svg{width:54px;height:54px}
+.tcard{position:absolute;width:280px;height:290px;background:#fff;border-radius:30px;box-shadow:0 22px 50px rgba(30,30,40,.14);opacity:0;padding:26px 24px}
+.tcard .n{width:74px;height:74px;border-radius:50%;background:var(--b);color:#fff;font-size:44px;font-weight:700;display:grid;place-items:center}
+.tcard .sk{height:20px;border-radius:10px;background:#e2e4e9;margin-top:20px;filter:blur(2px)}
+.tcard svg{position:absolute;left:50%;bottom:22px;width:72px;height:72px;transform:translateX(-50%)}
+.ttlB{position:absolute;left:70px;right:70px;text-align:center;font-weight:700;font-size:64px;color:var(--k);opacity:0;line-height:1.3}
+.ttlB b{color:var(--b);font-weight:700}
+.ph{position:absolute;width:420px;height:820px;border-radius:56px;background:#fff;border:3px solid #ececef;padding:12px;opacity:0;box-shadow:0 30px 70px rgba(0,0,0,.28)}
+.ph .scr{position:absolute;inset:12px;border-radius:46px;background:#f7f7f9;overflow:hidden;padding:28px 20px}
+.ph .punch{position:absolute;left:50%;top:22px;width:20px;height:20px;border-radius:50%;background:#d9d9de;transform:translateX(-50%)}
+.ph .sb{display:flex;justify-content:space-between;direction:ltr;font-size:20px;font-weight:600;color:var(--k);padding:0 16px}
+.ph .ttl{text-align:center;direction:ltr;font-size:44px;font-weight:700;color:var(--k);margin:54px 0 8px}
+.ph .ctry{display:flex;justify-content:center;align-items:center;gap:8px;font-size:34px;font-weight:700;color:var(--k);margin-bottom:30px}
+.ph .ctry svg{width:40px;height:40px}
+.ph .grp{background:#fff;border-radius:28px;padding:6px 10px}
+.ph .row{display:flex;align-items:center;gap:14px;padding:22px 8px;border-bottom:2px solid #eeeff2;opacity:0}
+.ph .row:last-child{border-bottom:0}
+.ph .row .n{width:46px;height:46px;border-radius:50%;background:var(--b);color:#fff;font-weight:700;font-size:28px;display:grid;place-items:center;flex:none}
+.ph .row .bar{flex:1;height:22px;border-radius:11px;background:#dfe2e7;filter:blur(2px)}
+.ph .row svg{width:40px;height:40px;flex:none}
+.vs{position:absolute;width:130px;height:130px;border-radius:50%;background:var(--b);color:#fff;font-size:54px;font-weight:700;direction:ltr;
+  display:grid;place-items:center;box-shadow:0 16px 40px rgba(200,20,27,.4);opacity:0;border:8px solid #fff}
+
+/* ---------- pack shot ---------- */
+#cta{position:absolute;inset:0;opacity:0}
+#cta .lg{position:absolute;left:50%;top:330px;width:420px;height:80px;transform:translateX(-50%);background:var(--b);-webkit-mask:url(assets/hamahang-logo.png) center/contain no-repeat;mask:url(assets/hamahang-logo.png) center/contain no-repeat;opacity:0}
+#cta .l1{position:absolute;left:0;right:0;top:540px;text-align:center;color:var(--k);font-size:60px;font-weight:600;opacity:0}
+#cta .l2{position:absolute;left:0;right:0;top:640px;text-align:center;color:var(--k);font-size:100px;font-weight:700;opacity:0}
+#cta .l2 b{color:var(--b);font-weight:700}
+#cta .ap{position:absolute;left:120px;right:120px;top:880px;height:250px;background:#fff;border-radius:44px;display:flex;align-items:center;gap:34px;padding:0 44px;opacity:0;
+  box-shadow:0 30px 70px rgba(30,30,40,.18)}
+#cta .ap .pl{width:150px;height:150px;border-radius:50%;background:var(--b);display:grid;place-items:center;flex:none;box-shadow:0 12px 30px rgba(200,20,27,.4)}
+#cta .ap .pl i{display:block;width:0;height:0;border-left:52px solid #fff;border-top:34px solid transparent;border-bottom:34px solid transparent;margin-left:14px}
+#cta .ap .t1{font-size:56px;font-weight:700;color:var(--k)}
+#cta .ap .t2{font-size:36px;font-weight:600;color:var(--mute);margin-top:6px}
+#cta .bio{position:absolute;left:50%;top:1215px;transform:translateX(-50%);background:var(--b);color:#fff;border-radius:999px;
+  padding:8px 40px 18px;font-size:46px;font-weight:700;white-space:nowrap;opacity:0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <path id="samsung-path" d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/>
+  <symbol id="i-q" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M34 36a16 16 0 1 1 24 14c-6 3.5-8 7-8 12v3"/><circle fill="#c8141b" cx="50" cy="79" r="6"/></symbol>
+  <symbol id="i-ex" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M38 18v46M62 18v46"/><circle fill="#c8141b" cx="38" cy="80" r="6"/><circle fill="#c8141b" cx="62" cy="80" r="6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M50 12l30 12v24c0 20-14 34-30 40-16-6-30-20-30-40V24z"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M36 50l10 10 20-21"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 100 100"><circle fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" cx="50" cy="50" r="33"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M17 50h66M50 17c-12 10-12 56 0 66M50 17c12 10 12 56 0 66"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M24 32h52M24 68h52"/></symbol>
+  <symbol id="i-factory" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M14 84V50l20 12V50l20 12V50l20 12V24h12v60z"/><rect fill="#c8141b" x="24" y="68" width="10" height="9" rx="2"/><rect fill="#c8141b" x="44" y="68" width="10" height="9" rx="2"/><rect fill="#c8141b" x="64" y="68" width="10" height="9" rx="2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 100 100"><path fill="#c8141b" d="M50 90C38 74 24 60 24 42a26 26 0 0 1 52 0c0 18-14 32-26 48z"/><circle fill="#ffffff" cx="50" cy="42" r="10"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M12 20h12l10 44h44l8-30H30"/><circle fill="#c8141b" cx="40" cy="78" r="7"/><circle fill="#c8141b" cx="72" cy="78" r="7"/></symbol>
+  <symbol id="i-money" viewBox="0 0 100 100"><rect fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" x="12" y="28" width="76" height="44" rx="8"/><circle fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" cx="50" cy="50" r="11"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M24 40v20M76 40v20"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M36 62c-7-6-11-13-11-22a25 25 0 0 1 50 0c0 9-4 16-11 22v8H36z"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M40 80h20M43 89h14"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M50 30v14M42 40l8 6 8-6"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 100 100"><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M50 16v66M30 86h40M20 30h60M20 30L10 56h20zM80 30l-10 26h20z"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M10 56a10 6 0 0 0 20 0M70 56a10 6 0 0 0 20 0"/><circle fill="#c8141b" cx="50" cy="22" r="7"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 100 100"><rect fill="#c8141b" x="20" y="44" width="60" height="44" rx="10"/><path fill="none" stroke="#c8141b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M32 44V34a18 18 0 0 1 36 0v10"/><circle fill="#c8141b" cx="50" cy="64" r="7"/></symbol>
+  <symbol id="i-lockw" viewBox="0 0 100 100"><rect fill="#ffffff" x="20" y="44" width="60" height="44" rx="10"/><path fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" d="M32 44V34a18 18 0 0 1 36 0v10"/><circle fill="#c8141b" cx="50" cy="64" r="7"/></symbol>
+</defs></svg>
+
+<div id="stage">
+  <div id="cam">
+    <img id="vid" alt="">
+    <div id="behind">
+      <!-- hook -->
+      <div class="ib" id="b_vn" style="left:94px;top:330px"><div class="disc fl"><img src="assets/flags/vn.svg"></div><div class="cap">ویتنام</div></div>
+      <div class="ib" id="b_ex" style="left:786px;top:330px"><div class="disc"><svg><use href="#i-ex"/></svg></div></div>
+      <!-- question -->
+      <div class="ib" id="b_c1" style="left:94px;top:300px;width:180px;height:180px"><div class="disc fl"><img src="assets/flags/vn.svg"></div><div class="cap" style="top:168px">ویتنام</div></div>
+      <div class="ib" id="b_c2" style="left:806px;top:290px;width:180px;height:180px"><div class="disc fl"><img src="assets/flags/cn.svg"></div><div class="cap" style="top:168px">چین</div></div>
+      <div class="ib" id="b_c3" style="left:806px;top:560px;width:180px;height:180px"><div class="disc fl"><img src="assets/flags/in.svg"></div><div class="cap" style="top:168px">هند</div></div>
+      <div class="ib" id="b_c4" style="left:94px;top:570px;width:180px;height:180px"><div class="disc fl"><img src="assets/flags/kr.svg"></div><div class="cap" style="top:168px">کره</div></div>
+      <div class="ib" id="b_shield" style="left:94px;top:360px"><div class="disc"><svg><use href="#i-shield"/></svg></div></div>
+      <div class="ib" id="b_q1" style="left:786px;top:330px"><div class="disc"><svg><use href="#i-q"/></svg></div></div>
+      <!-- does it matter -->
+      <div class="ib" id="b_globe" style="left:94px;top:340px"><div class="disc"><svg><use href="#i-globe"/></svg></div></div>
+      <div class="ib" id="b_bulb" style="left:786px;top:340px"><div class="disc"><svg><use href="#i-bulb"/></svg></div></div>
+      <div class="ib" id="b_fac" style="left:94px;top:360px"><div class="disc"><svg><use href="#i-factory"/></svg></div></div>
+      <div class="ib" id="b_q4" style="left:786px;top:340px"><div class="disc"><svg><use href="#i-q"/></svg></div></div>
+      <!-- money question -->
+      <div class="ib" id="b_cart" style="left:94px;top:350px"><div class="disc"><svg><use href="#i-cart"/></svg></div></div>
+      <div class="ib" id="b_money" style="left:786px;top:330px"><div class="disc"><svg><use href="#i-money"/></svg></div><div class="cap">+۲ تا ۳ م</div></div>
+      <div class="ib" id="b_bulb2" style="left:786px;top:340px"><div class="disc"><svg><use href="#i-bulb"/></svg></div></div>
+      <div class="ib" id="b_scale" style="left:94px;top:350px"><div class="disc"><svg><use href="#i-scale"/></svg></div></div>
+      <div class="ib" id="b_q2" style="left:786px;top:330px"><div class="disc"><svg><use href="#i-q"/></svg></div></div>
+    </div>
+    <div id="actor"><img id="vid2" alt=""></div>
+  </div>
+
+  <div class="layer" id="fx">
+    <div class="kt" id="k1" style="top:1130px"><span class="w">حتماً،</span><span class="w big">حتماً!</span></div>
+    <div class="kt" id="k2" style="top:1130px"><span class="w big">ویتنام</span><span class="w">باشه!</span></div>
+    <div class="kt" id="k3" style="top:1152px"><span class="w big">کشورِ</span><span class="w">سازنده</span></div>
+    <div class="kt" id="k4" style="top:1130px"><span class="w big">کیفیت</span><span class="w">رو</span><br><span class="w sm">تضمین می‌کنه؟</span></div>
+    <div class="kt" id="k5" style="top:1149px"><span class="w">واقعاً</span><span class="w big">مهمه؟</span></div>
+    <div class="kt" id="k6" style="top:1135px"><span class="w">کجا</span><span class="w big">مونتاژ</span><span class="w">شده؟</span></div>
+    <div class="kt" id="k7" style="top:1130px"><span class="w big">جای دیگه</span><span class="w">بخری؟</span></div>
+    <div class="kt" id="k8" style="top:1130px"><span class="w big">۲ تا ۳ میلیون</span><br><span class="w sm">بیشتر هزینه؟</span></div>
+    <div class="kt" id="k9" style="top:1130px"><span class="w">از خودت</span><span class="w big">بپرس</span></div>
+    <div class="kt" id="k10" style="top:1140px"><span class="w">این</span><span class="w big">اختلاف قیمت</span></div>
+    <div class="kt" id="k11" style="top:1130px"><span class="w">دقیقاً بابت</span><span class="w big">چیه؟</span></div>
+    <div id="fullchip"><span class="pl"><i></i></span>ویدیوی کامل در آپارات</div>
+  </div>
+
+  <!-- ====== full-graphic boards ====== -->
+  <div id="board" class="postbg">
+    <div class="bignum" id="n3" style="left:-210px;top:1000px;color:rgba(200,20,27,.45)">۳</div>
+    <div class="bignum" id="n4" style="right:-230px;top:180px;color:rgba(200,20,27,.45)">۴</div>
+    <div class="scene" id="sA">
+      <div class="tile" id="aTile" style="left:830px;top:290px"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div>
+      <div class="note" id="aNote" style="right:270px;top:310px;width:640px">صفحه‌ی <b>رسمی</b><br>پشتیبانی سامسونگ</div>
+      <svg class="arrow" id="aArr" style="left:740px;top:455px;width:150px;height:110px" viewBox="0 0 150 110"><path class="dash" d="M120 4 C 120 60, 80 90, 20 96"/><path class="head" d="M34 80 L16 97 L38 106"/></svg>
+      <div class="bcard" id="aCard" style="left:80px;top:580px;width:920px;padding:0 0 22px">
+        <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
+        <div style="position:relative;margin:18px 28px 0"><img class="shot blurbox" src="assets/ev/community_par.jpg"></div>
+        <div class="lock" id="aLock" style="left:50%;top:150px;transform:translateX(-50%)"><svg><use href="#i-lockw"/></svg>توی ویدیوی کامل</div>
+      </div>
+      <svg class="arrow" id="aBr" style="left:0;top:905px;width:1080px;height:110px" viewBox="0 0 1080 110"><path class="dash" d="M540 0 V40 M220 40 H860 M220 40 V96 M540 40 V96 M860 40 V96"/></svg>
+      <div class="tcard" id="t1" style="left:720px;top:1020px"><div class="n">۱</div><div class="sk" style="width:90%"></div><div class="sk" style="width:70%"></div><svg><use href="#i-lock"/></svg></div>
+      <div class="tcard" id="t2" style="left:400px;top:1020px"><div class="n">۲</div><div class="sk" style="width:85%"></div><div class="sk" style="width:60%"></div><svg><use href="#i-lock"/></svg></div>
+      <div class="tcard" id="t3" style="left:80px;top:1020px"><div class="n">۳</div><div class="sk" style="width:95%"></div><div class="sk" style="width:65%"></div><svg><use href="#i-lock"/></svg></div>
+    </div>
+    <div class="scene" id="sB">
+      <div class="ttlB" id="bTtl" style="top:290px">موقع مقایسه، <b>۴ چیز</b> مهمه</div>
+      <div class="ph" id="ph1" style="left:600px;top:450px"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div><div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/flags/vn.svg" style="width:58px;height:44px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.2)">ویتنام</div><div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div></div></div></div>
+      <div class="ph" id="ph2" style="left:60px;top:450px"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div><div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/flags/in.svg" style="width:58px;height:44px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.2)">هند</div><div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><svg><use href="#i-lock"/></svg></div></div></div></div>
+      <div class="vs" id="vs" style="left:475px;top:795px">VS</div>
+    </div>
+  </div>
+
+  <div id="cta" class="postbg">
+    <div class="lg"></div>
+    <div class="l1">جواب این سؤال‌ها</div>
+    <div class="l2">توی ویدیوی <b>کامل</b></div>
+    <div class="ap"><div class="pl"><i></i></div><div><div class="t1">آپارات گروه هماهنگ</div><div class="t2">ویدیوی کامل · ۲ دقیقه</div></div></div>
+    <div class="bio">لینک توی بیو</div>
+  </div>
+</div>
+
+<script src="assets/gsap.min.js"></script>
+<script src="teaser_data.js"></script>
+<script>
+const FPS=30, VIDEO_FRAMES=window.VIDEO_FRAMES;
+const q=new URLSearchParams(location.search);
+const FRAMES=q.get('frames')||'tframes', MASKS=q.get('masks')||'tmasks';
+const PIECES=window.PIECES||[];
+const tl=gsap.timeline({paused:true});
+gsap.set('#board',{xPercent:110});
+const SFX=[]; window.SFX=SFX;
+const $=s=>document.querySelector(s);
+const sfx=(t,type,g=1)=>SFX.push({t:+Math.max(0,t).toFixed(3),type,g});
+function pop(sel,t0,t1,o={}){
+  const rot=o.rot??0, s=o.s??1;
+  tl.fromTo(sel,{opacity:0,scale:0.3,rotation:rot-20,y:o.dy??30},{opacity:1,scale:s,rotation:rot,y:0,duration:o.d??0.45,ease:o.ease??'back.out(2.2)'},t0);
+  if(o.float!==false) tl.to(sel,{y:-12,duration:0.9,ease:'sine.inOut',repeat:Math.max(1,Math.floor((t1-t0-0.5)/0.9)),yoyo:true},t0+0.45);
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.4,duration:0.22,ease:'power2.in'},t1-0.22);
+  if(o.snd!==false) sfx(t0,o.snd||'pop',o.g??1);
+}
+function kt(sel,t0,t1,o={}){
+  const el=$(sel), words=el.querySelectorAll('.w');
+  tl.set(el,{opacity:1},t0);
+  tl.fromTo(words,{opacity:0,y:50,scale:1.3},{opacity:1,y:0,scale:1,duration:0.3,ease:'back.out(2)',stagger:0.09},t0);
+  tl.to(el,{opacity:0,y:-20,duration:0.16,ease:'power2.in'},t1-0.16); tl.set(el,{y:0},t1);
+  if(o.snd!==false) sfx(t0,'swish',0.55);
+}
+function boardIn(t){ tl.fromTo('#board',{xPercent:110,skewX:-6},{xPercent:0,skewX:0,duration:0.38,ease:'power3.out'},t-0.05); sfx(t-0.08,'whoosh',1); }
+function boardOut(t){ tl.to('#board',{xPercent:-110,skewX:6,duration:0.32,ease:'power3.in'},t-0.32); tl.set('#board',{xPercent:110,skewX:0},t); sfx(t-0.3,'whoosh',0.9); }
+function scene(sel,t0,t1){ tl.set(sel,{opacity:1},t0); tl.set(sel,{opacity:0},t1); }
+function ring(sel,t0,t1){ tl.fromTo(sel,{opacity:0,scale:0.8,rotation:-20},{opacity:1,scale:1,rotation:0,duration:0.6,ease:'power3.out'},t0); tl.to(sel,{opacity:0,duration:0.2},t1-0.2); }
+function draw(sel,t,d=0.3){ tl.fromTo(sel,{opacity:1,clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:d,ease:'power2.out'},t); }
+
+// ===== HOOK 0 – 3.24
+tl.set('#k1',{opacity:1},0); tl.set('#k1 .w',{opacity:1},0);
+tl.fromTo('#k1 .big',{scale:1},{scale:1.12,duration:0.15,yoyo:true,repeat:1,ease:'sine.inOut'},0.15);
+tl.fromTo('#k1',{x:-10},{x:10,duration:0.05,repeat:9,yoyo:true,ease:'none'},0.9); tl.set('#k1',{x:0},1.4);
+tl.to('#k1',{opacity:0,y:-20,duration:0.16},2.34); sfx(0.02,'thud',0.9);
+tl.set('#b_vn',{opacity:1,scale:1,rotation:-6},0);
+tl.to('#b_vn',{y:-12,duration:0.9,repeat:2,yoyo:true,ease:'sine.inOut'},0.4); tl.to('#b_vn',{opacity:0,scale:0.4,duration:0.22},2.98);
+pop('#b_ex',0.6,2.5,{rot:8});
+kt('#k2',2.5,3.22);
+// ===== QUESTION 3.24 – 7.57
+kt('#k3',3.3,5.52);
+pop('#b_c1',3.4,5.5,{rot:-6}); pop('#b_c2',3.6,5.5,{rot:6}); pop('#b_c3',3.85,5.5,{rot:-4}); pop('#b_c4',4.1,5.5,{rot:5});
+kt('#k4',5.56,7.55);
+pop('#b_shield',5.65,7.55,{rot:-8}); pop('#b_q1',5.85,7.55,{rot:10});
+tl.to('#b_q1',{rotation:-6,duration:0.12,repeat:5,yoyo:true},6.4);
+tl.fromTo('#fullchip',{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'back.out(2)'},3.6); sfx(3.6,'tick',0.6);
+// ===== BOARD 1  7.57 – 12.86
+boardIn(7.6); scene('#sA',7.5,12.9);
+pop('#aTile',7.8,null,{float:false});
+tl.fromTo('#aNote',{opacity:0,x:40},{opacity:1,x:0,duration:0.35,ease:'power3.out'},7.95);
+tl.fromTo('#aArr',{opacity:0,clipPath:'inset(0 0 100% 0)'},{opacity:1,clipPath:'inset(0 0 0% 0)',duration:0.4},8.2);
+tl.fromTo('#aCard',{opacity:0,y:120,rotation:3},{opacity:1,y:0,rotation:0,duration:0.5,ease:'back.out(1.4)'},8.35); sfx(8.35,'whoosh',0.6);
+tl.fromTo('#aLock',{opacity:0,scale:0.6},{opacity:1,scale:1,duration:0.35,ease:'back.out(2.5)'},9.9); sfx(9.9,'thud',0.6);
+ring('#n3',11.6,12.9); draw('#aBr',11.7,0.3);
+['#t1','#t2','#t3'].forEach((s,i)=>{ tl.fromTo(s,{opacity:0,y:80,scale:0.8},{opacity:1,y:0,scale:1,duration:0.4,ease:'back.out(2)'},11.9+i*0.2); sfx(11.9+i*0.2,'pop',0.9); });
+boardOut(12.86);
+// ===== DOES IT MATTER?  12.86 – 18.0
+kt('#k5',12.9,16.25);
+pop('#b_bulb',13.0,16.2,{rot:6}); pop('#b_globe',13.2,16.2,{rot:-6});
+tl.to('#b_globe svg',{rotation:360,duration:3,ease:'none'},13.2);
+kt('#k6',16.3,17.98);
+pop('#b_fac',16.35,17.95,{rot:-6}); pop('#b_q4',16.5,17.95,{rot:10});
+// ===== BOARD 2  18.0 – 23.06
+boardIn(18.03); scene('#sB',17.95,23.1);
+tl.fromTo('#bTtl',{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'power3.out'},18.25);
+tl.fromTo('#ph2',{opacity:0,x:-120,rotation:-6},{opacity:1,x:0,rotation:-3,duration:0.5,ease:'back.out(1.5)'},18.5);
+tl.fromTo('#ph1',{opacity:0,x:120,rotation:6},{opacity:1,x:0,rotation:3,duration:0.5,ease:'back.out(1.5)'},18.7); sfx(18.5,'whoosh',0.7);
+pop('#vs',19.4,null,{float:false,snd:'thud'});
+ring('#n4',21.0,23.1);
+['.r1','.r2','.r3','.r4'].forEach((r,i)=>{ tl.fromTo('#sB '+r,{opacity:0,x:40},{opacity:1,x:0,duration:0.25,ease:'back.out(2)'},21.05+i*0.33); sfx(21.05+i*0.33,'tick',1); });
+boardOut(23.06);
+// ===== THE PRICE QUESTION  23.06 – 31.66
+kt('#k7',23.1,25.3); pop('#b_cart',23.15,25.28,{rot:-8});
+kt('#k8',25.34,27.2); pop('#b_money',25.4,27.18,{rot:8,snd:'cash'});
+kt('#k9',27.26,29.0); pop('#b_bulb2',27.3,29.0,{rot:6});
+kt('#k10',29.05,30.12); pop('#b_scale',29.08,31.62,{rot:-6});
+tl.to('#b_scale',{rotation:6,duration:0.4,repeat:3,yoyo:true,ease:'sine.inOut'},29.5);
+kt('#k11',30.16,31.64); pop('#b_q2',30.2,31.62,{rot:10});
+tl.to('#fullchip',{opacity:0,duration:0.2},31.5);
+// ===== PACK SHOT  31.66 – 36.5
+tl.fromTo('#cta',{opacity:0,scale:1.08},{opacity:1,scale:1,duration:0.35,ease:'power3.out'},31.6); sfx(31.55,'whoosh',1); sfx(31.7,'thud',0.8);
+tl.fromTo('#cta .lg',{opacity:0,y:-20},{opacity:1,y:0,duration:0.35},31.85);
+tl.fromTo('#cta .l1',{opacity:0,y:30},{opacity:1,y:0,duration:0.35,ease:'power3.out'},32.0);
+tl.fromTo('#cta .l2',{opacity:0,scale:1.4},{opacity:1,scale:1,duration:0.4,ease:'back.out(2)'},32.3); sfx(32.3,'pop',1);
+tl.fromTo('#cta .ap',{opacity:0,y:120},{opacity:1,y:0,duration:0.5,ease:'back.out(1.6)'},32.8); sfx(32.8,'whoosh',0.7);
+tl.fromTo('#cta .ap .pl',{scale:1},{scale:1.12,duration:0.35,repeat:7,yoyo:true,ease:'sine.inOut'},33.3);
+tl.fromTo('#cta .bio',{opacity:0,y:30},{opacity:1,y:0,duration:0.35},33.5); sfx(33.5,'ding',0.8);
+tl.set({},{},36.5);
+
+function camScale(t){
+  for(let i=PIECES.length-1;i>=0;i--){ const p=PIECES[i]; if(t>=p[3]-1e-6){
+    const base=(i%2)?1.05:1.0; const k=Math.min(1,(t-p[3])/Math.max(0.5,p[2]-p[1])); return base+0.02*k; } }
+  return 1;
+}
+function load(img,src){ return new Promise(r=>{ if(img.src.endsWith(src)) return r(); img.onload=()=>r(); img.onerror=()=>r(); img.src=src; }); }
+const maskImg=new Image();
+window.seekFrame=async function(i){
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false);
+  $('#cam').style.transform=`scale(${camScale(t).toFixed(4)})`;
+  const n=String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0');
+  const src=`${FRAMES}/${n}.jpg`, msrc=`${MASKS}/${n}.png`;
+  await Promise.all([load($('#vid'),src),load($('#vid2'),src),load(maskImg,msrc)]);
+  const a=$('#actor'); a.style.webkitMaskImage=a.style.maskImage=`url(${msrc})`;
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  return t;
+};
+window.frontRects=function(i){
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false);
+  const bx=gsap.getProperty('#board','xPercent'), ctaO=+getComputedStyle($('#cta')).opacity;
+  const out=[];
+  if(Math.abs(bx)<100 || ctaO>0.9) return {t,cover:true,s:camScale(t),r:out};
+  document.querySelectorAll('#fx .kt .w, #fx .tag, #fullchip').forEach(el=>{
+    let o=1, e=el; while(e && e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; }
+    if(o>0.05){ const r=el.getBoundingClientRect(); out.push([el.closest('[id]').id,r.left,r.top,r.right,r.bottom]); }
+  });
+  return {t,cover:false,s:camScale(t),r:out};
+};
+window.DURATION=36.5; window.TOTAL_FRAMES=Math.round(36.5*FPS);
+</script>
+</body>
+</html>
