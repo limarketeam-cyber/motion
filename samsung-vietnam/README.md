@@ -48,3 +48,14 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
 - Tiles sit behind the speaker; each placed so its icon and caption are never covered
   by head/body in any frame it is shown (only ~15% of the tile edge tucks behind).
 - SFX cues are remapped to the new cut (`teaser4_sfx_mapped.json`).
+
+### Teaser v5 — tight rhythm (current `samsung-vietnam-teaser.mp4`, 28.2s)
+- `teaser5_cut.py` → `teaser5_edl.json` (cold open on the money line, pauses removed,
+  flash frames auto-replaced, 0.6s freeze on the cliffhanger).
+- `teaser5_build.py` → `teaser5.html` (all timings derived from the cut);
+  tile positions in `teaser5_tiles.json` (icon + caption never covered by the speaker,
+  inside the safe zone at the 112% punch-in).
+- `teaser5_audio.py`: speech + SFX + 112 bpm synthesized beat, ducked under the voice,
+  cut on the freeze, back on the pack shot.
+- Jump cuts alternate 100% / 112% zoom; thin progress bar at the top; board A shows
+  point 1 half-revealed, points 2 and 3 locked.
