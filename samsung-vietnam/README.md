@@ -30,3 +30,12 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
   are replaced with the nearest clean frame; the low opening shot is reframed
   (1.4× zoom, lifted 160px) so the text stays in the sweet spot below the chin.
 - Render: `PAGE=teaser2.html node render.mjs out`.
+
+### Teaser v3 — 3D tiles (current `samsung-vietnam-teaser.mp4`)
+- Style chosen from `style-options.png` (option 4, 3D tiles); built in `teaser3.html`.
+- Speaker shots: white + red only (flags excepted). Boards and pack shot: 60% white,
+  30% black, 10% blue, on the Hamahang white→red gradient.
+- Tiles sit beside the jaw (fully readable, only the edge tucks behind the speaker).
+- Text slabs track the lapel mic (`teaser_mic.js`, smoothed per shot) to cover it.
+- Editing fixes: orange flash frames removed, 3-frame soft blend on mid-sentence cuts,
+  camera punch-in changes only between sentences.

@@ -1,0 +1,97 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><title>Style options</title>
+<link rel="stylesheet" href="assets/fonts/plex-600.css"><link rel="stylesheet" href="assets/fonts/plex-700.css">
+<style>
+:root{--r:#d0141c;--r2:#a30d13;--k:#111114;--b:#1e5eff;--mute:#6c707a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"IBM Plex Sans Arabic",sans-serif}
+#st{position:relative;width:1080px;height:1920px;overflow:hidden}
+.full{position:absolute;inset:0;width:1080px;height:1920px}
+#actor{position:absolute;inset:0;-webkit-mask:url(tmasks/00411.png) 0 0/1080px 1920px no-repeat;mask:url(tmasks/00411.png) 0 0/1080px 1920px no-repeat}
+#behind{position:absolute;inset:0;filter:blur(.8px)}
+.label{position:absolute;left:40px;top:40px;background:rgba(0,0,0,.75);color:#fff;font-size:44px;font-weight:700;padding:8px 26px 16px;border-radius:16px;z-index:99}
+.post{position:absolute;inset:0;background:radial-gradient(820px 700px at 78% 86%,rgba(236,70,70,.42),transparent 70%),radial-gradient(640px 560px at 18% 70%,rgba(255,150,150,.30),transparent 72%),radial-gradient(700px 600px at 12% 6%,rgba(214,226,238,.65),transparent 70%),linear-gradient(#fdfdfe,#f6f6f8)}
+.post::after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+.kt{position:absolute;left:0;right:0;top:1150px;text-align:center;font-weight:700;font-size:88px;line-height:1}
+.kt .w{display:inline-block;margin:0 8px;color:#fff;padding:14px 30px 28px}
+.badge{position:absolute;width:220px;height:220px;display:grid;place-items:center}
+.badge svg{width:130px;height:130px}
+.note{position:absolute;right:70px;top:300px;width:900px;text-align:right;color:var(--k);font-size:64px;font-weight:700;line-height:1.3}
+.note b{color:var(--b)}
+.cards{position:absolute;left:80px;right:80px;top:620px;display:flex;justify-content:space-between;direction:rtl}
+.c{width:280px;height:330px;position:relative;padding:28px 24px}
+.c .n{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:46px;font-weight:700}
+.c .sk{height:22px;border-radius:11px;background:#e3e5ea;margin-top:22px;filter:blur(2px)}
+.c .lk{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:84px;height:84px}
+.c .lk svg{width:100%;height:100%}
+.pill{position:absolute;left:50%;top:1100px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;font-size:46px;font-weight:700;white-space:nowrap;padding:14px 40px 22px 26px}
+.pill svg{width:60px;height:60px}
+
+/* ===== S1 glass ===== */
+.s1 .badge{border-radius:50%;background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.85) 0,rgba(255,255,255,.35) 40%,rgba(255,255,255,.18) 100%);
+  border:3px solid rgba(255,255,255,.95);box-shadow:0 34px 60px rgba(0,0,0,.45),inset 0 -14px 26px rgba(208,20,28,.18),inset 0 10px 18px rgba(255,255,255,.9);backdrop-filter:blur(8px)}
+.s1 .badge svg{filter:drop-shadow(0 6px 8px rgba(208,20,28,.35))}
+.s1 .kt .w{border-radius:26px;background:linear-gradient(180deg,#ea2a31 0%,#c3121a 55%,#9e0c12 100%);
+  box-shadow:0 20px 40px rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.45),inset 0 -6px 12px rgba(0,0,0,.18)}
+.s1 .c{border-radius:34px;background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(255,255,255,.35));border:2px solid #fff;box-shadow:0 26px 60px rgba(30,30,40,.16),inset 0 8px 18px #fff;backdrop-filter:blur(10px)}
+.s1 .c .n{background:linear-gradient(180deg,#4b82ff,#1e5eff 60%,#1747c9);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 10px 22px rgba(30,94,255,.35)}
+.s1 .pill{border-radius:999px;background:linear-gradient(180deg,#2b2b30,#111114);color:#fff;box-shadow:0 20px 40px rgba(0,0,0,.3),inset 0 2px 0 rgba(255,255,255,.25)}
+
+/* ===== S2 clay 3D ===== */
+.s2 .badge{border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff 0,#f3f3f5 55%,#dcdce2 100%);
+  box-shadow:0 14px 0 #c9c9d0,0 40px 60px rgba(0,0,0,.45),inset 0 -12px 22px rgba(0,0,0,.10),inset 0 14px 22px #fff}
+.s2 .badge{background:none;box-shadow:none}
+.s2 .badge img{width:250px;height:250px;filter:drop-shadow(0 26px 26px rgba(0,0,0,.5))}
+.s2 .c .lk img{width:100%;height:100%;filter:drop-shadow(0 10px 10px rgba(0,0,0,.25))}
+.s2 .kt .w{border-radius:28px;background:linear-gradient(180deg,#e8252c,#c8141b);box-shadow:0 12px 0 #7f080d,0 30px 40px rgba(0,0,0,.45),inset 0 3px 0 rgba(255,255,255,.35)}
+.s2 .c{border-radius:44px;background:linear-gradient(180deg,#ffffff,#f1f1f4);box-shadow:0 12px 0 #dedee4,0 36px 60px rgba(30,30,40,.18),inset 0 10px 20px #fff}
+.s2 .c .n{background:linear-gradient(180deg,#3d74ff,#1e5eff);box-shadow:0 6px 0 #1440b0,inset 0 3px 0 rgba(255,255,255,.45)}
+.s2 .c .lk svg{filter:drop-shadow(0 4px 0 #0e2f8a)}
+.s2 .pill{border-radius:999px;background:linear-gradient(180deg,#2a2a2f,#111114);color:#fff;box-shadow:0 10px 0 #000,0 28px 40px rgba(0,0,0,.35)}
+
+/* ===== S3 sticker ===== */
+.s3 .badge{background:none}
+.s3 .badge svg{width:200px;height:200px;filter:drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff) drop-shadow(0 18px 18px rgba(0,0,0,.45))}
+.s3 #bL{transform:rotate(-10deg)} .s3 #bR{transform:rotate(9deg)}
+.s3 .kt .w{background:var(--r);border-radius:6px;transform:rotate(-2deg);box-shadow:0 16px 28px rgba(0,0,0,.4);
+  clip-path:polygon(0 6%,3% 0,97% 4%,100% 0,99% 94%,96% 100%,4% 96%,0 100%)}
+.s3 .c{border-radius:22px;background:#fff;border:8px solid #fff;box-shadow:0 22px 40px rgba(30,30,40,.22)}
+.s3 #c1{transform:rotate(3deg)} .s3 #c2{transform:rotate(-2deg)} .s3 #c3{transform:rotate(2.5deg)}
+.s3 .c .n{background:var(--b);border-radius:18px;transform:rotate(-6deg)}
+.s3 .c::before{content:"";position:absolute;left:50%;top:-24px;width:120px;height:40px;transform:translateX(-50%) rotate(-4deg);background:rgba(30,94,255,.55)}
+.s3 .pill{border-radius:10px;background:var(--k);color:#fff;transform:translateX(-50%) rotate(-2deg);box-shadow:0 18px 30px rgba(0,0,0,.3)}
+
+/* ===== S4 isometric tile ===== */
+.s4 .badge{border-radius:40px;width:210px;height:210px;background:linear-gradient(160deg,#ffffff,#f0f0f3);
+  transform:perspective(900px) rotateX(16deg) rotateY(var(--ry,-18deg));
+  box-shadow:1px 1px 0 #e4e4e9,2px 2px 0 #dcdce2,3px 3px 0 #d6d6dc,4px 4px 0 #d0d0d7,5px 5px 0 #cacad2,6px 6px 0 #c4c4cc,7px 7px 0 #bebec7,8px 8px 0 #b8b8c1,9px 9px 0 #b2b2bb,10px 10px 0 #acacb5,24px 40px 50px rgba(0,0,0,.45)}
+.s4 #bR{--ry:18deg}
+.s4 .badge svg{filter:drop-shadow(0 6px 6px rgba(208,20,28,.3))}
+.s4 .kt .w{background:var(--r);border-radius:18px;transform:perspective(900px) rotateX(12deg);
+  box-shadow:0 2px 0 #b8111a,0 4px 0 #a80f17,0 6px 0 #980d14,0 8px 0 #880b12,0 10px 0 #780a10,0 26px 36px rgba(0,0,0,.45)}
+.s4 .c{border-radius:30px;background:linear-gradient(160deg,#fff,#f3f3f6);transform:perspective(1100px) rotateX(24deg) rotateZ(-4deg);
+  box-shadow:0 2px 0 #e6e6eb,0 4px 0 #dcdce2,0 6px 0 #d2d2d9,0 8px 0 #c8c8d0,0 10px 0 #bebec7,0 30px 50px rgba(30,30,40,.22)}
+.s4 .c .n{background:var(--b);border-radius:20px;box-shadow:0 3px 0 #1749d6,0 6px 0 #1238b0}
+.s4 .pill{border-radius:20px;background:var(--k);color:#fff;transform:translateX(-50%) perspective(900px) rotateX(12deg);box-shadow:0 3px 0 #000,0 6px 0 #000,0 24px 36px rgba(0,0,0,.35)}
+</style></head><body><div id="st"></div>
+<script src="styles_icons.js"></script>
+<script>
+const q=new URLSearchParams(location.search); const s=q.get('s')||'1', m=q.get('m')||'a';
+const names={1:'۱ · شیشه‌ای',2:'۲ · سه‌بعدی نرم',3:'۳ · استیکری',4:'۴ · کاشی سه‌بعدی'};
+const st=document.getElementById('st'); st.className='s'+s;
+const G=(n,c)=> s==='2' ? `<img src="assets/tint/${n}_${c==='r'?'r':'b'}.png">` : IC[n][c];
+if(m==='a'){
+  st.innerHTML=`<img class="full" src="tframes/00411.jpg">
+  <div id="behind"><div class="badge" id="bL" style="left:64px;top:700px">${G('globe_showing_asia-australia','r')}</div>
+  <div class="badge" id="bR" style="left:796px;top:680px">${G('red_question_mark','r')}</div></div>
+  <div id="actor"><img class="full" src="tframes/00411.jpg"></div>
+  <div class="kt"><span class="w">واقعاً</span><span class="w">مهمه؟</span></div>
+  <div class="label">${names[s]}</div>`;
+}else{
+  const card=(i,n)=>`<div class="c" id="c${i}"><div class="n">${n}</div><div class="sk" style="width:90%"></div><div class="sk" style="width:65%"></div><div class="lk">${G('locked','b')}</div></div>`;
+  st.innerHTML=`<div class="post"></div>
+  <div class="note">سامسونگ توی صفحه‌ی <b>رسمیش</b><br>۳ تا نکته گفته</div>
+  <div class="cards">${card(1,'۱')}${card(2,'۲')}${card(3,'۳')}</div>
+  <div class="pill">${IC['locked'].w}توی ویدیوی کامل</div>
+  <div class="label">${names[s]}</div>`;
+}
+</script></body></html>
