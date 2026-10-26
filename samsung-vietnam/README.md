@@ -40,7 +40,7 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
 - Editing fixes: orange flash frames removed, 3-frame soft blend on mid-sentence cuts,
   camera punch-in changes only between sentences.
 
-### Teaser v4 (current `samsung-vietnam-teaser.mp4`, 37.9s)
+### Teaser v4 (37.9s)
 - `teaser4.html` + `teaser_edl2.json`: natural pauses kept inside sentences (no
   mid-sentence jump cuts); the source's orange light-leak frames removed.
 - Chest text: one fixed position for the whole video — centred, at lapel-mic height;
@@ -49,7 +49,7 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
   by head/body in any frame it is shown (only ~15% of the tile edge tucks behind).
 - SFX cues are remapped to the new cut (`teaser4_sfx_mapped.json`).
 
-### Teaser v5 — tight rhythm (current `samsung-vietnam-teaser.mp4`, 28.2s)
+### Teaser v5 — tight rhythm (`samsung-vietnam-teaser.mp4`, 28.2s)
 - `teaser5_cut.py` → `teaser5_edl.json` (cold open on the money line, pauses removed,
   flash frames auto-replaced, 0.6s freeze on the cliffhanger).
 - `teaser5_build.py` → `teaser5.html` (all timings derived from the cut);
@@ -59,3 +59,14 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
   cut on the freeze, back on the pack shot.
 - Jump cuts alternate 100% / 112% zoom; thin progress bar at the top; board A shows
   point 1 half-revealed, points 2 and 3 locked.
+
+### Teaser v6 — v4 in the Hamahang visual identity (`samsung-vietnam-teaser-v6.mp4`, 37.9s)
+- Same cut, timing and audio as v4; `teaser6_build.py` → `teaser6.html` (built from `teaser4.html`).
+- Assets from the Hamahang pack in `assets/brand/`: IBM Plex Sans Arabic / IBM Plex Sans
+  Regular + Bold, official line icons, native-ratio flags, revised logo.
+- Speaker shots: flat white plates (no shadow, volume or gradient) with a red line icon
+  that draws on, a red accent bar, red caption tags; still placed behind the speaker.
+- Boards and pack shot: brand light gradient, white plates with a thin outline and a blue
+  accent bar, blue index tags, ink #262426 text, flat phones and VS tile.
+- Transitions: brand layer wipes (T02 diagonal into boards, T01 out, T03 vertical into
+  the pack shot), same layer timing as the pack JSON at ~0.5x length.

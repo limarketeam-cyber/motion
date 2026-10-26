@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تیزر سامسونگ ویتنام — هویت بصری هماهنگ</title>
+<style>
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSansArabic-Regular.ttf);font-weight:400}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSansArabic-Bold.ttf);font-weight:700}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSans-Regular.ttf);font-weight:400;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSans-Bold.ttf);font-weight:700;unicode-range:U+0000-00FF,U+2000-206F}
+/* Hamahang visual identity: primary #D32F2F, ink #262426, tertiary #002CB0, secondary #567B9F, outline #D5D9DD */
+:root{--ink:#262426;--r:#D32F2F;--b:#002CB0;--sec:#567B9F;--line:#D5D9DD;--bg:#FCFBFB;--skel:#E3E8ED}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:"HH",sans-serif;font-weight:400}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 700px}
+#vid,#vid2{position:absolute;inset:0;width:1080px;height:1920px;display:block}
+#actor{position:absolute;inset:0;-webkit-mask-size:1080px 1920px;mask-size:1080px 1920px;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+#behind{position:absolute;inset:0;filter:blur(.6px)}
+.layer{position:absolute;inset:0;pointer-events:none}
+/* speaker shot: flat brand plates (white + red), no shadow / volume / gradient */
+.t3{position:absolute;opacity:0}
+.t3 .face{position:absolute;inset:0;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 2px var(--line);display:grid;place-items:center}
+.t3 .face svg{width:62%;height:62%;overflow:visible}
+.t3 .face svg [pathLength]{stroke-dasharray:1 2}
+.t3 .face .acc{position:absolute;right:10px;top:24%;bottom:24%;width:5px;border-radius:3px;background:var(--r);transform-origin:50% 0}
+.t3 .face.fl{padding:20px 26px 20px 20px}
+.t3 .face.fl img{width:100%;height:100%;object-fit:contain}
+.t3 .cap{position:absolute;left:50%;top:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap}
+.t3.capup .cap{top:auto;bottom:calc(100% + 10px)}
+.t3 .cap span{display:inline-block;background:var(--r);color:#fff;font-weight:700;font-size:30px;line-height:1.45;padding:2px 22px 6px;border-radius:10px}
+/* chest text: white words + key word on a red plate */
+.kt{position:absolute;isolation:isolate;left:0;right:0;text-align:center;opacity:0;font-weight:700;font-size:80px;line-height:1.25;color:#fff;
+  text-shadow:0 0 3px rgba(0,0,0,.85),0 6px 22px rgba(0,0,0,.7)}
+.kt::before{content:"";position:absolute;left:50%;top:50%;width:980px;height:230px;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(0,0,0,.40),transparent);z-index:-1}
+.kt .w{display:inline-block;margin:0 10px}
+.kt .w.key{background:var(--r);border-radius:14px;padding:0 26px 12px;text-shadow:none}
+/* full-graphic boards: brand light gradient background; 60 white / 30 ink / 10 blue */
+.postbg{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(900px 760px at 84% 94%,rgba(211,47,47,.50),transparent 70%),radial-gradient(700px 620px at 8% 80%,rgba(230,149,149,.32),transparent 72%),
+  radial-gradient(820px 700px at 6% 2%,rgba(157,175,230,.42),transparent 70%),radial-gradient(700px 640px at 102% 28%,rgba(196,213,230,.55),transparent 70%),var(--bg)}
+#board{position:absolute;inset:0;overflow:hidden}
+.bignum{position:absolute;width:560px;height:560px;border-radius:50%;border:40px solid #C4D5E6;color:#9DAFE6;opacity:0;display:grid;place-items:center;font-weight:700;font-size:250px;line-height:1;padding-bottom:40px}
+.scene{position:absolute;inset:0;opacity:0}
+.arrow{position:absolute;overflow:visible;opacity:0}
+.dash{fill:none;stroke:var(--sec);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 14}
+.head{fill:none;stroke:var(--sec);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.acc-b::after,.acc-r::after{content:"";position:absolute;right:12px;top:22px;bottom:22px;width:4px;border-radius:2px;background:var(--b)}
+.acc-r::after{background:var(--r)}
+.bcard{position:absolute;background:#fff;border-radius:14px;overflow:hidden;opacity:0;border:2px solid var(--line)}
+.bcard::after{content:"";position:absolute;right:26px;bottom:0;width:60px;height:4px;background:var(--b)}
+.bcard img.shot{display:block;width:100%}
+.blurbox{filter:blur(7px)}
+.note{position:absolute;color:var(--ink);font-weight:700;font-size:54px;line-height:1.3;opacity:0;text-align:right}
+.note b{color:var(--b);font-weight:700}
+.stile{position:absolute;width:170px;height:170px;opacity:0}
+.stile .f3{position:absolute;inset:0;border-radius:14px;background:#fff;border:2px solid var(--line);display:grid;place-items:center}
+.stile svg{width:130px;height:28px;fill:var(--ink)}
+.lock{position:absolute;opacity:0;white-space:nowrap}
+.lock .f{position:relative;display:flex;align-items:center;gap:14px;background:var(--ink);color:#fff;border-radius:14px;padding:10px 40px 18px 22px;font-size:40px;font-weight:700}
+.lock svg{width:52px;height:52px}
+.tc{position:absolute;width:280px;height:300px;opacity:0}
+.tc .f3{position:absolute;inset:0;border-radius:14px;background:#fff;border:2px solid var(--line);padding:26px 30px 26px 24px}
+.tc .n,.ph .row .n{border-radius:10px;background:var(--b);color:#fff;font-weight:700;display:grid;place-items:center}
+.tc .n{width:80px;height:80px;font-size:46px}
+.tc .sk{height:20px;border-radius:10px;background:var(--skel);margin-top:22px;filter:blur(1.5px)}
+.tc .lk{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:84px;height:84px} .tc .lk svg{width:100%;height:100%}
+.ttlB{position:absolute;left:70px;right:70px;text-align:center;font-weight:700;font-size:66px;color:var(--ink);opacity:0;line-height:1.3}
+.ttlB b{color:var(--b);font-weight:700}
+.ph{position:absolute;width:420px;height:820px;opacity:0}
+.ph .f3{position:absolute;inset:0;border-radius:56px;background:var(--ink);padding:12px}
+.ph .scr{position:absolute;inset:12px;border-radius:46px;background:var(--bg);overflow:hidden;padding:28px 20px}
+.ph .punch{position:absolute;left:50%;top:22px;width:20px;height:20px;border-radius:50%;background:var(--ink);transform:translateX(-50%)}
+.ph .sb{display:flex;justify-content:space-between;direction:ltr;font-size:20px;color:var(--ink);padding:0 16px}
+.ph .ttl{text-align:center;direction:ltr;font-size:44px;font-weight:700;color:var(--ink);margin:54px 0 8px}
+.ph .ctry{display:flex;justify-content:center;align-items:center;gap:12px;font-size:34px;font-weight:700;color:var(--ink);margin-bottom:30px}
+.ph .ctry img{width:60px;height:40px;object-fit:contain}
+.ph .grp{position:relative;background:#fff;border-radius:14px;border:2px solid var(--line);padding:6px 10px}
+.ph .row{display:flex;align-items:center;gap:14px;padding:22px 8px;border-bottom:2px solid #EEF1F4;opacity:0}
+.ph .row:last-child{border-bottom:0}
+.ph .row .n{width:48px;height:48px;font-size:28px;border-radius:8px;flex:none}
+.ph .row .bar{flex:1;height:20px;border-radius:10px;background:var(--skel);filter:blur(1.5px)}
+.ph .row .lk{width:44px;height:44px;flex:none} .ph .row .lk svg{width:100%;height:100%}
+.vs{position:absolute;width:140px;height:140px;opacity:0}
+.vs .f3{position:absolute;inset:0;border-radius:20px;background:var(--b);color:#fff;font-size:56px;font-weight:700;direction:ltr;display:grid;place-items:center}
+/* pack shot: same background, 60/30/10, revised logo */
+#cta{position:absolute;inset:0;opacity:0}
+#cta .lg{position:absolute;left:50%;top:330px;width:460px;transform:translateX(-50%);opacity:0}
+#cta .lg img{display:block;width:100%}
+#cta .l1{position:absolute;left:0;right:0;top:540px;text-align:center;color:var(--ink);font-size:60px;font-weight:400;opacity:0}
+#cta .l2{position:absolute;left:0;right:0;top:640px;text-align:center;color:var(--ink);font-size:100px;font-weight:700;opacity:0}
+#cta .l2 b{color:var(--b);font-weight:700}
+#cta .ap{position:absolute;left:120px;right:120px;top:880px;height:250px;opacity:0}
+#cta .ap .f3{position:absolute;inset:0;background:#fff;border:2px solid var(--line);border-radius:14px;display:flex;align-items:center;gap:34px;padding:0 50px 0 44px}
+#cta .ap .pl{width:150px;height:150px;border-radius:14px;background:var(--r);display:grid;place-items:center;flex:none}
+#cta .ap .pl svg{width:96px;height:96px}
+#cta .ap .t1{font-size:56px;font-weight:700;color:var(--ink)}
+#cta .ap .t2{font-size:36px;font-weight:400;color:var(--sec);margin-top:6px}
+#cta .bio{position:absolute;left:50%;top:1230px;transform:translateX(-50%);opacity:0;white-space:nowrap}
+#cta .bio .f{position:relative;display:inline-block;background:var(--ink);color:#fff;border-radius:14px;padding:10px 50px 20px 44px;font-size:46px;font-weight:700}
+/* brand layer wipes */
+#wipe{position:absolute;inset:0;pointer-events:none;z-index:50}
+#wipe .ws{position:absolute;inset:0;overflow:hidden}
+#wipe i{position:absolute;inset:0}
+#wipe .wi i{left:-16%;right:-16%;clip-path:polygon(14% 0,100% 0,86% 100%,0 100%)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><path id="samsung-path" d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/></defs></svg>
+<div id="stage">
+  <div id="cam">
+    <img id="vid" alt="">
+    <div id="behind">
+<div class="t3 capup" id="b_vn" style="left:40px;top:550px;width:190px;height:190px"><div class="face fl"><img src="assets/brand/flags/VN.svg"><i class="acc"></i></div><div class="cap"><span>ویتنام</span></div></div>
+<div class="t3" id="b_ex" style="left:820px;top:490px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="warning-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 3 L30 28 H2 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 12 V19 M16 24 V24.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_c1" style="left:40px;top:650px;width:170px;height:170px"><div class="face fl"><img src="assets/brand/flags/VN.svg"><i class="acc"></i></div><div class="cap"><span>ویتنام</span></div></div>
+<div class="t3 capup" id="b_c2" style="left:790px;top:320px;width:190px;height:190px"><div class="face fl"><img src="assets/brand/flags/CN.svg"><i class="acc"></i></div><div class="cap"><span>چین</span></div></div>
+<div class="t3 capup" id="b_c4" style="left:40px;top:430px;width:190px;height:190px"><div class="face fl"><img src="assets/brand/flags/KR.svg"><i class="acc"></i></div><div class="cap"><span>کره</span></div></div>
+<div class="t3" id="b_c3" style="left:810px;top:600px;width:190px;height:190px"><div class="face fl"><img src="assets/brand/flags/IN.svg"><i class="acc"></i></div><div class="cap"><span>هند</span></div></div>
+<div class="t3" id="b_shield" style="left:50px;top:310px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="warranty-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 3 L26 7 V15 C26 21 22 25 16 29 C10 25 6 21 6 15 V7 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M11 16 L15 20 L22 12" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_q1" style="left:840px;top:730px;width:170px;height:170px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_globe" style="left:70px;top:860px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="globe-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="16" cy="16" r="11" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M5 16 H27 M16 5 C9 11 9 21 16 27 M16 5 C23 11 23 21 16 27" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_bulb" style="left:780px;top:380px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="information-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="16" cy="16" r="12" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 14 V23 M16 9 V9.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_fac" style="left:70px;top:860px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="factory-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 28 V12 L12 7 V12 L20 7 V17 H28 V28 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M23 17 V3 H27 V17" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M9 22 H11 M16 22 H18 M23 22 H25" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_q4" style="left:760px;top:400px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_cart" style="left:100px;top:790px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="cart-line-v3"><g transform="translate(0 0) scale(3)"><path pathLength="1" d="M2 4 L6 4 L6.9067 8.307 M9.3053 19.7 L10 23 L27 23" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M7 9 H29 L26 19 H9 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><path d="M13.8428 27.2215 L13.6584 26.8818 L13.4142 26.5858 L13.1182 26.3416 L12.7785 26.1572 L12.4031 26.0406 L12 26 L11.5969 26.0406 L11.2215 26.1572 L10.8818 26.3416 L10.5858 26.5858 L10.3416 26.8818 L10.1572 27.2215 L10.0406 27.5969 L10 28 L10.0406 28.4031 L10.1572 28.7785 L10.3416 29.1182 L10.5858 29.4142 L10.8818 29.6584 L11.2215 29.8428 L11.5969 29.9594 L12 30 L12.4031 29.9594 L12.7785 29.8428 L13.1182 29.6584 L13.4142 29.4142 L13.6584 29.1182 L13.8428 28.7785 L13.9594 28.4031 L14 28 L13.9594 27.5969 L13.8428 27.2215 Z" fill="#D32F2F" fill-rule="evenodd" stroke="none"/><path d="M26.8428 27.2215 L26.6584 26.8818 L26.4142 26.5858 L26.1182 26.3416 L25.7785 26.1572 L25.4031 26.0406 L25 26 L24.5969 26.0406 L24.2215 26.1572 L23.8818 26.3416 L23.5858 26.5858 L23.3416 26.8818 L23.1572 27.2215 L23.0406 27.5969 L23 28 L23.0406 28.4031 L23.1572 28.7785 L23.3416 29.1182 L23.5858 29.4142 L23.8818 29.6584 L24.2215 29.8428 L24.5969 29.9594 L25 30 L25.4031 29.9594 L25.7785 29.8428 L26.1182 29.6584 L26.4142 29.4142 L26.6584 29.1182 L26.8428 28.7785 L26.9594 28.4031 L27 28 L26.9594 27.5969 L26.8428 27.2215 Z" fill="#D32F2F" fill-rule="evenodd" stroke="none"/></g></g></svg><i class="acc"></i></div></div>
+<div class="t3 capup" id="b_money" style="left:830px;top:770px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="price-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M3 5 H17 L29 17 L17 29 L3 15 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="9" cy="11" r="2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div><div class="cap"><span>+۲ تا ۳ م</span></div></div>
+<div class="t3" id="b_bulb2" style="left:780px;top:450px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="chat-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M10 12 H22 M10 18 H17" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_scale" style="left:70px;top:810px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="discount-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="16" cy="16" r="12" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M10 23 L22 9" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="10" cy="10" r="2.5" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" xmlns="http://www.w3.org/2000/svg" cx="22" cy="22" r="2.5" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="b_q2" style="left:760px;top:390px;width:190px;height:190px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+    
+    </div>
+    <div id="actor"><img id="vid2" alt=""></div>
+  </div>
+  <div class="layer" id="fx">
+<div class="kt" id="k1"><span class="w">حتماً،</span><span class="w key">حتماً!</span></div>
+<div class="kt" id="k2"><span class="w key">ویتنام</span><span class="w">باشه!</span></div>
+<div class="kt" id="k3"><span class="w key">کشورِ</span><span class="w">سازنده</span></div>
+<div class="kt" id="k4"><span class="w key">کیفیت</span><span class="w">رو تضمین می‌کنه؟</span></div>
+<div class="kt" id="k5"><span class="w">واقعاً</span><span class="w key">مهمه؟</span></div>
+<div class="kt" id="k6"><span class="w">کجا</span><span class="w key">مونتاژ</span><span class="w">شده؟</span></div>
+<div class="kt" id="k7"><span class="w key">جای دیگه</span><span class="w">بخری؟</span></div>
+<div class="kt" id="k8"><span class="w key">۲ تا ۳ میلیون</span><span class="w">بیشتر؟</span></div>
+<div class="kt" id="k9"><span class="w">از خودت</span><span class="w key">بپرس</span></div>
+<div class="kt" id="k10"><span class="w">این</span><span class="w key">اختلاف قیمت</span></div>
+<div class="kt" id="k11"><span class="w">دقیقاً بابت</span><span class="w key">چیه؟</span></div>
+  </div>
+  <div id="board" class="postbg">
+    <div class="bignum" id="n3" style="left:-210px;top:1000px;">۳</div>
+    <div class="bignum" id="n4" style="right:-230px;top:180px;">۴</div>
+    <div class="scene" id="sA">
+      <div class="stile" id="aTile" style="left:830px;top:290px"><div class="f3 acc-b"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div></div>
+      <div class="note" id="aNote" style="right:270px;top:310px;width:640px">صفحه‌ی <b>رسمی</b><br>پشتیبانی سامسونگ</div>
+      <svg class="arrow" id="aArr" style="left:740px;top:470px;width:150px;height:110px" viewBox="0 0 150 110"><path class="dash" d="M120 4 C 120 60, 80 90, 20 96"/><path class="head" d="M34 80 L16 97 L38 106"/></svg>
+      <div class="bcard" id="aCard" style="left:80px;top:590px;width:920px;padding:0 0 22px">
+        <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
+        <div style="position:relative;margin:18px 28px 0"><img class="shot blurbox" src="assets/ev/community_par.jpg"></div>
+        <div class="lock" id="aLock" style="left:50%;top:140px;transform:translateX(-50%)"><span class="f acc-r"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#FFFFFF" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+توی ویدیوی کامل</span></div>
+      </div>
+      <svg class="arrow" id="aBr" style="left:0;top:910px;width:1080px;height:110px" viewBox="0 0 1080 110"><path class="dash" d="M540 0 V40 M220 40 H860 M220 40 V96 M540 40 V96 M860 40 V96"/></svg>
+      <div class="tc" id="t1" style="left:720px;top:1020px"><div class="f3 acc-b"><div class="n">۱</div><div class="sk" style="width:90%"></div><div class="sk" style="width:65%"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div></div><div class="tc" id="t2" style="left:400px;top:1020px"><div class="f3 acc-b"><div class="n">۲</div><div class="sk" style="width:90%"></div><div class="sk" style="width:65%"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div></div><div class="tc" id="t3" style="left:80px;top:1020px"><div class="f3 acc-b"><div class="n">۳</div><div class="sk" style="width:90%"></div><div class="sk" style="width:65%"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div></div>
+    </div>
+    <div class="scene" id="sB">
+      <div class="ttlB" id="bTtl" style="top:290px">موقع مقایسه، <b>۴ چیز</b> مهمه</div>
+      <div class="ph" id="ph1" style="left:600px;top:450px"><div class="f3" style="--rz:3deg"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div><div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/brand/flags/VN.svg">ویتنام</div><div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div></div></div></div></div>
+      <div class="ph" id="ph2" style="left:60px;top:450px"><div class="f3" style="--rz:-3deg"><div class="scr"><div class="punch"></div><div class="sb"><span>9:41</span><span>85%</span></div><div class="ttl">Galaxy A57</div><div class="ctry"><img src="assets/brand/flags/IN.svg">هند</div><div class="grp"><div class="row r1"><div class="n">۱</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r2"><div class="n">۲</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r3"><div class="n">۳</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div><div class="row r4"><div class="n">۴</div><div class="bar"></div><div class="lk"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="lock-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="6" y="14" width="20" height="15" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M10 14 V8 A6 6 0 0 1 22 8 V14" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M16 20 V24" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>
+</div></div></div></div></div></div>
+      <div class="vs" id="vs" style="left:470px;top:790px"><div class="f3">VS</div></div>
+    </div>
+  </div>
+  <div id="cta" class="postbg">
+    <div class="lg"><img src="assets/brand/logo.svg" alt="گروه هماهنگ"></div>
+    <div class="l1">جواب این سؤال‌ها</div>
+    <div class="l2">توی ویدیوی <b>کامل</b></div>
+    <div class="ap"><div class="f3 acc-b"><div class="pl"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12.0014 1.5938C2.7317 1.5906-1.9119 12.7965 4.641 19.3515c2.975 2.976 7.4496 3.8669 11.3374 2.257 3.8877-1.61 6.4228-5.4036 6.4228-9.6116 0-5.7441-4.6555-10.4012-10.3997-10.4031zM6.11 6.783c.5011-2.5982 3.8927-3.2936 5.376-1.1028 1.4834 2.1907-.4216 5.0816-3.02 4.5822-1.6118-.3098-2.6668-1.868-2.356-3.4794zm4.322 8.9882c-.5045 2.5971-3.8965 3.288-5.377 1.0959-1.4807-2.1922.427-5.0807 3.0247-4.5789 1.612.3114 2.6655 1.8714 2.3524 3.483zm1.2605-2.405c-1.1528-.2231-1.4625-1.7273-.4917-2.3877.9708-.6604 2.256.18 2.0401 1.3343-.1347.7198-.8294 1.1924-1.5484 1.0533zm6.197 3.8375c-.501 2.5981-3.8927 3.2935-5.376 1.1028-1.4834-2.1908.4217-5.0817 3.0201-4.5822 1.6117.3097 2.6667 1.8679 2.356 3.4794zm-1.9662-5.5018c-2.5981-.501-3.2935-3.8962-1.1027-5.3795 2.1907-1.4834 5.0816.4216 4.5822 3.02-.3082 1.6132-1.8668 2.6701-3.4795 2.3595zm-2.3348 11.5618l2.2646.611c1.9827.5263 4.0167-.6542 4.5433-2.6368l.639-2.4016a11.3828 11.3828 0 0 1-7.4469 4.4274zM21.232 3.5985l-2.363-.6284a11.3757 11.3757 0 0 1 4.3538 7.619l.6495-2.4578c.5194-1.9804-.6615-4.0076-2.6403-4.5328zM.6713 13.8086l-.5407 2.04c-.5263 1.9826.6542 4.0166 2.6368 4.5432l2.1066.5618a11.3792 11.3792 0 0 1-4.2027-7.145zM10.3583.702L8.1498.1261C6.166-.4024 4.1296.7785 3.603 2.763l-.5512 2.082A11.3757 11.3757 0 0 1 10.3583.702Z"/></svg></div><div><div class="t1">آپارات گروه هماهنگ</div><div class="t2">ویدیوی کامل ۲ دقیقه‌ای</div></div></div></div>
+    <div class="bio"><span class="f acc-r">لینک توی بیو</span></div>
+  </div>
+  <div id="wipe">
+    <div class="ws wi"><i style="background:#262426"></i><i style="background:#D32F2F"></i><i style="background:#DFE7ED"></i></div>
+    <div class="ws wo"><i style="background:#567B9F"></i><i style="background:#262426"></i><i style="background:#D32F2F"></i></div>
+    <div class="ws v"><i style="background:#D32F2F"></i><i style="background:#567B9F"></i><i style="background:#262426"></i></div>
+  </div>
+</div>
+<script src="assets/gsap.min.js"></script>
+<script src="teaser4_data.js"></script>
+<script>
+const FPS=30, VIDEO_FRAMES=window.VIDEO_FRAMES4;
+const q=new URLSearchParams(location.search);
+const FRAMES=q.get('frames')||'tf4', MASKS=q.get('masks')||'tmasks4';
+const PIECES=window.PIECES||[];
+const tl=gsap.timeline({paused:true});
+gsap.set('#board',{xPercent:110});
+const SFX=[]; window.SFX=SFX;
+const $=s=>document.querySelector(s);
+const sfx=(t,type,g=1)=>SFX.push({t:+Math.max(0,t).toFixed(3),type,g});
+function pop(sel,t0,t1,o={}){
+  const el=$(sel);
+  tl.fromTo(sel,{opacity:0,scale:0.86,y:24},{opacity:1,scale:1,y:0,duration:0.32,ease:'power3.out'},t0);
+  const acc=el.querySelector('.acc'); if(acc) tl.fromTo(acc,{scaleY:0},{scaleY:1,duration:0.28,ease:'power2.out'},t0+0.12);
+  const ps=el.querySelectorAll('[pathLength]'); if(ps.length) tl.fromTo(ps,{strokeDashoffset:1},{strokeDashoffset:0,duration:0.5,ease:'power2.inOut',stagger:0.06},t0+0.1);
+  const cap=el.querySelector('.cap span'); if(cap) tl.fromTo(cap,{opacity:0,y:12},{opacity:1,y:0,duration:0.25,ease:'power3.out'},t0+0.2);
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.92,duration:0.2,ease:'power2.in'},t1-0.2);
+  if(o.snd!==false) sfx(t0,o.snd||'pop',o.g??1);
+}
+function kt(sel,t0,t1,o={}){
+  const el=$(sel), words=el.querySelectorAll('.w');
+  tl.set(el,{opacity:1},t0);
+  tl.fromTo(words,{opacity:0,y:50,scale:1.3},{opacity:1,y:0,scale:1,duration:0.3,ease:'back.out(2)',stagger:0.09},t0);
+  tl.to(el,{opacity:0,y:-20,duration:0.16,ease:'power2.in'},t1-0.16); tl.set(el,{y:0},t1);
+  if(o.snd!==false) sfx(t0,'swish',0.55);
+}
+// brand transitions (T01/T02/T03 layer wipes): 3 stacked colour layers, cut while fully covered.
+// Same layer timing as the pack JSON, run at 0.55x length to keep the teaser's pace.
+const WK=0.55, LAY=[[0,.65,1.3,.6],[.11,.65,1.2,.6],[.22,.65,1.1,.6]];
+gsap.set('#wipe .wi i,#wipe .wo i',{xPercent:100}); gsap.set('#wipe .v i',{yPercent:-100});
+function wipe(id,tc,k=WK){
+  const v=id==='v', P=v?'yPercent':'xPercent', a=v?-100:100, z=v?100:-100, t0=tc-1.0*k;
+  document.querySelectorAll('#wipe .'+id+' i').forEach((el,i)=>{ const [es,ed,xs,xd]=LAY[i];
+    tl.fromTo(el,{[P]:a},{[P]:0,duration:ed*k,ease:'power3.inOut',immediateRender:false},t0+es*k);
+    tl.fromTo(el,{[P]:0},{[P]:z,duration:xd*k,ease:'power3.inOut',immediateRender:false},t0+xs*k); });
+}
+function boardIn(t){ wipe('wi',t); tl.set('#board',{xPercent:0},t); sfx(t-0.08,'whoosh',1); }
+function boardOut(t){ wipe('wo',t,0.42); tl.set('#board',{xPercent:110},t); sfx(t-0.3,'whoosh',0.9); }
+function scene(sel,t0,t1){ tl.set(sel,{opacity:1},t0); tl.set(sel,{opacity:0},t1); }
+function ring(sel,t0,t1){ tl.fromTo(sel,{opacity:0,scale:0.85},{opacity:1,scale:1,duration:0.5,ease:'power3.out'},t0); tl.to(sel,{opacity:0,duration:0.2},t1-0.2); }
+function draw(sel,t,d=0.3){ tl.fromTo(sel,{opacity:1,clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:d,ease:'power2.out'},t); }
+
+// ===== HOOK 0 – 3.24
+tl.set('#k1',{opacity:1},0); tl.set('#k1 .w',{opacity:1},0);
+tl.fromTo('#k1 .w:last-child',{scale:1},{scale:1.12,duration:0.15,yoyo:true,repeat:1,ease:'sine.inOut'},0.15);
+tl.fromTo('#k1',{x:-10},{x:10,duration:0.05,repeat:9,yoyo:true,ease:'none'},0.9); tl.set('#k1',{x:0},1.4);
+tl.to('#k1',{opacity:0,y:-20,duration:0.16},2.34); sfx(0.02,'thud',0.9);
+tl.set('#b_vn',{opacity:1,scale:1},0); tl.to('#b_vn',{opacity:0,scale:0.4,duration:0.22},2.98);
+pop('#b_ex',0.6,2.5,{rot:8});
+kt('#k2',2.5,3.22);
+// ===== QUESTION 3.24 – 7.57
+kt('#k3',3.3,5.52);
+pop('#b_c1',3.4,5.5,{rot:-6}); pop('#b_c2',3.6,5.5,{rot:6}); pop('#b_c3',3.85,5.5,{rot:-4}); pop('#b_c4',4.1,5.5,{rot:5});
+kt('#k4',5.56,7.55);
+pop('#b_shield',5.65,7.55,{rot:-8}); pop('#b_q1',5.85,7.55,{rot:10});
+
+// ===== BOARD 1  7.57 – 12.86
+boardIn(7.6); scene('#sA',7.5,12.9);
+pop('#aTile',7.8,null,{float:false});
+tl.fromTo('#aNote',{opacity:0,x:40},{opacity:1,x:0,duration:0.35,ease:'power3.out'},7.95);
+tl.fromTo('#aArr',{opacity:0,clipPath:'inset(0 0 100% 0)'},{opacity:1,clipPath:'inset(0 0 0% 0)',duration:0.4},8.2);
+tl.fromTo('#aCard',{opacity:0,y:90},{opacity:1,y:0,duration:0.45,ease:'power3.out'},8.35); sfx(8.35,'whoosh',0.6);
+tl.fromTo('#aLock',{opacity:0,scale:0.6},{opacity:1,scale:1,duration:0.35,ease:'back.out(2.5)'},9.9); sfx(9.9,'thud',0.6);
+ring('#n3',11.6,12.9); draw('#aBr',11.7,0.3);
+['#t1','#t2','#t3'].forEach((s,i)=>{ tl.fromTo(s,{opacity:0,y:60},{opacity:1,y:0,duration:0.35,ease:'power3.out'},11.9+i*0.2); sfx(11.9+i*0.2,'pop',0.9); });
+boardOut(12.86);
+// ===== DOES IT MATTER?  12.86 – 18.0
+kt('#k5',12.9,16.25);
+pop('#b_bulb',13.0,16.2,{rot:6}); pop('#b_globe',13.2,16.2,{rot:-6});
+
+kt('#k6',16.3,17.98);
+pop('#b_fac',16.35,17.95,{rot:-6}); pop('#b_q4',16.5,17.95,{rot:10});
+// ===== BOARD 2  18.0 – 23.06
+boardIn(18.03); scene('#sB',17.95,23.1);
+tl.fromTo('#bTtl',{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'power3.out'},18.25);
+tl.fromTo('#ph2',{opacity:0,x:-120},{opacity:1,x:0,duration:0.45,ease:'power3.out'},18.5);
+tl.fromTo('#ph1',{opacity:0,x:120},{opacity:1,x:0,duration:0.45,ease:'power3.out'},18.7); sfx(18.5,'whoosh',0.7);
+pop('#vs',19.4,null,{float:false,snd:'thud'});
+ring('#n4',21.0,23.1);
+['.r1','.r2','.r3','.r4'].forEach((r,i)=>{ tl.fromTo('#sB '+r,{opacity:0,x:40},{opacity:1,x:0,duration:0.25,ease:'back.out(2)'},21.05+i*0.33); sfx(21.05+i*0.33,'tick',1); });
+boardOut(23.06);
+// ===== THE PRICE QUESTION  23.06 – 31.66
+kt('#k7',23.1,25.3); pop('#b_cart',23.15,25.28,{rot:-8});
+kt('#k8',25.34,27.2); pop('#b_money',25.4,27.18,{rot:8,snd:'cash'});
+kt('#k9',27.26,29.0); pop('#b_bulb2',27.3,29.0,{rot:6});
+kt('#k10',29.05,30.12); pop('#b_scale',29.08,31.62,{rot:-6});
+kt('#k11',30.16,31.64); pop('#b_q2',30.2,31.62,{rot:10});
+
+// ===== PACK SHOT  31.66 – 36.5
+wipe('v',31.66); tl.set('#cta',{opacity:1},31.66); sfx(31.55,'whoosh',1); sfx(31.7,'thud',0.8);
+tl.fromTo('#cta .lg',{opacity:0,y:-20},{opacity:1,y:0,duration:0.35},31.85);
+tl.fromTo('#cta .l1',{opacity:0,y:30},{opacity:1,y:0,duration:0.35,ease:'power3.out'},32.0);
+tl.fromTo('#cta .l2',{opacity:0,scale:1.4},{opacity:1,scale:1,duration:0.4,ease:'back.out(2)'},32.3); sfx(32.3,'pop',1);
+tl.fromTo('#cta .ap',{opacity:0,y:120},{opacity:1,y:0,duration:0.5,ease:'back.out(1.6)'},32.8); sfx(32.8,'whoosh',0.7);
+tl.fromTo('#cta .ap .pl',{scale:1},{scale:1.08,duration:0.35,repeat:7,yoyo:true,ease:'sine.inOut'},33.3);
+tl.fromTo('#cta .bio',{opacity:0,y:30},{opacity:1,y:0,duration:0.35},33.5); sfx(33.5,'ding',0.8);
+tl.set({},{},36.5);
+
+const LABS=[]; PIECES.forEach(p=>{ if(!LABS.includes(p[0])) LABS.push(p[0]); });
+function camScale(t){
+  for(let i=PIECES.length-1;i>=0;i--){ const p=PIECES[i]; if(t>=p[3]-1e-6){
+    const li=LABS.indexOf(p[0]); const first=PIECES.find(q=>q[0]===p[0]); const last=[...PIECES].reverse().find(q=>q[0]===p[0]);
+    const span=(last[3]+last[2]-last[1])-first[3]; const k=Math.min(1,(t-first[3])/Math.max(0.5,span));
+    return ((li%2)?1.05:1.0)+0.02*k; } }
+  return 1;
+}
+function load(img,src){ return new Promise(r=>{ if(img.src.endsWith(src)) return r(); img.onload=()=>r(); img.onerror=()=>r(); img.src=src; }); }
+const maskImg=new Image();
+// All chest text uses one position: centred across the frame, at the lapel-mic height of the style sample frame.
+const TEXT_CY=1459;
+document.querySelectorAll('#fx .kt').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; });
+function trackText(){ document.querySelectorAll('#fx .kt').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
+// The cut changed (natural pauses restored): map new video time -> original design time.
+const PO=window.PIECES_OLD, PN=window.PIECES;
+const OLD_END=PO[PO.length-1][3]+PO[PO.length-1][2]-PO[PO.length-1][1], NEW_END=PN[PN.length-1][3]+PN[PN.length-1][2]-PN[PN.length-1][1];
+function famOf(l){ return l.slice(0,2); }
+function oldT(t){
+  const K=window.TMAP; if(t>=NEW_END) return t-NEW_END+OLD_END;
+  if(t<=K[0][0]) return K[0][1];
+  for(let i=1;i<K.length;i++){ if(t<=K[i][0]){ const a=K[i-1],b=K[i]; return a[1]+(b[1]-a[1])*(t-a[0])/(b[0]-a[0]); } }
+  return K[K.length-1][1];
+}
+window.seekFrame=async function(i){
+  const t=i/FPS; tl.seek(Math.max(oldT(t),0.001),false);
+  $('#cam').style.transform=`scale(${camScale(t).toFixed(4)})`;
+  const n=String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0');
+  const src=`${FRAMES}/${n}.jpg`, msrc=`${MASKS}/${n}.png`;
+  await Promise.all([load($('#vid'),src),load($('#vid2'),src),load(maskImg,msrc)]);
+  const a=$('#actor'); a.style.webkitMaskImage=a.style.maskImage=`url(${msrc})`;
+  trackText();
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  return t;
+};
+window.frontRects=function(i){
+  const t=i/FPS; tl.seek(Math.max(oldT(t),0.001),false);
+  const bx=gsap.getProperty('#board','xPercent'), ctaO=+getComputedStyle($('#cta')).opacity;
+  const out=[];
+  if(Math.abs(bx)<100 || ctaO>0.9) return {t,cover:true,s:camScale(t),r:out};
+  trackText();
+  document.querySelectorAll('#behind .t3').forEach(el=>{ if(+getComputedStyle(el).opacity>0.05){ const r=el.getBoundingClientRect(); out.push(['TILE:'+el.id,r.left,r.top,r.right,r.bottom+60]); } });
+  document.querySelectorAll('#fx .kt .w').forEach(el=>{
+    let o=1, e=el; while(e && e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; }
+    if(o>0.05){ const r=el.getBoundingClientRect(); out.push([el.closest('[id]').id,r.left,r.top,r.right,r.bottom]); }
+  });
+  return {t,cover:false,s:camScale(t),r:out};
+};
+window.DURATION=NEW_END+(36.5-OLD_END); window.TOTAL_FRAMES=Math.round(window.DURATION*FPS);
+</script>
+</body>
+</html>
