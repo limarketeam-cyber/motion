@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>ریل سامسونگ ویتنام — هماهنگ</title>
+<style>
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSansArabic-Regular.ttf);font-weight:400}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSansArabic-Bold.ttf);font-weight:700}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSans-Regular.ttf);font-weight:400;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:"HH";src:url(assets/brand/fonts/IBMPlexSans-Bold.ttf);font-weight:700;unicode-range:U+0000-00FF,U+2000-206F}
+/* Hamahang visual identity: primary #D32F2F, ink #262426, tertiary #002CB0, secondary #567B9F, outline #D5D9DD
+   Instagram safe zone used for every element: x 60–1020 (x ≤ 950 below y 1050, the button column), y 260–1500 */
+:root{--ink:#262426;--r:#D32F2F;--b:#002CB0;--sec:#567B9F;--line:#D5D9DD;--bg:#FCFBFB;--skel:#E3E8ED}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:"HH",sans-serif;font-weight:400}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#cam{position:absolute;inset:0;transform-origin:540px 640px}
+#vid,#vid2{position:absolute;inset:0;width:1080px;height:1920px;display:block}
+#actor{position:absolute;inset:0;-webkit-mask-size:1080px 1920px;mask-size:1080px 1920px;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+#behind{position:absolute;inset:0;filter:blur(.6px)}
+.layer{position:absolute;inset:0;pointer-events:none}
+.ltr{direction:ltr}
+/* ---- speaker shots: flat white plates, red line icons, red accent bar (white + red only) ---- */
+.t3{position:absolute;opacity:0}
+.t3 .face{position:absolute;inset:0;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 2px var(--line);display:grid;place-items:center}
+.t3 .face svg{width:62%;height:62%;overflow:visible}
+[pathLength]{stroke-dasharray:1 2}
+.acc{position:absolute;right:10px;top:24%;bottom:24%;width:5px;border-radius:3px;background:var(--r);transform-origin:50% 0}
+.t3 .face.fl{padding:20px 26px 20px 20px}
+.t3 .face.fl img{width:100%;height:100%;object-fit:contain}
+.t3 .cap{position:absolute;left:50%;top:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap}
+.t3.capup .cap{top:auto;bottom:calc(100% + 10px)}
+.t3 .cap span{display:inline-block;background:var(--r);color:#fff;font-weight:700;font-size:30px;line-height:1.45;padding:2px 22px 6px;border-radius:10px}
+.pc{position:absolute;opacity:0;background:#fff;border-radius:16px;box-shadow:inset 0 0 0 2px var(--line);color:var(--r);overflow:hidden}
+.pc .acc{top:28px;bottom:28px}
+.ix{display:inline-grid;place-items:center;flex:none;width:58px;height:58px;border-radius:10px;background:var(--r);color:#fff;font-weight:700;font-size:36px;line-height:1}
+.ix.b{background:var(--b)}
+#call .hd{background:var(--r);color:#fff;font-size:26px;font-weight:400;padding:8px 22px 12px;white-space:nowrap}
+#call .bd{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 24px 20px 18px}
+#call .bd svg{width:92px;height:92px} #call .bd b{font-size:48px;font-weight:700}
+#p2tag .row1{display:flex;align-items:center;gap:14px;padding:14px 28px 18px 14px;font-size:34px;font-weight:700;line-height:1.25;white-space:nowrap}
+#spec{padding:18px 22px 14px 8px}
+#spec .st{font-size:34px;font-weight:400;margin-bottom:8px;white-space:nowrap} #spec .st b{font-weight:700}
+#spec .sr{display:flex;align-items:center;gap:8px;font-size:28px;font-weight:700;padding:12px 6px;border-top:2px solid #F3E1E1;opacity:0;white-space:nowrap}
+#spec .sr .ix{width:36px;height:36px;font-size:24px}
+#spec .sr.star{background:var(--r);color:#fff;border-radius:10px;border-top:0;margin-top:6px}
+#spec .sr.star .ix{background:#fff;color:var(--r)}
+/* ---- chest text: white words + key word on a red plate; one fixed spot on the lapel mic ---- */
+.kt{position:absolute;isolation:isolate;left:140px;right:140px;text-align:center;opacity:0;font-weight:700;font-size:78px;line-height:1.25;color:#fff;
+  text-shadow:0 0 3px rgba(0,0,0,.85),0 6px 22px rgba(0,0,0,.7)}
+.kt::before{content:"";position:absolute;left:50%;top:50%;width:980px;height:230px;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(0,0,0,.40),transparent);z-index:-1}
+.kt .w{display:inline-block;margin:0 10px}
+.kt .w.key{background:var(--r);border-radius:14px;padding:0 24px 12px;text-shadow:none}
+/* ---- boards: brand light gradient; 60 white / 30 ink / 10 blue ---- */
+.postbg{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(900px 760px at 84% 94%,rgba(211,47,47,.50),transparent 70%),radial-gradient(700px 620px at 8% 80%,rgba(230,149,149,.32),transparent 72%),
+  radial-gradient(820px 700px at 6% 2%,rgba(157,175,230,.42),transparent 70%),radial-gradient(700px 640px at 102% 28%,rgba(196,213,230,.55),transparent 70%),var(--bg)}
+#board{position:absolute;inset:0;overflow:hidden}
+#dbg{position:absolute;inset:0;opacity:0;background:radial-gradient(1100px 900px at 20% 30%,#2B3BA8 0%,#3A2F9C 30%,transparent 75%),
+  radial-gradient(1000px 1000px at 90% 95%,#D32F2F 0%,#B52A45 40%,transparent 80%),linear-gradient(160deg,#2B3BA8,#8E2A5E 55%,#D32F2F)}
+.bignum{position:absolute;width:560px;height:560px;border-radius:50%;border:40px solid #C4D5E6;color:#9DAFE6;opacity:0;display:grid;place-items:center;font-weight:700;font-size:250px;line-height:1;padding-bottom:40px}
+.scene{position:absolute;inset:0;opacity:0}
+.arrow{position:absolute;overflow:visible;opacity:0}
+.dash{fill:none;stroke:var(--sec);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 14}
+.head{fill:none;stroke:var(--sec);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.acc-b::after{content:"";position:absolute;right:12px;top:22px;bottom:22px;width:4px;border-radius:2px;background:var(--b)}
+.bcard{position:absolute;background:#fff;border-radius:14px;overflow:hidden;opacity:0;border:2px solid var(--line)}
+.bcard img.shot{display:block;width:100%}
+.hl{position:absolute;background:rgba(0,44,176,.20);mix-blend-mode:multiply;border-radius:4px;transform-origin:left center;transform:scaleX(0)}
+.fa{margin:18px 28px 0;font-size:36px;font-weight:700;color:var(--ink);line-height:1.6;border-right:4px solid var(--b);padding-right:18px;opacity:0}
+.note{position:absolute;color:var(--ink);font-weight:700;font-size:54px;line-height:1.3;opacity:0;text-align:right}
+.note b{color:var(--b);font-weight:700}
+.stile{position:absolute;width:170px;height:170px;opacity:0}
+.stile .f3{position:absolute;inset:0;border-radius:14px;background:#fff;border:2px solid var(--line);display:grid;place-items:center}
+.stile svg{width:130px;height:28px;fill:var(--ink)}
+.tags,.hdr{position:absolute;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:14px;opacity:0;font-weight:700;color:var(--ink)}
+.tags .ix{width:84px;height:84px;font-size:50px}.tags b{font-size:60px;margin-right:10px}
+.hdr{font-size:58px;gap:20px}.hdr .ix{width:76px;height:76px;font-size:46px}
+.bico{position:absolute;width:220px;height:220px;opacity:0;background:#fff;border:2px solid var(--line);border-radius:16px;display:grid;place-items:center}
+.bico svg{width:68%;height:68%}
+.bico.big{width:360px;height:360px}
+#cMag{background:transparent;border:0}
+.bflag{position:absolute;width:160px;opacity:0;text-align:center}
+.bflag img{width:160px;height:107px;object-fit:contain;display:block}
+.bflag span{display:block;margin-top:12px;font-size:38px;font-weight:700;color:var(--ink)}
+.eq{position:absolute;font-weight:700;font-size:110px;color:var(--b);opacity:0;line-height:1}
+.pill{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;background:var(--b);border-radius:16px;padding:12px 40px 20px 30px;
+  font-weight:700;font-size:52px;color:#fff;opacity:0;white-space:nowrap}
+.pill svg{width:64px;height:64px}
+.quote{position:absolute;background:#fff;border-radius:14px;border:2px solid var(--line);padding:34px 40px;opacity:0}
+.quote .en{direction:ltr;text-align:left;font-weight:400;font-size:40px;line-height:1.45;color:var(--ink)}
+.quote .en mark{background:linear-gradient(transparent 14%,rgba(0,44,176,.16) 14%,rgba(0,44,176,.16) 94%,transparent 94%);background-size:0% 100%;background-repeat:no-repeat;color:var(--b);font-weight:700}
+.quote .fa2{margin-top:20px;font-size:42px;font-weight:700;color:var(--ink);line-height:1.6;border-right:4px solid var(--b);padding-right:20px}
+.quote .src{margin-top:18px;direction:ltr;text-align:left;font-size:24px;color:var(--sec)}
+.stamp{position:absolute;left:50%;transform:translateX(-50%);opacity:0;border:6px solid var(--b);color:var(--b);border-radius:16px;padding:8px 34px 16px;font-weight:700;font-size:50px;background:#fff;white-space:nowrap}
+.steps{padding:10px 30px}
+.steps .stp{display:flex;align-items:center;gap:18px;font-size:46px;font-weight:700;padding:22px 6px;border-bottom:2px dashed var(--line);opacity:0;color:var(--ink)}
+.steps .stp:last-child{border-bottom:0}
+.steps .stp svg{width:62px;height:62px}
+.headline{position:absolute;left:60px;right:60px;text-align:center;color:#fff;font-weight:400;font-size:70px;line-height:1.35;opacity:0}
+.headline b{font-weight:700;font-size:92px}
+.shop .hd{display:flex;align-items:center;justify-content:space-between;padding:26px 34px;background:var(--ink);color:#fff;font-size:32px;direction:ltr}
+.shop .hd img{height:40px}
+.shop .r{display:flex;align-items:center;gap:22px;padding:24px 34px;border-bottom:2px solid #EEF1F4;opacity:0}
+.shop .r:last-child{border-bottom:0}
+.shop .r .f{width:90px;height:60px;object-fit:contain;flex:none}
+.shop .r .m{direction:ltr;font-size:46px;font-weight:700;flex:1;text-align:left;color:var(--ink)}
+.shop .r .p{font-size:34px;font-weight:700;color:#fff;background:var(--r);border-radius:10px;padding:4px 22px 10px}
+/* ---- brand end card (no Aparat) ---- */
+#endc{position:absolute;inset:0;opacity:0;background:var(--ink)}
+#endc .panel{position:absolute;top:0;bottom:0;left:820px;right:0;background:#324A5C}
+#endc .bar{position:absolute;top:0;bottom:0;left:806px;width:14px;background:var(--r)}
+#endc .in{position:absolute;left:90px;width:640px;top:640px;text-align:center}
+#endc .lg{width:600px;display:block;margin:0 auto 70px}
+#endc .site{direction:ltr;color:#fff;font-size:52px}
+#endc .ig{direction:ltr;color:#BAC8D3;font-size:40px;margin-top:18px}
+/* ---- brand layer wipes ---- */
+#wipe{position:absolute;inset:0;pointer-events:none;z-index:50}
+#wipe .ws{position:absolute;inset:0;overflow:hidden}
+#wipe i{position:absolute;inset:0}
+#wipe .wi i{left:-16%;right:-16%;clip-path:polygon(14% 0,100% 0,86% 100%,0 100%)}
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><path id="samsung-path" d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/></defs></svg>
+<div id="stage">
+  <div id="cam">
+    <img id="vid" alt="">
+    <div id="behind">
+<div class="t3 capup" id="t_vn" style="left:150px;top:340px;width:170px;height:170px"><div class="face fl"><img src="assets/brand/flags/VN.svg"><i class="acc"></i></div><div class="cap"><span>ویتنام</span></div></div>
+<div class="t3 capup" id="t_cn" style="left:720px;top:400px;width:170px;height:170px"><div class="face fl"><img src="assets/brand/flags/CN.svg"><i class="acc"></i></div><div class="cap"><span>چین</span></div></div>
+<div class="t3 capup" id="t_in" style="left:720px;top:680px;width:160px;height:160px"><div class="face fl"><img src="assets/brand/flags/IN.svg"><i class="acc"></i></div><div class="cap"><span>هند</span></div></div>
+<div class="t3" id="t_kr" style="left:150px;top:550px;width:160px;height:160px"><div class="face fl"><img src="assets/brand/flags/KR.svg"><i class="acc"></i></div><div class="cap"><span>کره</span></div></div>
+<div class="t3" id="t_shield" style="left:140px;top:590px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="warranty-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 3 L26 7 V15 C26 21 22 25 16 29 C10 25 6 21 6 15 V7 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M11 16 L15 20 L22 12" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_q1" style="left:780px;top:370px;width:170px;height:170px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_phone" style="left:770px;top:360px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="phone-rear-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect pathLength="1" x="9" y="3.5" width="14" height="25" rx="3" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="13" cy="9" r="1.7" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="13" cy="15" r="1.7" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="13" cy="21" r="1.7" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div><div class="cap"><span class=ltr>A57</span></div></div>
+<div class="t3" id="t_ex" style="left:90px;top:400px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="warning-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 3 L30 28 H2 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 12 V19 M16 24 V24.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_vn2" style="left:160px;top:620px;width:190px;height:190px"><div class="face fl"><img src="assets/brand/flags/VN.svg"><i class="acc"></i></div></div>
+<div class="t3" id="t_mute" style="left:770px;top:310px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="mute-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M3 11 H9 L17 5 V27 L9 21 H3 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M22 11 L29 21 M29 11 L22 21" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_gear1" style="left:110px;top:370px;width:170px;height:170px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="gear-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M24.500 16.000 L26.789 18.146 L26.163 20.210 L23.067 20.722 L22.010 22.010 L22.111 25.146 L20.210 26.163 L17.658 24.337 L16.000 24.500 L13.854 26.789 L11.790 26.163 L11.278 23.067 L9.990 22.010 L6.854 22.111 L5.837 20.210 L7.663 17.658 L7.500 16.000 L5.211 13.854 L5.837 11.790 L8.933 11.278 L9.990 9.990 L9.889 6.854 L11.790 5.837 L14.342 7.663 L16.000 7.500 L18.146 5.211 L20.210 5.837 L20.722 8.933 L22.010 9.990 L25.146 9.889 L26.163 11.790 L24.337 14.342 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="16" cy="16" r="3.2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_gear2" style="left:830px;top:600px;width:150px;height:150px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="gear-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M24.500 16.000 L26.789 18.146 L26.163 20.210 L23.067 20.722 L22.010 22.010 L22.111 25.146 L20.210 26.163 L17.658 24.337 L16.000 24.500 L13.854 26.789 L11.790 26.163 L11.278 23.067 L9.990 22.010 L6.854 22.111 L5.837 20.210 L7.663 17.658 L7.500 16.000 L5.211 13.854 L5.837 11.790 L8.933 11.278 L9.990 9.990 L9.889 6.854 L11.790 5.837 L14.342 7.663 L16.000 7.500 L18.146 5.211 L20.210 5.837 L20.722 8.933 L22.010 9.990 L25.146 9.889 L26.163 11.790 L24.337 14.342 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="16" cy="16" r="3.2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_fac" style="left:160px;top:570px;width:130px;height:130px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="factory-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 28 V12 L12 7 V12 L20 7 V17 H28 V28 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M23 17 V3 H27 V17" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M9 22 H11 M16 22 H18 M23 22 H25" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_shield2" style="left:170px;top:590px;width:170px;height:170px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="warranty-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M16 3 L26 7 V15 C26 21 22 25 16 29 C10 25 6 21 6 15 V7 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M11 16 L15 20 L22 12" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_cart" style="left:120px;top:300px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="cart-line-v3"><g transform="translate(0 0) scale(3)"><path pathLength="1" d="M2 4 L6 4 L6.9067 8.307 M9.3053 19.7 L10 23 L27 23" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M7 9 H29 L26 19 H9 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><path d="M13.8428 27.2215 L13.6584 26.8818 L13.4142 26.5858 L13.1182 26.3416 L12.7785 26.1572 L12.4031 26.0406 L12 26 L11.5969 26.0406 L11.2215 26.1572 L10.8818 26.3416 L10.5858 26.5858 L10.3416 26.8818 L10.1572 27.2215 L10.0406 27.5969 L10 28 L10.0406 28.4031 L10.1572 28.7785 L10.3416 29.1182 L10.5858 29.4142 L10.8818 29.6584 L11.2215 29.8428 L11.5969 29.9594 L12 30 L12.4031 29.9594 L12.7785 29.8428 L13.1182 29.6584 L13.4142 29.4142 L13.6584 29.1182 L13.8428 28.7785 L13.9594 28.4031 L14 28 L13.9594 27.5969 L13.8428 27.2215 Z" fill="#D32F2F" fill-rule="evenodd" stroke="none"/><path d="M26.8428 27.2215 L26.6584 26.8818 L26.4142 26.5858 L26.1182 26.3416 L25.7785 26.1572 L25.4031 26.0406 L25 26 L24.5969 26.0406 L24.2215 26.1572 L23.8818 26.3416 L23.5858 26.5858 L23.3416 26.8818 L23.1572 27.2215 L23.0406 27.5969 L23 28 L23.0406 28.4031 L23.1572 28.7785 L23.3416 29.1182 L23.5858 29.4142 L23.8818 29.6584 L24.2215 29.8428 L24.5969 29.9594 L25 30 L25.4031 29.9594 L25.7785 29.8428 L26.1182 29.6584 L26.4142 29.4142 L26.6584 29.1182 L26.8428 28.7785 L26.9594 28.4031 L27 28 L26.9594 27.5969 L26.8428 27.2215 Z" fill="#D32F2F" fill-rule="evenodd" stroke="none"/></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_price" style="left:720px;top:440px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="price-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M3 5 H17 L29 17 L17 29 L3 15 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="9" cy="11" r="2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_pay" style="left:150px;top:310px;width:160px;height:160px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="payment-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect pathLength="1" x="3" y="6" width="26" height="20" rx="3" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M3 12 H29 M8 21 H13" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_disc" style="left:100px;top:400px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="discount-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="16" cy="16" r="12" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M10 23 L22 9" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="10" cy="10" r="2.5" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><circle pathLength="1" cx="22" cy="22" r="2.5" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_q2" style="left:700px;top:270px;width:180px;height:180px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+<div class="t3" id="t_q3" style="left:190px;top:610px;width:150px;height:150px"><div class="face"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="faq-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M4 5 H28 V24 H14 L7 29 V24 H4 Z" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M13 11 C13 7 21 7 21 11 C21 15 16 14 16 18 M16 21 V21.1" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><i class="acc"></i></div></div>
+
+<div class="pc" id="call" style="left:740px;top:330px;width:200px">
+  <div class="hd">تماس ورودی…</div>
+  <div class="bd"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="call-center-line-v3"><g transform="translate(0 0) scale(3)"><path pathLength="1" d="M5 15.3 L5 14 L5.0143 13.4339 L5.0568 12.8753 L5.1267 12.3248 L5.2235 11.7831 L5.3463 11.2509 L5.4945 10.7289 L5.8644 9.7183 L6.3276 8.7567 L6.8786 7.8498 L7.5119 7.003 L8.2218 6.2218 L9.003 5.5119 L9.8498 4.8786 L10.7567 4.3276 L11.7183 3.8644 L12.7289 3.4945 L13.2509 3.3463 L13.7831 3.2235 L14.3248 3.1267 L14.8753 3.0568 L15.4339 3.0143 L16 3 L16.5661 3.0143 L17.1247 3.0568 L17.6752 3.1267 L18.2169 3.2235 L18.7491 3.3463 L19.2711 3.4945 L20.2817 3.8644 L21.2433 4.3276 L22.1502 4.8786 L22.997 5.5119 L23.7782 6.2218 L24.4881 7.003 L25.1214 7.8498 L25.6724 8.7567 L26.1356 9.7183 L26.5055 10.7289 L26.6537 11.2509 L26.7765 11.7831 L26.8733 12.3248 L26.9432 12.8753 L26.9857 13.4339 L27 14 L27 15.3" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><g transform="matrix(1 0 0 1 0 0)"><rect pathLength="1" x="3" y="16" width="6" height="11" rx="2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><rect pathLength="1" x="23" y="16" width="6" height="11" rx="2" fill="none" stroke="#D32F2F" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path pathLength="1" d="M26 26 Q26 30 18 30 H16" fill="none" stroke="#D32F2F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg><b>دوستم</b></div><i class="acc"></i></div>
+<div class="pc" id="p2tag" style="left:770px;top:290px">
+  <div class="row1"><span class="ix">۲</span><b>تکنولوژی<br>تولید</b></div><i class="acc"></i></div>
+<div class="pc" id="spec" style="left:790px;top:290px;width:198px">
+  <div class="st"><b>۴ چیز</b></div>
+  <div class="sr" id="r1"><span class="ix">۱</span>مدل دقیق</div>
+  <div class="sr" id="r2"><span class="ix">۲</span>رم</div>
+  <div class="sr" id="r3"><span class="ix">۳</span>حافظه</div>
+  <div class="sr star" id="r4"><span class="ix">۴</span>گارانتی</div><i class="acc"></i></div>
+    </div>
+    <div id="actor"><img id="vid2" alt=""></div>
+  </div>
+  <div class="layer" id="fx">
+<div class="kt" id="k1"><span class="w key">کشورِ</span><span class="w">سازنده</span></div>
+<div class="kt" id="k2"><span class="w key">کیفیت</span><span class="w">رو تضمین می‌کنه؟</span></div>
+<div class="kt" id="k3"><span class="w">دوستم</span><span class="w key">زنگ زد</span></div>
+<div class="kt ltr" id="k4"><span class="w">Galaxy</span><span class="w key">A57</span></div>
+<div class="kt" id="k5"><span class="w">حتماً،</span><span class="w key">حتماً!</span></div>
+<div class="kt" id="k6"><span class="w key">ویتنام</span><span class="w">باشه!</span></div>
+<div class="kt" id="k7"><span class="w">گوشش</span><span class="w key">بدهکار نبود</span></div>
+<div class="kt" id="k8"><span class="w">توی</span><span class="w key">همه‌ی</span><span class="w">کارخونه‌ها</span></div>
+<div class="kt" id="k9"><span class="w">همه‌جا</span><span class="w key">یکسان</span></div>
+<div class="kt" id="k10"><span class="w key">۴</span><span class="w">تا چیز رو چک کن</span></div>
+<div class="kt" id="k11"><span class="w">مهم‌ترین:</span><span class="w key">گارانتی</span></div>
+<div class="kt" id="k12"><span class="w key">جای دیگه</span><span class="w">بخری؟</span></div>
+<div class="kt" id="k13"><span class="w key">۲ تا ۳ میلیون</span><span class="w">بیشتر؟</span></div>
+<div class="kt" id="k14"><span class="w">این</span><span class="w key">اختلاف قیمت</span></div>
+<div class="kt" id="k15"><span class="w">دقیقاً بابت</span><span class="w key">چه تفاوتیه؟</span></div>
+  </div>
+
+<div id="board" class="postbg">
+  <div id="dbg"></div>
+  <div class="bignum" id="n1" style="right:-200px;top:960px">۱</div>
+  <div class="bignum" id="n3" style="left:-200px;top:1000px">۳</div>
+  <!-- A: Samsung support page, 3 points -->
+  <div class="scene" id="sA">
+    <div class="stile" id="aTile" style="left:820px;top:300px"><div class="f3 acc-b"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div></div>
+    <div class="note" id="aNote" style="right:280px;top:316px;width:600px">صفحه‌ی <b>رسمی</b><br>پشتیبانی سامسونگ</div>
+    <svg class="arrow" id="aArr" style="left:740px;top:470px;width:150px;height:100px" viewBox="0 0 150 100"><path class="dash" d="M120 4 C 120 56, 80 84, 20 90"/><path class="head" d="M34 74 L16 91 L38 100"/></svg>
+    <div class="bcard" id="aCard" style="left:70px;top:590px;width:940px;padding:0 0 22px">
+      <img class="shot" src="assets/ev/community_url.jpg" style="border-bottom:2px solid #eee">
+      <div style="position:relative;margin:18px 28px 0"><img class="shot" src="assets/ev/community_par.jpg">
+        <div class="hl" id="aH1" style="left:51.3%;top:70.6%;width:44.5%;height:11.7%"></div>
+        <div class="hl" id="aH2" style="left:1.6%;top:86.9%;width:55%;height:11.7%"></div></div>
+      <div class="fa" id="aFa">«گوشی‌ای که توی کارخونه‌ی ویتنام ساخته شده، ذاتاً از نمونه‌ی ساخت اندونزی بهتر نیست.»</div>
+    </div>
+    <div class="tags" id="aTags" style="top:1210px"><span class="ix b">۱</span><span class="ix b">۲</span><span class="ix b">۳</span><b>نکته</b></div>
+  </div>
+  <!-- B: point 1 — factories -->
+  <div class="scene" id="sB">
+    <div class="hdr" id="bHdr" style="top:320px"><span class="ix b">۱</span>کارخونه‌ها</div>
+    <div class="bico" id="bF1" style="left:90px;top:520px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="factory-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M4 28 V12 L12 7 V12 L20 7 V17 H28 V28 Z" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M23 17 V3 H27 V17" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M9 22 H11 M16 22 H18 M23 22 H25" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg></div><div class="bico" id="bF2" style="left:430px;top:520px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="factory-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M4 28 V12 L12 7 V12 L20 7 V17 H28 V28 Z" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M23 17 V3 H27 V17" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M9 22 H11 M16 22 H18 M23 22 H25" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg></div><div class="bico" id="bF3" style="left:770px;top:520px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="factory-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M4 28 V12 L12 7 V12 L20 7 V17 H28 V28 Z" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M23 17 V3 H27 V17" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M9 22 H11 M16 22 H18 M23 22 H25" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg></div>
+    <div class="bflag" id="bG1" style="left:120px;top:770px"><img src="assets/brand/flags/CN.svg"><span>چین</span></div><div class="bflag" id="bG2" style="left:460px;top:770px"><img src="assets/brand/flags/IN.svg"><span>هند</span></div><div class="bflag" id="bG3" style="left:800px;top:770px"><img src="assets/brand/flags/VN.svg"><span>ویتنام</span></div>
+    <div class="eq" id="bE1" style="left:332px;top:560px">=</div><div class="eq" id="bE2" style="left:672px;top:560px">=</div>
+    <div class="pill" id="bPill" style="top:1010px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="check-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M5 16 L12 23 L27 7" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>کیفیت یکسان</div>
+  </div>
+  <!-- C: point 3 — quality control + official report -->
+  <div class="scene" id="sC">
+    <div class="hdr" id="cHdr" style="top:320px"><span class="ix b">۳</span>کنترل کیفیت قبل از عرضه</div>
+    <div class="bico big" id="cPhone" style="left:80px;top:500px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="phone-front-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><rect x="9" y="3.5" width="14" height="25" rx="3" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M13 7 H19" fill="none" stroke="#262426" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M14 25 H18" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg></div>
+    <div class="bico" id="cMag" style="left:200px;top:600px;width:200px;height:200px"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="search-color-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><circle cx="14" cy="14" r="9" fill="none" stroke="#262426" stroke-width="1.7"/></g><g transform="matrix(1 0 0 1 0 0)"><path d="M21 21 L29 29" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg></div>
+    <div class="bcard steps" id="cList" style="left:470px;top:520px;width:530px">
+      <div class="stp"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="check-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M5 16 L12 23 L27 7" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>مرحله‌ی اول</div><div class="stp"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="check-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M5 16 L12 23 L27 7" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>مرحله‌ی دوم</div><div class="stp"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g id="check-line-v3"><g transform="translate(0 0) scale(3)"><g transform="matrix(1 0 0 1 0 0)"><path d="M5 16 L12 23 L27 7" fill="none" stroke="#002CB0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g></g></svg>مرحله‌ی سوم</div></div>
+    <div class="stamp" id="cStamp" style="top:1010px">استاندارد رسمی سامسونگ</div>
+    <div class="stile" id="cTile" style="left:820px;top:300px"><div class="f3 acc-b"><svg viewBox="0 10 24 4"><use href="#samsung-path"/></svg></div></div>
+    <div class="note" id="cNote" style="right:280px;top:316px;width:600px">گزارش <b>رسمی</b><br>سامسونگ ـ ۲۰۲۴</div>
+    <div class="quote" id="cQ" style="left:70px;top:590px;width:940px">
+      <div class="en">“…the highest quality products that satisfy customers are produced <mark>uniformly no matter where they are produced.</mark>”</div>
+      <div class="fa2">«محصولات، هر جا که تولید بشن، با یک کیفیت یکسان ساخته می‌شن.»</div>
+      <div class="src">— Samsung Electronics Sustainability Report 2024</div></div>
+  </div>
+  <!-- D: same price on Hamahang -->
+  <div class="scene" id="sD">
+    <div class="headline" id="dHead" style="top:330px">توی سایت هماهنگ<br><b>همه یک قیمتن</b></div>
+    <div class="bcard shop" id="dCard" style="left:90px;top:640px;width:900px">
+      <div class="hd"><span>www.hamahang.shop</span><img src="assets/brand/logo-white.svg" alt="گروه هماهنگ"></div>
+      <div class="r" id="dR1"><img class="f" src="assets/brand/flags/VN.svg"><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div><div class="r" id="dR2"><img class="f" src="assets/brand/flags/IN.svg"><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div><div class="r" id="dR3"><img class="f" src="assets/brand/flags/CN.svg"><div class="m">Galaxy A57</div><div class="p">یک قیمت</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="endc"><i class="panel"></i><i class="bar"></i>
+  <div class="in"><img class="lg" src="assets/brand/logo-white.svg" alt="گروه هماهنگ">
+  <div class="site">www.hamahang.shop</div><div class="ig">@hamahang_shop</div></div></div>
+
+<div id="wipe">
+  <div class="ws wi"><i style="background:#262426"></i><i style="background:#D32F2F"></i><i style="background:#DFE7ED"></i></div>
+  <div class="ws wo"><i style="background:#567B9F"></i><i style="background:#262426"></i><i style="background:#D32F2F"></i></div>
+  <div class="ws v"><i style="background:#D32F2F"></i><i style="background:#567B9F"></i><i style="background:#262426"></i></div>
+</div>
+</div>
+<script src="assets/gsap.min.js"></script>
+<script>
+const T={"k1": 0.0, "k2": 2.3, "call": 4.57, "k4": 6.57, "k5": 8.19, "k6": 10.68, "k7": 11.42, "BA": 12.71, "aThree": 14.67, "P1": 15.64, "P1eq": 18.28, "P1same": 18.75, "P2": 21.31, "P2b": 25.26, "P3": 26.53, "P3s1": 27.21, "P3s2": 28.48, "P3s3": 29.79, "P3std": 31.48, "P3ev": 33.45, "L": 36.57, "r1": 38.32, "r2": 40.22, "r3": 41.91, "r4": 44.03, "D": 47.04, "D2": 49.43, "M": 51.88, "X1": 53.77, "X2": 55.12, "SPEECH": 56.96, "END": 59.96};
+const PIECES=[["H", 0.0, 4.33, 0], ["ST", 21.86, 25.72, 4.33], ["ST", 26.21, 29.44, 8.19], ["DF", 34.93, 36.22, 11.42], ["G", 52.44, 55.37, 12.71], ["P1", 55.37, 55.98, 15.64], ["P1", 56.27, 58.64, 16.25], ["P1", 60.77, 63.46, 18.62], ["P2", 63.46, 68.68, 21.31], ["P3", 68.68, 78.72, 26.53], ["L", 103.75, 107.4, 36.57], ["L", 107.66, 114.48, 40.22], ["N", 128.95, 131.34, 47.04], ["N", 131.6, 135.94, 49.43], ["N2", 138.22, 141.41, 53.77]], SPEECH=56.96, END=59.96;
+const FPS=30, FRAMES='rf', MASKS='rmasks', VIDEO_FRAMES=1711;
+// Reel timeline — one paused GSAP timeline seeked per frame by render.mjs.  T = reel times of cue points.
+const tl=gsap.timeline({paused:true});
+gsap.set('#board',{xPercent:110});
+const SFX=[]; window.SFX=SFX;
+const $=s=>document.querySelector(s);
+const sfx=(t,type,g=1)=>SFX.push({t:+Math.max(0,t).toFixed(3),type,g});
+// brand entrance: panel in, accent line grows, icon path draws, caption tag slides in
+function pop(sel,t0,t1,o={}){
+  const el=$(sel);
+  tl.fromTo(sel,{opacity:0,scale:0.86,y:24},{opacity:1,scale:1,y:0,duration:0.32,ease:'power3.out'},t0);
+  const acc=el.querySelector('.acc'); if(acc) tl.fromTo(acc,{scaleY:0},{scaleY:1,duration:0.28,ease:'power2.out'},t0+0.12);
+  const ps=el.querySelectorAll('[pathLength]'); if(ps.length) tl.fromTo(ps,{strokeDashoffset:1},{strokeDashoffset:0,duration:0.5,ease:'power2.inOut',stagger:0.06},t0+0.1);
+  const cap=el.querySelector('.cap span'); if(cap) tl.fromTo(cap,{opacity:0,y:12},{opacity:1,y:0,duration:0.25,ease:'power3.out'},t0+0.2);
+  if(t1!=null) tl.to(sel,{opacity:0,scale:0.92,duration:0.2,ease:'power2.in'},t1-0.2);
+  if(o.snd!==false) sfx(t0,o.snd||'pop',o.g??0.9);
+}
+function kt(sel,t0,t1,o={}){
+  const el=$(sel), words=el.querySelectorAll('.w');
+  tl.set(el,{opacity:1},t0);
+  if(o.instant) tl.set(words,{opacity:1},t0);
+  else tl.fromTo(words,{opacity:0,y:40,scale:1.25},{opacity:1,y:0,scale:1,duration:0.26,ease:'back.out(2)',stagger:0.08},t0);
+  if(o.shake){ tl.fromTo(el,{x:-9},{x:9,duration:0.05,repeat:7,yoyo:true,ease:'none'},t0+0.3); tl.set(el,{x:0},t0+0.72); }
+  tl.to(el,{opacity:0,y:-18,duration:0.14,ease:'power2.in'},t1-0.14); tl.set(el,{y:0},t1);
+  if(o.snd!==false) sfx(t0,'swish',0.5);
+}
+function fadeIn(sel,t,from={y:30},d=0.35){ tl.fromTo(sel,{opacity:0,...from},{opacity:1,x:0,y:0,duration:d,ease:'power3.out'},t); }
+// brand transitions (pack T01/T02/T03): 3 stacked colour layers, the cut happens while fully covered
+const WK=0.55, LAY=[[0,.65,1.3,.6],[.11,.65,1.2,.6],[.22,.65,1.1,.6]];
+gsap.set('#wipe .wi i,#wipe .wo i',{xPercent:100}); gsap.set('#wipe .v i',{yPercent:-100});
+function wipe(id,tc,k=WK){
+  const v=id==='v', P=v?'yPercent':'xPercent', a=v?-100:100, z=v?100:-100, t0=tc-1.0*k;
+  document.querySelectorAll('#wipe .'+id+' i').forEach((el,i)=>{ const [es,ed,xs,xd]=LAY[i];
+    tl.fromTo(el,{[P]:a},{[P]:0,duration:ed*k,ease:'power3.inOut',immediateRender:false},t0+es*k);
+    tl.fromTo(el,{[P]:0},{[P]:z,duration:xd*k,ease:'power3.inOut',immediateRender:false},t0+xs*k); });
+  sfx(t0+0.1,'whoosh',0.9);
+}
+function boardIn(t,k){ wipe('wi',t,k); tl.set('#board',{xPercent:0},t); }
+function boardOut(t,k=0.42){ wipe('wo',t,k); tl.set('#board',{xPercent:110},t); }
+function scene(sel,t0,t1){ tl.set(sel,{opacity:1},t0); tl.set(sel,{opacity:0},t1); }
+function ring(sel,t0,t1){ tl.fromTo(sel,{opacity:0,scale:0.85},{opacity:1,scale:1,duration:0.5,ease:'power3.out'},t0); tl.to(sel,{opacity:0,duration:0.2},t1-0.2); }
+function draw(sel,t,d=0.35){ tl.fromTo(sel,{opacity:1,clipPath:'inset(0 0 100% 0)'},{clipPath:'inset(0 0 0% 0)',duration:d,ease:'power2.out'},t); }
+function hl(sel,t,d=0.45){ tl.to(sel,{scaleX:1,duration:d,ease:'power2.out'},t); sfx(t,'marker',0.6); }
+function mark(sel,t,d=0.9){ tl.to(sel,{backgroundSize:'100% 100%',duration:d,ease:'power1.inOut'},t); sfx(t,'marker',0.6); }
+
+// ===== HOOK: country vs quality (first frame already carries the text)
+kt('#k1',0,T.k2,{instant:true}); sfx(0.02,'thud',0.9);
+pop('#t_vn',0.12,T.k2,{snd:false}); pop('#t_cn',0.35,T.k2); pop('#t_kr',0.6,T.k2,{snd:false}); pop('#t_in',0.85,T.k2);
+kt('#k2',T.k2,T.call-0.24);
+pop('#t_shield',T.k2+0.1,T.call-0.24); pop('#t_q1',T.k2+0.35,T.call-0.24);
+// ===== STORY: the friend who wants a Vietnam A57
+kt('#k3',T.call,T.k4); pop('#call',T.call+0.08,T.k4,{snd:'ring',g:0.6});
+kt('#k4',T.k4,T.k5); pop('#t_phone',T.k4+0.06,T.k5);
+kt('#k5',T.k5,T.k6,{shake:true}); pop('#t_ex',T.k5+0.1,T.k6); sfx(T.k5+0.3,'thud',0.8);
+kt('#k6',T.k6,T.k7); pop('#t_vn2',T.k6+0.04,T.k7,{snd:'tick'});
+kt('#k7',T.k7,T.BA); pop('#t_mute',T.k7+0.06,T.BA);
+// ===== BOARD A: Samsung's support page — 3 points
+boardIn(T.BA); scene('#sA',T.BA,T.P1);
+pop('#aTile',T.BA+0.15,null);
+fadeIn('#aNote',T.BA+0.25,{x:40}); draw('#aArr',T.BA+0.45);
+fadeIn('#aCard',T.BA+0.55,{y:90},0.45); sfx(T.BA+0.55,'whoosh',0.5);
+hl('#aH1',T.BA+1.05); hl('#aH2',T.BA+1.35); fadeIn('#aFa',T.BA+1.55,{y:14});
+fadeIn('#aTags',T.aThree,{y:30}); tl.fromTo('#aTags .ix',{scale:0.4},{scale:1,duration:0.3,ease:'back.out(2.4)',stagger:0.12},T.aThree); [0,.12,.24].forEach(d=>sfx(T.aThree+d,'tick',0.9));
+// ===== BOARD B: point 1 — every factory, same quality
+wipe('wi',T.P1,0.42); scene('#sB',T.P1,T.P2); ring('#n1',T.P1+0.1,T.P2);
+fadeIn('#bHdr',T.P1+0.1,{x:50});
+[1,2,3].forEach(i=>{ pop('#bF'+i,T.P1+0.3+i*0.18,null,{snd:i===1?'pop':false}); fadeIn('#bG'+i,T.P1+0.5+i*0.18,{y:16},0.25); });
+pop('#bE1',T.P1eq,null,{snd:'ding'}); pop('#bE2',T.P1eq+0.15,null,{snd:false});
+tl.fromTo('#bPill',{opacity:0,scale:0.7},{opacity:1,scale:1,duration:0.35,ease:'back.out(2)'},T.P1same); sfx(T.P1same,'ding',0.8);
+boardOut(T.P2);
+// ===== SPEAKER: point 2 — same technology everywhere
+pop('#p2tag',T.P2+0.05,T.P3,{snd:'tick'});
+kt('#k8',T.P2+0.05,T.P2b); kt('#k9',T.P2b,T.P3);
+pop('#t_gear1',T.P2+0.25,T.P3); pop('#t_gear2',T.P2+0.45,T.P3,{snd:false}); pop('#t_fac',T.P2+1.0,T.P3);
+tl.fromTo('#t_gear1 svg',{rotation:0},{rotation:120,duration:T.P3-T.P2,ease:'none'},T.P2+0.25);
+tl.fromTo('#t_gear2 svg',{rotation:0},{rotation:-150,duration:T.P3-T.P2,ease:'none'},T.P2+0.45);
+// ===== BOARD C: point 3 — quality control, then the official report
+boardIn(T.P3); scene('#sC',T.P3,T.L); ring('#n3',T.P3+0.1,T.P3ev);
+fadeIn('#cHdr',T.P3+0.15,{x:50});
+pop('#cPhone',T.P3+0.3,null); fadeIn('#cMag',T.P3+0.5,{x:-60,y:-40},0.4);
+tl.to('#cMag',{x:-90,y:-120,duration:0.8,ease:'sine.inOut',repeat:Math.max(1,Math.floor((T.P3ev-T.P3-1)/0.8)),yoyo:true},T.P3+0.9);
+fadeIn('#cList',T.P3+0.6,{x:80});
+[T.P3s1,T.P3s2,T.P3s3].forEach((t,i)=>{ tl.fromTo(`#cList .stp:nth-child(${i+1})`,{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:'power3.out'},t); sfx(t,'tick',1); });
+tl.fromTo('#cStamp',{opacity:0,scale:1.5},{opacity:1,scale:1,duration:0.26,ease:'power3.in'},T.P3std); sfx(T.P3std+0.24,'thud',1);
+tl.to(['#cHdr','#cPhone','#cMag','#cList','#cStamp'],{opacity:0,y:-30,duration:0.22,ease:'power2.in'},T.P3ev-0.25);
+pop('#cTile',T.P3ev,null); fadeIn('#cNote',T.P3ev+0.12,{x:40});
+fadeIn('#cQ',T.P3ev+0.3,{y:90},0.45); sfx(T.P3ev+0.3,'whoosh',0.5); mark('#cQ mark',T.P3ev+0.85,1.0);
+boardOut(T.L);
+// ===== SPEAKER: the 4 things to compare
+kt('#k10',T.L+0.04,T.r1); pop('#spec',T.L+0.15,T.D-0.05,{snd:'whoosh'});
+[['#r1',T.r1],['#r2',T.r2],['#r3',T.r3],['#r4',T.r4]].forEach(([s,t])=>{ tl.fromTo(s,{opacity:0,x:40},{opacity:1,x:0,duration:0.26,ease:'back.out(2)'},t); sfx(t,'tick',1); });
+kt('#k11',T.r4,T.D-0.05); pop('#t_shield2',T.r4+0.1,T.D-0.05,{snd:'ding',g:0.7});
+// ===== BOARD D: one price on Hamahang (brand blue→red gradient)
+boardIn(T.D,0.42); scene('#sD',T.D,T.D2); tl.set('#dbg',{opacity:1},T.D); tl.set('#dbg',{opacity:0},T.D2);
+fadeIn('#dHead',T.D+0.12,{y:30}); fadeIn('#dCard',T.D+0.32,{y:80},0.4);
+[1,2,3].forEach(i=>{ fadeIn('#dR'+i,T.D+0.55+i*0.18,{x:50},0.25); sfx(T.D+0.55+i*0.18,'tick',0.8); });
+boardOut(T.D2);
+// ===== SPEAKER: the price question
+kt('#k12',T.D2,T.M); pop('#t_cart',T.D2+0.06,T.M);
+kt('#k13',T.M,T.X1); pop('#t_price',T.M+0.06,T.X1,{snd:'cash'}); pop('#t_pay',T.M+0.3,T.X1,{snd:false});
+kt('#k14',T.X1,T.X2); pop('#t_disc',T.X1+0.06,T.SPEECH);
+kt('#k15',T.X2,T.SPEECH); pop('#t_q2',T.X2+0.06,T.SPEECH); pop('#t_q3',T.X2+0.3,T.SPEECH,{snd:false});
+// ===== END CARD (brand only)
+wipe('v',T.SPEECH,0.55); tl.set('#endc',{opacity:1},T.SPEECH);
+tl.fromTo('#endc .lg',{opacity:0,y:30},{opacity:1,y:0,duration:0.45,ease:'power3.out'},T.SPEECH+0.3);
+tl.fromTo('#endc .bar',{scaleY:0,transformOrigin:'50% 0'},{scaleY:1,duration:0.5,ease:'power2.out'},T.SPEECH+0.2);
+tl.fromTo(['#endc .site','#endc .ig'],{opacity:0,y:20},{opacity:1,y:0,duration:0.35,stagger:0.15,ease:'power3.out'},T.SPEECH+0.6);
+sfx(T.SPEECH+0.35,'ding',0.7);
+tl.set({},{},T.END);
+
+// chest text: one fixed spot — centred, on the lapel mic
+const TEXT_CY=1150;
+function placeText(){ document.querySelectorAll('#fx .kt').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
+// every cut gets a clear zoom change (100% / 110%) plus a slow push
+function camScale(t){
+  let i=0; for(let k=0;k<PIECES.length;k++) if(t>=PIECES[k][3]-1e-6) i=k;
+  const p=PIECES[i], k=Math.min(1,(t-p[3])/Math.max(0.4,p[2]-p[1]));
+  const amp=p[0]==='L'?0.04:0.10;   // the 4-item card needs the right-hand column: gentler punch-in there
+  return ((i%2)?1+amp:1.0)+0.02*k;
+}
+function load(img,src){ return new Promise(r=>{ if(img.src.endsWith(src)) return r(); img.onload=()=>r(); img.onerror=()=>r(); img.src=src; }); }
+const maskImg=new Image();
+window.seekFrame=async function(i){
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
+  $('#cam').style.transform=`scale(${camScale(Math.min(t,SPEECH-0.01)).toFixed(4)})`;
+  const n=String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0');
+  const src=`${FRAMES}/${n}.jpg`, msrc=`${MASKS}/${n}.png`;
+  await Promise.all([load($('#vid'),src),load($('#vid2'),src),load(maskImg,msrc)]);
+  const a=$('#actor'); a.style.webkitMaskImage=a.style.maskImage=`url(${msrc})`;
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  return t;
+};
+window.frontRects=function(i){
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
+  const bx=gsap.getProperty('#board','xPercent'), endO=+getComputedStyle($('#endc')).opacity;
+  const out=[], s=camScale(Math.min(t,SPEECH-0.01));
+  if(Math.abs(bx)<100 || endO>0.5) return {t,cover:true,s,r:out};
+  document.querySelectorAll('#behind .t3,#behind .pc').forEach(el=>{ if(+getComputedStyle(el).opacity>0.05){ const r=el.getBoundingClientRect();
+    out.push([(el.classList.contains('t3')?'TILE:':'CARD:')+el.id,r.left,r.top,r.right,r.bottom]); } });
+  document.querySelectorAll('#fx .kt .w').forEach(el=>{
+    let o=1,e=el; while(e&&e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; }
+    if(o>0.05){ const r=el.getBoundingClientRect(); out.push([el.closest('[id]').id,r.left,r.top,r.right,r.bottom]); }
+  });
+  return {t,cover:false,s,r:out};
+};
+window.DURATION=END; window.TOTAL_FRAMES=Math.round(END*FPS);
+
+</script>
+</body>
+</html>

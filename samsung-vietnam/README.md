@@ -70,3 +70,19 @@ extract frames to `frames/` at 1080x1920 (the source is 1080x1080 with SAR 9:16,
   accent bar, blue index tags, ink #262426 text, flat phones and VS tile.
 - Transitions: brand layer wipes (T02 diagonal into boards, T01 out, T03 vertical into
   the pack shot), same layer timing as the pack JSON at ~0.5x length.
+
+## 1-minute Instagram Reel — Hamahang identity (`samsung-vietnam-reel.mp4`, 60s)
+Source: the clean upload without burned-in subtitles (`..._2.mp4`), full frame, no zoom crop.
+- `reel_cut.py` → `reel_edl.json`: hook question, the friend story, Samsung's 3 points,
+  the 4 things to compare, the price question. Filler and side remarks dropped; only pauses
+  ≥0.4s between sentences are removed (no mid-sentence jump cuts); flash frames auto-replaced.
+- `reel_build.py` (+ `reel.css`, `reel_timeline.js`) → `reel.html`; tile/card positions in
+  `reel_tiles.json` / `reel_cards.json`.
+- Speaker shots: white + red only (flags excepted); tiles and cards sit behind the speaker —
+  icon, caption and every card are never covered in any frame they show; chest text at one
+  fixed spot on the lapel mic (y≈1150).
+- Boards: brand light gradient, 60 white / 30 ink / 10 blue; "one price on Hamahang" uses the
+  brand blue→red gradient. Brand layer-wipe transitions. End card: logo, site, Instagram (no Aparat).
+- Instagram safe zone for every element: x 60–1020 (≤950 below y 1050), y 260–1500 —
+  audited over all frames (0 violations); text never on the face (0 violations).
+- `reel_audio.py`: speech + SFX + synthesized 112 bpm beat ducked under the voice.
