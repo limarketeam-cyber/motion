@@ -27,11 +27,11 @@ function fadeIn(sel,t,from={y:30},d=0.35){ tl.fromTo(sel,{opacity:0,...from},{op
 // brand transitions (pack T01/T02/T03): 3 stacked colour layers, the cut happens while fully covered
 const WK=0.55, LAY=[[0,.65,1.3,.6],[.11,.65,1.2,.6],[.22,.65,1.1,.6]];
 gsap.set('#wipe .wi i,#wipe .wo i',{xPercent:100}); gsap.set('#wipe .v i',{yPercent:-100});
-function wipe(id,tc,k=WK){
+function wipe(id,tc,k=WK,hold=0){
   const v=id==='v', P=v?'yPercent':'xPercent', a=v?-100:100, z=v?100:-100, t0=tc-1.0*k;
   document.querySelectorAll('#wipe .'+id+' i').forEach((el,i)=>{ const [es,ed,xs,xd]=LAY[i];
     tl.fromTo(el,{[P]:a},{[P]:0,duration:ed*k,ease:'power3.inOut',immediateRender:false},t0+es*k);
-    tl.fromTo(el,{[P]:0},{[P]:z,duration:xd*k,ease:'power3.inOut',immediateRender:false},t0+xs*k); });
+    tl.fromTo(el,{[P]:0},{[P]:z,duration:xd*k,ease:'power3.inOut',immediateRender:false},t0+xs*k+hold); });
   sfx(t0+0.1,'whoosh',0.9);
 }
 function boardIn(t,k){ wipe('wi',t,k); tl.set('#board',{xPercent:0},t); }
@@ -47,8 +47,10 @@ kt('#k1',0,T.k2,{instant:true}); sfx(0.02,'thud',0.9);
 pop('#t_vn',0.12,T.k2,{snd:false}); pop('#t_cn',0.35,T.k2); pop('#t_kr',0.6,T.k2,{snd:false}); pop('#t_in',0.85,T.k2);
 kt('#k2',T.k2,T.call-0.24);
 pop('#t_shield',T.k2+0.1,T.call-0.24); pop('#t_q1',T.k2+0.35,T.call-0.24);
-// ===== STORY: the friend who wants a Vietnam A57
-kt('#k3',T.call,T.k4); pop('#call',T.call+0.08,T.k4,{snd:'ring',g:0.6});
+// ===== STORY: the friend who wants a Vietnam A57 — a held brand wipe covers the source's zoom-blur (frames 131–144)
+const ST0=PIECES[1][3], STC=ST0+0.07, STR=4.84;
+wipe('v',STC,0.42,STR-STC-0.04); sfx(ST0,'thud',1);
+kt('#k3',STR,T.k4); pop('#call',STR+0.05,T.k4,{snd:'ring',g:0.6});
 kt('#k4',T.k4,T.k5); pop('#t_phone',T.k4+0.06,T.k5);
 kt('#k5',T.k5,T.k6,{shake:true}); pop('#t_ex',T.k5+0.1,T.k6); sfx(T.k5+0.3,'thud',0.8);
 kt('#k6',T.k6,T.k7); pop('#t_vn2',T.k6+0.04,T.k7,{snd:'tick'});
@@ -112,6 +114,7 @@ const TEXT_CY=1150;
 function placeText(){ document.querySelectorAll('#fx .kt').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
 // every cut gets a clear zoom change (100% / 110%) plus a slow push
 function camScale(t){
+  if(t>=2.3 && t<PIECES[1][3]) return 1.10+0.02*(t-2.3)/2;     // hard cut colour→B&W inside the hook gets a zoom change
   let i=0; for(let k=0;k<PIECES.length;k++) if(t>=PIECES[k][3]-1e-6) i=k;
   const p=PIECES[i], k=Math.min(1,(t-p[3])/Math.max(0.4,p[2]-p[1]));
   const amp=p[0]==='L'?0.04:0.10;   // the 4-item card needs the right-hand column: gentler punch-in there

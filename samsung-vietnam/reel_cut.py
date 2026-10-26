@@ -62,4 +62,9 @@ for lab, s, e, o in pieces:
     good = [i for i in rng if i not in bad]
     for b in bad:
         g = min(good, key=lambda k: abs(k - b)); Image.open(f'{S}/rf/{g:05d}.jpg').save(f'{S}/rf/{b:05d}.jpg', quality=95); fixed.append(b)
+# the source's own light-leak between the colour and the B&W hook shots (reel 2.27–2.40s):
+# replace with a clean hard cut (the page adds a zoom change there)
+for b, g in ((68, 67), (69, 67), (70, 74), (71, 74), (72, 74), (73, 74)):
+    Image.open(f'{S}/rf/{g:05d}.jpg').save(f'{S}/rf/{b:05d}.jpg', quality=95); fixed.append(b)
+# (the source's zoom-blur into the story shot, frames 131–144, is covered by a brand wipe in the page)
 print('frames', N, 'fixed', fixed)
