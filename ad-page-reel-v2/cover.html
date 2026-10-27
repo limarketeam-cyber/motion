@@ -3,40 +3,62 @@
 <head>
 <meta charset="utf-8">
 <title>Ad Page Reel Cover</title>
-<!-- Reels cover 1080x1920 (ruby.explains ReelsCover pattern + presenter photo).
-     All text sits inside the centred 4:5 grid crop (y 285–1635). Render: render-cover.mjs -->
+<!-- Reels cover 1080x1920, no photo: ruby.explains ReelsCover pattern (grid paper, yellow
+     circle bleeding off the left, ink tag, mono English term, giant Persian term) + a graphic
+     of the reel's point: the big page is crossed out, the goal-matched page is picked.
+     All text inside the centred 4:5 grid crop (y 285–1635). Render: node render-cover.mjs -->
 <style>
 @font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Bold.woff2) format('woff2');font-weight:700}
 @font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Black.woff2) format('woff2');font-weight:900}
 @font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');font-weight:500}
 @font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2');font-weight:600}
-:root{--paper:#F5F6F8;--white:#fff;--ink:#15171C;--ink-3:#6B7080;--grid:#E4E6EA;--yellow:#ECFF52}
+:root{--paper:#F5F6F8;--white:#fff;--ink:#15171C;--ink-2:#3A3E48;--ink-3:#6B7080;--grid:#E4E6EA;--yellow:#ECFF52}
 html,body{margin:0}
 #c{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Vazirmatn,sans-serif;color:var(--ink);
   background-color:var(--paper);
   background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);
   background-size:54px 54px}
 .circle{position:absolute;width:940px;height:940px;border-radius:50%;background:var(--yellow);top:170px;left:-370px}
-.photo{position:absolute;top:300px;right:72px;width:620px;height:728px;border:3px solid var(--ink);
-  background:url(cover-photo.jpg) center/cover no-repeat}
-.txt{position:absolute;top:1046px;right:84px;left:84px;display:flex;flex-direction:column;gap:16px}
-.chip{align-self:flex-start;display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--white);font-weight:700;font-size:34px;padding:8px 24px 12px}
-.chip i{width:18px;height:18px;background:var(--yellow)}
-h1{margin:0;font-weight:900;font-size:140px;line-height:1.08;letter-spacing:-3px}
-.en{direction:ltr;text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:46px;color:var(--ink)}
-.neq{align-self:flex-start;border:3px solid var(--ink);background:var(--white);font-weight:900;font-size:48px;padding:6px 26px 12px;letter-spacing:-1px}
+.crop{position:absolute;top:285px;left:0;right:0;height:1350px;padding:100px 84px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.tag{align-self:flex-start;display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--white);font-weight:700;font-size:34px;padding:8px 26px 12px}
+.tag i{width:18px;height:18px;background:var(--yellow)}
+.en{direction:ltr;text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:52px}
+h1{margin:0;font-weight:900;font-size:176px;line-height:1.05;letter-spacing:-4px}
+.pages{display:flex;gap:24px;margin-top:36px;direction:rtl}
+.pg{position:relative;flex:1;background:var(--white);border:3px solid var(--ink);padding:48px 28px 26px;display:flex;flex-direction:column;gap:10px}
+.pg .h{display:flex;align-items:center;gap:12px;direction:ltr;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:30px;color:var(--ink-2)}
+.pg .av{width:40px;height:40px;border-radius:50%;border:3px solid var(--ink)}
+.pg .n{direction:ltr;text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:84px;line-height:1}
+.pg .n span{position:relative;display:inline-block}
+.pg .f{direction:ltr;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:500;color:var(--ink-3)}
+.pg .l{font-weight:700;font-size:30px;color:var(--ink-2)}
+.pg.no{opacity:.55}
+.pg.no .strike{position:absolute;left:-10px;right:-10px;top:50%;height:7px;background:var(--ink)}
+.pick{position:absolute;top:-30px;right:24px;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);font-weight:900;font-size:30px;padding:6px 18px 10px}
+.pick b{color:var(--yellow);font-size:34px;line-height:1}
 .handle{position:absolute;bottom:64px;right:84px;direction:ltr;font-family:'IBM Plex Mono',monospace;font-size:32px}
 </style>
 </head>
 <body>
 <div id="c">
   <div class="circle"></div>
-  <div class="photo"></div>
-  <div class="txt">
-    <div class="chip"><i></i>تبلیغات</div>
-    <h1>کدوم پیج<br>برای تبلیغ؟</h1>
+  <div class="crop">
+    <div class="tag"><i></i>تبلیغات</div>
     <div class="en">Choosing an Ad Page</div>
-    <div class="neq">پرفالوورترین ≠ مناسب‌ترین</div>
+    <h1>کدوم پیج<br>برای تبلیغ؟</h1>
+    <div class="pages">
+      <div class="pg">
+        <span class="pick"><b>✓</b>هماهنگ با هدفت</span>
+        <div class="h">@page_2<span class="av"></span></div>
+        <div class="n"><span>150K</span></div><div class="f">followers</div>
+        <div class="l">پیج مناسب</div>
+      </div>
+      <div class="pg no">
+        <div class="h">@page_1<span class="av"></span></div>
+        <div class="n"><span>900K<i class="strike"></i></span></div><div class="f">followers</div>
+        <div class="l">لزوماً مناسب نیست</div>
+      </div>
+    </div>
   </div>
   <div class="handle">ruby.explains</div>
 </div>

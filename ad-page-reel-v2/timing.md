@@ -23,4 +23,4 @@ edge 1630 px) because the face sits larger/lower here (chin up to ~1270 px when 
 | 71.35 | (end) | save CTA |
 
 Cover: `cover.html` → `node render-cover.mjs` → `cover.png` (1080×1920) and
-`cover-grid.png` (the 4:5 profile-grid crop). Photo = graded frame at 34.3 s.
+`cover-grid.png` (the 4:5 profile-grid crop). No photo: title + a two-page graphic (big page crossed out, goal-matched page picked).
