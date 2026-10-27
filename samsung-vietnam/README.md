@@ -81,8 +81,8 @@ Source: the clean upload without burned-in subtitles (`..._2.mp4`), full frame, 
 - Speaker shots follow the client's reference frames: big white line icons from the pack sit
   behind the speaker (at most ~35% tucked behind the head, red labels never covered; positions in
   `reel_icons.json`), a red chapter bar «02 | تکنولوژی تولید» and a big red shield over the chest for
-  «مهم‌ترین: گارانتی»; chest text at one fixed spot on the lapel mic (y≈1150). White + red only (flags excepted).
-- Subtitles: brand subtitle plate (ink, white text, red rule), x 130–950, bottom at y 1484.
+  «مهم‌ترین: گارانتی»; every icon carries a short red label underneath; chest text at one fixed spot on the
+  lapel mic (y≈1150). White + red only (flags excepted). No speech subtitles.
 - Boards: brand light gradient, 60 white / 30 ink / 10 blue; "one price on Hamahang" uses the
   brand blue→red gradient. Brand layer-wipe transitions. End card: logo, site, Instagram (no Aparat).
 - Instagram safe zone for every element: x 60–1020 (≤950 below y 1050), y 260–1500 —

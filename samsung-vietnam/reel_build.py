@@ -39,13 +39,13 @@ ON_BOARD = lambda n: icon(n + '-color', {SEC: INK, RED: BLUE})      # ink struct
 ICONS = {
     'i_vn': ('F:VN', 'ویتنام', 170, 90, 330), 'i_cn': ('F:CN', 'چین', 170, 830, 320),
     'i_kr': ('F:KR', 'کره', 150, 90, 600), 'i_in': ('F:IN', 'هند', 150, 850, 600),
-    'i_shield': ('warranty', None, 300, 50, 380), 'i_q1': ('faq', None, 260, 770, 330),
+    'i_shield': ('warranty', 'کیفیت', 300, 50, 380), 'i_q1': ('faq', 'تضمین؟', 260, 770, 330),
     'i_call': ('call-center', 'دوستم', 230, 800, 320), 'i_phone': ('phone-rear', 'A57', 240, 790, 320),
-    'i_ex': ('warning', None, 300, 50, 380), 'i_vn2': ('F:VN', None, 220, 60, 380), 'i_mute': ('mute', None, 280, 770, 330),
-    'i_gear1': ('gear', None, 300, 40, 440), 'i_fac': ('factory', None, 330, 690, 290), 'i_gear2': ('gear', None, 240, 720, 620),
-    'i_model': ('phone-front', 'مدل دقیق', 210, 830, 300), 'i_ram': ('ram', 'رم', 230, 790, 600), 'i_sto': ('storage', 'حافظه', 210, 60, 420),
-    'i_cart': ('cart', None, 300, 50, 370), 'i_price': ('price', None, 280, 770, 340), 'i_pay': ('payment', None, 240, 60, 400),
-    'i_disc': ('discount', None, 300, 50, 380), 'i_q2': ('faq', None, 280, 760, 320), 'i_q3': ('faq', None, 200, 80, 650),
+    'i_ex': ('warning', 'تأکید', 300, 50, 380), 'i_vn2': ('F:VN', 'ویتنام', 220, 60, 380), 'i_mute': ('mute', 'گوش نداد', 280, 770, 330),
+    'i_gear1': ('gear', 'تکنولوژی', 300, 40, 440), 'i_fac': ('factory', None, 330, 690, 290), 'i_gear2': ('gear', None, 240, 720, 620),
+    'i_model': ('phone-front', 'مدل دستگاه', 210, 830, 300), 'i_ram': ('ram', 'رم', 230, 790, 600), 'i_sto': ('storage', 'حافظه', 210, 60, 420),
+    'i_cart': ('cart', 'جای دیگه', 300, 50, 370), 'i_price': ('price', 'قیمت بالاتر', 280, 770, 340), 'i_pay': ('payment', 'هزینه', 240, 60, 400),
+    'i_disc': ('discount', 'اختلاف قیمت', 300, 50, 380), 'i_q2': ('faq', 'بابت چی؟', 280, 760, 320), 'i_q3': ('faq', None, 200, 80, 650),
 }
 POS = json.load(open('reel_icons.json')) if os.path.exists('reel_icons.json') else {}
 WHITE = lambda n: icon(n, {INK: '#FFFFFF'}, draw=True)
@@ -65,28 +65,6 @@ icons = '\n'.join(icon_html(i) for i in ICONS)
 chapter = '<div class="chap" id="ch2"><i class="bar"></i><b>تکنولوژی تولید</b><span class="no">02</span></div>'
 shield = f'<div id="fsh">{icon("warranty", {INK: RED}, draw=True)}</div>'
 
-# ---------------- subtitles (brand subtitle plate) ----------------
-LINES = [(0.10, 2.30, 'واقعاً کشور تولیدکننده'), (2.30, 4.33, 'کیفیت گوشی‌های سامسونگ رو تضمین می‌کنه؟'),
-         (22.10, 23.90, 'امروز دوستم با من تماس گرفت'), (24.10, 26.00, 'گفت یه دونه A57 سامسونگ می‌خوام'),
-         (26.20, 28.70, 'خیلی تأکید داشت که حتماً، حتماً'), (28.70, 29.44, 'ویتنام باشه'),
-         (34.95, 36.22, 'اما گوشش بدهکار نبود'),
-         (52.44, 54.40, 'سامسونگ توی صفحه‌ی پشتیبانی'), (54.40, 55.37, 'سه تا نکته رو گفته'),
-         (55.37, 58.64, 'یک: محصولاتی که توی کارخونه‌ها تولید می‌شن'), (60.77, 63.46, 'همگی از نظر کیفیت یکسان هستن'),
-         (63.46, 67.30, 'دو: تکنولوژی تولید توی تمام این کارخونه‌ها'), (67.41, 68.68, 'با همدیگه برابره'),
-         (68.68, 73.50, 'سه: تمام محصولات قبل از عرضه چندین مرحله'), (73.63, 76.90, 'از نظر اینکه با استانداردهای رسمی سامسونگ'),
-         (76.90, 78.72, 'یکی باشن چک می‌شن'),
-         (103.75, 105.50, 'باید چهارتا چیز رو در نظر بگیریم'), (105.50, 107.45, 'یک: مدل دقیق دستگاه'),
-         (107.66, 109.30, 'دو: رم اون دستگاه'), (109.30, 111.35, 'سه: حافظه‌ی اون دستگاه'),
-         (111.47, 114.48, 'چهار و مهم‌ترینشون: گارانتی اون دستگاه'),
-         (128.95, 131.40, 'توی سایت هماهنگ که همه‌شون یک قیمتن'), (131.60, 133.90, 'اما اگه خواستی از جای دیگه بخری'),
-         (134.05, 135.94, 'دو، سه میلیون و بیشتر هزینه کنی'), (138.22, 139.40, 'این اختلاف قیمت'),
-         (139.57, 141.41, 'دقیقاً بابت چه تفاوتیه؟')]
-SUBS = []
-for a_, b_, txt in LINES:
-    ra, rb = N(a_), N(b_ - 0.01)
-    if rb - ra > 0.25: SUBS.append([round(ra, 3), round(rb, 3), txt])
-for k in range(len(SUBS) - 1): SUBS[k][1] = min(SUBS[k][1], SUBS[k + 1][0])
-subs = '<div id="sub"><div class="sp"><span></span><i></i></div></div>'
 
 # ---------------- chest text (white words, key word on a red plate) ----------------
 KT = {'k1': [('کشورِ', 1), ('سازنده', 0)], 'k2': [('کیفیت', 1), ('رو تضمین می‌کنه؟', 0)],
@@ -190,13 +168,12 @@ html = f'''<!doctype html>
 {shield}
   </div>
 {board}
-{subs}
 {endc}
 {WIPES}
 </div>
 <script src="assets/gsap.min.js"></script>
 <script>
-const PIECES={json.dumps(PC)}, SPEECH={SPEECH}, END={END}, SUBS={json.dumps(SUBS, ensure_ascii=False)};
+const PIECES={json.dumps(PC)}, SPEECH={SPEECH}, END={END};
 const FPS=30, FRAMES='rf', MASKS='rmasks', VIDEO_FRAMES={len([f for f in os.listdir('rf') if f.endswith('.jpg')]) if os.path.exists('rf') else 1711};
 {open('reel_timeline.js', encoding='utf-8').read()}
 </script>

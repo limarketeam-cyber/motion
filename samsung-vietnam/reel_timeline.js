@@ -120,10 +120,6 @@ tl.set({},{},T.END);
 // chest text: one fixed spot — centred, on the lapel mic
 const TEXT_CY=1150;
 function placeText(){ document.querySelectorAll('#fx .kt,#fx .chap').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
-// subtitles: brand subtitle plate, one cue at a time
-let lastSub=null;
-function setSub(t){ const c=SUBS.find(c=>t>=c[0]&&t<c[1]); const el=$('#sub');
-  if(c){ if(lastSub!==c){ el.querySelector('span').textContent=c[2]; lastSub=c; } el.style.opacity=1; } else el.style.opacity=0; }
 // every cut gets a clear zoom change (100% / 110%) plus a slow push
 function camScale(t){
   if(t>=2.3 && t<PIECES[1][3]) return 1.10+0.02*(t-2.3)/2;     // hard cut colour→B&W inside the hook gets a zoom change
@@ -135,7 +131,7 @@ function camScale(t){
 function load(img,src){ return new Promise(r=>{ if(img.src.endsWith(src)) return r(); img.onload=()=>r(); img.onerror=()=>r(); img.src=src; }); }
 const maskImg=new Image();
 window.seekFrame=async function(i){
-  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText(); setSub(t);
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
   $('#cam').style.transform=`scale(${camScale(Math.min(t,SPEECH-0.01)).toFixed(4)})`;
   const n=String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0');
   const src=`${FRAMES}/${n}.jpg`, msrc=`${MASKS}/${n}.png`;
@@ -145,11 +141,10 @@ window.seekFrame=async function(i){
   return t;
 };
 window.frontRects=function(i){
-  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText(); setSub(t);
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
   const bx=gsap.getProperty('#board','xPercent'), endO=+getComputedStyle($('#endc')).opacity;
   const out=[], s=camScale(Math.min(t,SPEECH-0.01));
   const vis=el=>{ let o=1,e=el; while(e&&e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; } return o>0.05; };
-  const sub=$('#sub .sp'); if(vis(sub)){ const r=sub.getBoundingClientRect(); out.push(['SUB',r.left,r.top,r.right,r.bottom]); }
   if(Math.abs(bx)<100 || endO>0.5) return {t,cover:true,s,r:out};
   document.querySelectorAll('#behind .ic').forEach(el=>{ if(+getComputedStyle(el).opacity>0.05){ const r=el.getBoundingClientRect();
     out.push(['ICON:'+el.id,r.left,r.top,r.right,r.bottom]); const l=el.querySelector('.lb'); if(l){ const q=l.getBoundingClientRect(); out.push(['LBL:'+el.id,q.left,q.top,q.right,q.bottom]); } } });
