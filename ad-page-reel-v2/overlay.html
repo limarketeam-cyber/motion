@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="fa">
+<head>
+<meta charset="utf-8">
+<title>Ad Page Reel v2 Overlay</title>
+<!--
+  Motion overlay for the "choosing an ad page" talking-head reel (ruby.explains brand).
+  Transparent 1080x1920 stage, rendered frame-by-frame by render.mjs via window.__seek(t),
+  then composited over the reframed + graded footage. Times are seconds into the source
+  video (see timing.md).
+  v2: second take of the same script. Face sits larger/lower here, so cards are compact:
+  bottom edge 1630px, max ~330px tall → top edge >= ~1300px (chin reaches ~1270 when leaning).
+  Titles stay in the top band (282–370px). check-bands.py / check-face.py verify it.
+-->
+<style>
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Regular.woff2) format('woff2');font-weight:400}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Medium.woff2) format('woff2');font-weight:500}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Bold.woff2) format('woff2');font-weight:700}
+@font-face{font-family:Vazirmatn;src:url(fonts/Vazirmatn-Black.woff2) format('woff2');font-weight:900}
+@font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'IBM Plex Mono';src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2');font-weight:600}
+
+:root{
+  --paper:#F5F6F8; --white:#FFFFFF; --ink:#15171C; --ink-2:#3A3E48; --ink-3:#6B7080;
+  --line:#DADDE3; --yellow:#ECFF52;
+}
+html,body{margin:0;background:transparent}
+body.preview{background:#7a7468;display:grid;place-items:center;min-height:100vh;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Vazirmatn,sans-serif;color:var(--ink);transform-origin:center}
+*{box-sizing:border-box}
+.fa{direction:rtl;font-family:Vazirmatn,sans-serif}
+.en{direction:ltr;font-family:'IBM Plex Mono',monospace;unicode-bidi:isolate}
+.h{opacity:0}
+
+/* top band — one box only, ends ~370px; the hair starts ~430px */
+.top{position:absolute;left:0;top:282px;width:1080px;display:flex;justify-content:center;pointer-events:none}
+.tbox{background:var(--paper);border:3px solid var(--ink);padding:6px 26px 12px;font-weight:900;font-size:50px;line-height:1.3;letter-spacing:-1px;direction:rtl;white-space:nowrap}
+.tbox.inv{background:var(--ink);color:var(--white);display:flex;align-items:center;gap:16px}
+.tbox.inv .ic{color:var(--yellow);width:44px;height:44px}
+
+/* bottom band — anchored at 1630px, cards max ~330px tall so they stay under the chin */
+.bot{position:absolute;left:72px;width:860px;bottom:290px}
+.card{background:var(--white);border:3px solid var(--ink);padding:22px 28px}
+.ic{display:inline-block;width:44px;height:44px;background:currentColor;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;flex:none}
+.mk{background:linear-gradient(var(--yellow),var(--yellow)) no-repeat 0 60%/0% 82%;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 6px}
+.row{display:flex;gap:16px}
+.rtl{direction:rtl}
+.lbl{font-weight:700;font-size:30px;color:var(--ink-3);direction:rtl}
+.eg{font-weight:700;font-size:24px;color:var(--ink-3);border:2px solid var(--line);padding:0 12px 4px;direction:rtl}
+
+/* tiles */
+.tiles{display:flex;gap:16px;direction:rtl}
+.tile{position:relative;flex:1;background:var(--white);border:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 10px 14px;font-weight:700;font-size:34px;text-align:center;line-height:1.3}
+.tile > .ic{width:52px;height:52px}
+.res{display:flex;align-items:center;gap:10px;font-size:30px;padding:4px 16px 8px;border:3px solid var(--ink);direction:rtl}
+.res .ic{width:32px;height:32px}
+.res.ok{background:var(--ink);color:var(--white)}
+.res.ok .ic{color:var(--yellow)}
+.res.no{background:var(--paper);color:var(--ink-2)}
+.pagepill{display:inline-flex;gap:12px;align-items:center;background:var(--ink);color:var(--white);font-size:38px;font-weight:600;padding:10px 26px}
+.pagepill .ic{width:38px;height:38px;color:var(--yellow)}
+.fork{position:relative;height:56px}
+.fork div{position:absolute;background:var(--ink)}
+
+/* criteria card */
+.crit{display:flex;align-items:center;gap:20px;direction:rtl;padding:10px 0;border-top:2px solid var(--line);font-weight:900;font-size:42px}
+.crit:first-of-type{border-top:0}
+.crit .ic{width:52px;height:52px}
+.crit .v{margin-right:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:40px;direction:ltr;position:relative}
+.strike{position:absolute;left:-8px;right:-8px;top:52%;height:5px;background:var(--ink);transform-origin:left;transform:scaleX(0)}
+.plus{width:52px;height:52px;display:grid;place-items:center;background:var(--ink);color:var(--yellow);font-weight:900;font-size:40px;line-height:1;flex:none}
+
+/* goal columns */
+.goals{display:flex;gap:16px;direction:rtl}
+.goal{flex:1;background:var(--white);border:3px solid var(--ink);padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.goal .gh{display:flex;align-items:center;gap:12px;font-weight:700;font-size:30px;color:var(--ink-2);direction:rtl}
+.goal .gh .ic{width:38px;height:38px;color:var(--ink)}
+.goal .gt{font-weight:900;font-size:40px;direction:rtl;letter-spacing:-1px}
+.goal .m{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:26px;font-weight:500;color:var(--ink-3);text-align:right}
+.goal .n{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:56px;font-weight:600;line-height:1}
+.goal .nrow{display:flex;align-items:baseline;gap:12px;direction:ltr;justify-content:flex-end}
+.goal .cap{font-weight:700;font-size:28px;color:var(--ink-2);direction:rtl;line-height:1.4}
+
+/* steps */
+.steps{display:flex;align-items:center;direction:rtl}
+.steps .s{width:84px;height:84px;border:3px solid var(--ink);background:var(--paper);display:grid;place-items:center;font-weight:900;font-size:46px;line-height:1}
+.steps .c{width:72px;height:3px;background:var(--ink)}
+.shead{display:flex;align-items:center;gap:16px;direction:rtl;margin-bottom:8px}
+.shead .n{width:50px;height:50px;background:var(--ink);color:var(--white);display:grid;place-items:center;font-weight:900;font-size:34px}
+.shead .t{font-weight:700;font-size:30px;color:var(--ink-3)}
+.smain{font-weight:900;font-size:46px;line-height:1.35;direction:rtl;letter-spacing:-1px;margin-bottom:20px}
+.chip2{display:flex;align-items:center;gap:12px;background:var(--paper);border:3px solid var(--ink);font-weight:700;font-size:34px;padding:10px 20px 12px;direction:rtl;white-space:nowrap}
+.chip2 .ic{width:38px;height:38px}
+.ask{display:flex;align-items:center;gap:16px;direction:rtl;font-weight:700;font-size:36px;padding:6px 0}
+.ask .ic{width:44px;height:44px}
+.askrow .ask .ok{margin-right:6px}
+.ask .ok{margin-right:auto;width:46px;height:46px;background:var(--ink);color:var(--white);display:grid;place-items:center}
+.ask .ok .ic{width:32px;height:32px}
+.venn{position:relative;height:140px}
+.venn svg{position:absolute;left:0;top:0}
+.venn .vl{position:absolute;top:48px;font-weight:700;font-size:30px;direction:rtl}
+
+/* mistake table */
+.cmp{width:100%;border-collapse:collapse;direction:rtl}
+.cmp td{padding:7px 10px;border-top:2px solid var(--line);font-size:34px}
+.cmp tr:first-child td{border-top:0}
+.cmp .k{font-weight:900}
+.cmp .v{font-family:'IBM Plex Mono',monospace;font-weight:600;direction:ltr;text-align:center;width:200px}
+.cmp .hd td{font-weight:700;font-size:30px;color:var(--ink-3)}
+.cmp .hd .v{font-family:Vazirmatn;direction:rtl}
+
+/* CTA tiles */
+.pg{gap:10px;padding:22px 10px 18px}
+.pg .nm{font-weight:900;font-size:36px}
+.pg .fl{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:34px;font-weight:600}
+.pg .fl small{font-size:22px;color:var(--ink-3);font-weight:500}
+.pg .cks{display:flex;flex-direction:column;gap:6px;align-items:stretch;width:100%;padding:0 12px}
+.pg .ck{display:flex;align-items:center;gap:8px;font-size:24px;font-weight:700;color:var(--ink-2);direction:rtl}
+.pg .ck i.b{width:24px;height:24px;border:2px solid var(--ink);display:grid;place-items:center;flex:none}
+.pg .ck i.b .ic{width:18px;height:18px}
+.pick{position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--yellow);border:3px solid var(--ink);font-weight:900;font-size:26px;padding:2px 14px 6px;white-space:nowrap;direction:rtl}
+
+/* end card */
+.endc{display:flex;flex-direction:column;gap:18px}
+.endc .m{display:flex;align-items:center;gap:20px;direction:rtl;font-weight:900;font-size:52px;letter-spacing:-1px}
+.endc .m .ic{width:60px;height:60px}
+.endc .rule{height:3px;background:var(--ink);transform-origin:right}
+.endc .hd{display:flex;justify-content:space-between;align-items:center}
+.endc .hd .en{font-size:34px;font-weight:500}
+.endc .hd .fa{font-weight:700;font-size:30px;color:var(--ink-3)}
+
+#wipe{position:absolute;inset:0;background:var(--yellow)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== S1 hook ===== -->
+  <div class="top"><div class="tbox h" id="s1t1">یه پیج، دو تا نتیجه</div></div>
+  <div class="top"><div class="tbox h" id="s1t2"><span class="mk" id="s1t2m">چرا</span> یکی جواب گرفت، یکی نه؟</div></div>
+  <div class="bot">
+    <div style="display:flex;justify-content:center"><div class="pagepill en h" id="s1page"><i class="ic" style="--ic:url(icons/at-sign.svg)"></i>ad.page</div></div>
+    <div class="fork" id="s1fork">
+      <div class="fk v" style="left:429px;top:0;width:3px;height:28px;transform-origin:top"></div>
+      <div class="fk hz" style="left:214px;top:26px;width:433px;height:3px"></div>
+      <div class="fk v" style="left:214px;top:26px;width:3px;height:30px;transform-origin:top"></div>
+      <div class="fk v" style="left:644px;top:26px;width:3px;height:30px;transform-origin:top"></div>
+    </div>
+    <div class="tiles">
+      <div class="tile h s1tile"><i class="ic" style="--ic:url(icons/store.svg)"></i>کسب‌وکار الف<span class="res ok h"><i class="ic" style="--ic:url(icons/check.svg)"></i>راضی</span></div>
+      <div class="tile h s1tile"><i class="ic" style="--ic:url(icons/store.svg)"></i>کسب‌وکار ب<span class="res no h"><i class="ic" style="--ic:url(icons/x.svg)"></i>ناراضی</span></div>
+    </div>
+  </div>
+
+  <!-- ===== S2 definition ===== -->
+  <div class="top"><div class="tbox h" id="s2t1">انتخاب پیج تبلیغاتی</div></div>
+  <div class="bot">
+    <div class="card h" id="s2card">
+      <div class="crit h s2c"><i class="ic" style="--ic:url(icons/users.svg)"></i>تعداد فالوور<span class="v">500K<span class="strike" id="s2strike"></span></span></div>
+      <div class="crit h s2c"><span class="plus">+</span><span class="mk" id="s2m1">هدف تبلیغ</span></div>
+      <div class="crit h s2c"><span class="plus">+</span>مخاطب اون پیج</div>
+    </div>
+  </div>
+  <div class="top"><div class="tbox h" id="s2t2">هدف تو چیه؟</div></div>
+  <div class="bot">
+    <div class="goals">
+      <div class="goal h" id="g1">
+        <div class="gh"><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>اگه هدفت اینه:</div>
+        <div class="gt">شناخته‌شدن</div>
+        <div class="nrow h g1x"><div class="n" id="g1n">0</div><div class="m">Reach</div></div>
+        <div class="cap h g1x">به چند نفر از مخاطب <span class="mk" id="g1m">مرتبط</span> رسید؟</div>
+      </div>
+      <div class="goal h" id="g2">
+        <div class="gh"><i class="ic" style="--ic:url(icons/shopping-cart.svg)"></i>اگه هدفت اینه:<span class="eg h" id="s2eg" style="margin-right:auto">مثال</span></div>
+        <div class="gt">فروش</div>
+        <div class="nrow h g2x"><div class="n" id="g2n">0</div><div class="m">Purchases</div></div>
+        <div class="cap h g2x">چقدر به <span class="mk" id="g2m">خرید</span> رسید؟</div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- ===== S3 how-to ===== -->
+  <div class="top"><div class="tbox h" id="s3t1">قبل از انتخاب پیج، ۳ تا کار</div></div>
+  <div class="top">
+    <div class="steps" id="steps">
+      <div class="s h">۱</div><div class="c h"></div><div class="s h">۲</div><div class="c h"></div><div class="s h">۳</div>
+    </div>
+  </div>
+  <!-- step 1 -->
+  <div class="bot">
+    <div class="card h" id="st1">
+      <div class="shead"><div class="n">۱</div><div class="t">اول</div></div>
+      <div class="smain" id="st1m" style="clip-path:inset(0 0 0 100%)">هدفت رو مشخص کن</div>
+      <div class="row rtl">
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/megaphone.svg)"></i>شناخته‌شدن</div>
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/mouse-pointer-click.svg)"></i>بازدید سایت</div>
+        <div class="chip2 h st1c"><i class="ic" style="--ic:url(icons/shopping-cart.svg)"></i>فروش</div>
+      </div>
+    </div>
+  </div>
+  <!-- step 2 -->
+  <div class="bot">
+    <div class="card h" id="st2">
+      <div class="shead"><div class="n">۲</div><div class="t">دوم</div></div>
+      <div class="smain" id="st2m" style="clip-path:inset(0 0 0 100%);margin-bottom:6px">از ادمین آمار بخواه</div>
+      <div id="st2ask">
+        <div class="ask h st2a"><i class="ic" style="--ic:url(icons/chart-column.svg)"></i>آمار بازدید<span class="ok h"><i class="ic" style="--ic:url(icons/check.svg)"></i></span></div>
+        <div class="ask h st2a"><i class="ic" style="--ic:url(icons/users.svg)"></i>مشخصات مخاطب‌ها<span class="ok h"><i class="ic" style="--ic:url(icons/check.svg)"></i></span></div>
+      </div>
+      <div class="venn h" id="venn" style="display:none">
+        <svg width="794" height="140" viewBox="0 30 794 140">
+          <defs><clipPath id="clipA"><circle id="cA2" cx="345" cy="100" r="64"/></clipPath></defs>
+          <circle id="cB2" cx="449" cy="100" r="64" fill="#ECFF52" clip-path="url(#clipA)"/>
+          <circle id="cA" cx="345" cy="100" r="64" fill="none" stroke="#15171C" stroke-width="3"/>
+          <circle id="cB" cx="449" cy="100" r="64" fill="none" stroke="#15171C" stroke-width="3"/>
+        </svg>
+        <span class="vl" style="right:0">مخاطب پیج</span>
+        <span class="vl" style="left:0">مشتری‌های تو</span>
+      </div>
+    </div>
+  </div>
+  <!-- step 3 -->
+  <div class="bot">
+    <div class="card h" id="st3">
+      <div class="shead"><div class="n">۳</div><div class="smain" id="st3m" style="clip-path:inset(0 0 0 100%);margin:0">سابقه‌ی پیج رو چک کن</div></div>
+      <div class="row rtl askrow" style="gap:34px">
+      <div class="ask h st3a"><i class="ic" style="--ic:url(icons/message-circle.svg)"></i>کیفیت تعامل<span class="ok h"><i class="ic" style="--ic:url(icons/check.svg)"></i></span></div>
+      <div class="ask h st3a"><i class="ic" style="--ic:url(icons/chart-column.svg)"></i>نتایج تبلیغات قبلی<span class="ok h"><i class="ic" style="--ic:url(icons/check.svg)"></i></span></div>
+      </div>
+      <div class="row rtl" style="margin-top:6px"><div class="chip2 h" id="st3c"><i class="ic" style="--ic:url(icons/coins.svg)"></i>اول با <span class="mk" id="st3m2" style="padding:0 4px">بودجه کم</span> تست کن</div></div>
+    </div>
+  </div>
+
+  <!-- ===== S4 common mistake ===== -->
+  <div class="top"><div class="tbox inv h" id="s4chip"><i class="ic" style="--ic:url(icons/x.svg)"></i>اشتباه رایج</div></div>
+  <div class="bot">
+    <div class="card h" id="s4card">
+      <div class="lbl" style="margin-bottom:6px">فقط اینا رو مقایسه می‌کنن:</div>
+      <table class="cmp">
+        <tr class="hd"><td></td><td class="v">پیج الف</td><td class="v">پیج ب</td></tr>
+        <tr class="h s4r"><td class="k">فالوور</td><td class="v">800K</td><td class="v">120K</td></tr>
+        <tr class="h s4r"><td class="k">قیمت تبلیغ</td><td class="v fa" style="font-family:Vazirmatn;direction:rtl">گرون</td><td class="v fa" style="font-family:Vazirmatn;direction:rtl">ارزون</td></tr>
+        <tr class="h s4r"><td class="k"><span class="mk" id="s4m">هدف تو؟</span></td><td class="v">?</td><td class="v">?</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== S5 CTA ===== -->
+  <div class="top"><div class="tbox h" id="s5t1">قبل از تبلیغ بعدیت</div></div>
+  <div class="top"><div class="tbox h" id="s5t2">پرفالوورترین ≠ مناسب‌ترین</div></div>
+  <div class="top"><div class="tbox h" id="s5t3">پیج مناسب = <span class="mk" id="s5m">هماهنگ با هدفت</span></div></div>
+  <div class="bot">
+    <div class="tiles">
+      <div class="tile pg h s5tile"><span class="nm">پیج ۱</span><span class="fl h"><span>900K</span> <small>followers</small></span>
+        <span class="cks"><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>هدف</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>مخاطب</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>نتایج</span></span></div>
+      <div class="tile pg h s5tile"><span class="pick h" id="pick">هماهنگ با هدفت</span><span class="nm">پیج ۲</span><span class="fl h"><span>150K</span> <small>followers</small></span>
+        <span class="cks"><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>هدف</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>مخاطب</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>نتایج</span></span></div>
+      <div class="tile pg h s5tile"><span class="nm">پیج ۳</span><span class="fl h"><span>60K</span> <small>followers</small></span>
+        <span class="cks"><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>هدف</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>مخاطب</span><span class="ck"><i class="b"><i class="ic h" style="--ic:url(icons/check.svg)"></i></i>نتایج</span></span></div>
+    </div>
+  </div>
+  <div class="bot">
+    <div class="card h endc" id="end">
+      <div class="m"><i class="ic" style="--ic:url(icons/bookmark.svg)"></i>ذخیره‌ش کن، بعداً لازمت میشه</div>
+      <div class="rule" id="endrule"></div>
+      <div class="hd"><span class="en">ruby.explains</span><span class="fa">بفرست برای اون دوستت که کسب‌وکار داره</span></div>
+    </div>
+  </div>
+
+  <div id="wipe"></div>
+</div>
+
+<script src="gsap.min.js"></script>
+<script>
+(async () => {
+  const RENDER = new URLSearchParams(location.search).has('render');
+  const TOTAL = 72.3;   // speech ends ~71.15s; cut shortly after
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  if (!RENDER) {
+    document.body.classList.add('preview');
+    const fit = () => { const k = Math.min(innerWidth / 1080, innerHeight / 1920); $('#stage').style.transform = `scale(${k})`; };
+    fit(); addEventListener('resize', fit);
+  }
+  await document.fonts.ready;
+
+  // Brand easing: enter = easeOutQuart, exit = easeInCubic, move/wipe = easeInOutCubic
+  const E_IN = 'power3.out', E_OUT = 'power2.in', E_MOVE = 'power2.inOut';
+  const tl = gsap.timeline({ paused: true });
+  gsap.set('#wipe', { x: 1080 });
+  const els = x => [].concat(x).flatMap(s => typeof s === 'string' ? $$(s) : [s]);
+
+  const rise = (x, t, st = 0) => els(x).forEach((e, i) =>
+    tl.fromTo(e, { opacity: 0, y: 48 }, { opacity: 1, y: 0, duration: .4, ease: E_IN }, t + i * st));
+  const out = (x, t, st = 0) => els(x).reverse().forEach((e, i) =>
+    tl.to(e, { opacity: 0, y: -24, duration: .24, ease: E_OUT }, t + i * st));
+  const hide = (x, t) => tl.set(els(x), { opacity: 0 }, t);
+  const pop = (x, t, st = 0) => els(x).forEach((e, i) =>
+    tl.fromTo(e, { opacity: 0, scale: .96 }, { opacity: 1, scale: 1, duration: .24, ease: E_IN }, t + i * st));
+  const wipeFa = (x, t, d = .4) => tl.fromTo(x, { clipPath: 'inset(0% 0% 0% 100%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: d, ease: E_MOVE }, t);
+  const showFa = (x, t) => { tl.set(x, { opacity: 1 }, t); wipeFa(x, t); };   // title enters with an R→L wipe
+  const mark = (x, t) => tl.fromTo(x, { backgroundSize: '0% 82%' }, { backgroundSize: '100% 82%', duration: .4, ease: E_MOVE }, t);
+  const unmark = (x, t) => tl.to(x, { backgroundSize: '0% 82%', duration: .24, ease: E_OUT }, t);
+  const count = (x, to, t, d) => { const e = $(x), o = { n: 0 };
+    tl.to(o, { n: to, duration: d, ease: E_IN, onUpdate: () => { e.textContent = Math.round(o.n).toLocaleString('en-US'); } }, t); };
+  const sweep = (t, half = .4) => {
+    tl.fromTo('#wipe', { x: 1080 }, { x: 0, duration: half, ease: E_MOVE, immediateRender: false }, t)
+      .to('#wipe', { x: -1080, duration: half, ease: E_MOVE }, t + half);
+    return t + half;
+  };
+
+  /* ---------- S1  0.6 – 10.2  hook ---------- */
+  showFa('#s1t1', .62);
+  rise('#s1page', .75);                                   // «دو تا کسب‌وکار توی یه پیج یکسان»
+  tl.fromTo('#s1fork .fk.v', { scaleY: 0 }, { scaleY: 1, duration: .3, ease: E_MOVE }, 1.2);
+  tl.fromTo('#s1fork .fk.hz', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 1.3);
+  rise('.s1tile', 1.6, .15);
+  pop($$('.s1tile .res')[0], 3.9);                        // «یکی از نتیجه راضیه»
+  pop($$('.s1tile .res')[1], 5.0);                        // «اون یکی نه»
+  out('#s1t1', 5.95); showFa('#s1t2', 6.13); mark('#s1t2m', 6.4); // «چرا یه پیج…»
+  const C1 = sweep(10.25, .22);
+  hide(['#s1t2', '#s1page', ...$$('.s1tile'), ...$$('#s1fork .fk')], C1);
+
+  /* ---------- S2  10.7 – 30.5  definition + use ---------- */
+  showFa('#s2t1', C1);
+  rise('#s2card', 10.73); rise($$('.s2c')[0], 10.85);    // «…فقط به تعداد فالوورهاش»
+  tl.to('#s2strike', { scaleX: 1, duration: .4, ease: E_MOVE }, 14.3);   // «بستگی نداره»
+  rise($$('.s2c')[1], 15.37); mark('#s2m1', 15.6);       // «هدف تبلیغ»
+  rise($$('.s2c')[2], 16.5);                             // «و مخاطب اون پیج»
+  out(['#s2card', '#s2t1'], 18.0);
+  showFa('#s2t2', 18.25);
+  rise('#g1', 18.35);                                    // «اگه می‌خوای… شناخته بشه»
+  rise('.g1x', 20.7, .08); count('#g1n', 12400, 20.8, .9); // «مهمه تبلیغت به چند نفر…»
+  mark('#g1m', 23.9);                                    // «مخاطب‌های مرتبط»
+  unmark('#g1m', 25.0);
+  rise('#g2', 25.2);                                     // «اما اگه هدفت فروشه»
+  rise('.g2x', 26.55, .08); count('#g2n', 86, 26.65, .9); // «باید ببینی تبلیغت چقدر…»
+  rise('#s2eg', 26.8);
+  mark('#g2m', 28.7);                                    // «به خرید منجر شده»
+  const C2 = sweep(30.4, .18);
+  hide(['#s2t2', '#g1', '#g2', '#s2eg'], C2);
+
+  /* ---------- S3  30.66 – 52.6  how-to ---------- */
+  showFa('#s3t1', C2);                                   // «پس قبل از انتخاب پیج، سه تا کار…»
+  out('#s3t1', 32.4);
+  const S = $$('#steps .s'), Cn = $$('#steps .c');
+  rise([S[0], Cn[0], S[1], Cn[1], S[2]], 32.63, .08);
+  const stepOn = (i, t) => { tl.to(S[i], { backgroundColor: '#ECFF52', duration: .24, ease: E_IN }, t);
+    if (i) tl.to(S[i - 1], { backgroundColor: '#15171C', color: '#FFFFFF', duration: .24, ease: E_IN }, t); };
+
+  // step 1  34.34 – 39.2
+  stepOn(0, 34.3);
+  rise('#st1', 34.35); wipeFa('#st1m', 34.85);          // «هدفت رو مشخص کن»
+  const c1 = $$('.st1c'); rise(c1[0], 36.1); rise(c1[1], 37.0); rise(c1[2], 38.1);
+  out('#st1', 39.05);
+
+  // step 2  39.36 – 45.6
+  stepOn(1, 39.3);
+  rise('#st2', 39.38); wipeFa('#st2m', 39.8);           // «از ادمین … رو بخواه»
+  const a2 = $$('.st2a'); rise(a2[0], 40.5); rise(a2[1], 41.4);    // آمار بازدید / مشخصات مخاطب‌ها
+  pop(a2[0].querySelector('.ok'), 42.2); pop(a2[1].querySelector('.ok'), 42.35);
+  out('#st2ask', 42.7);
+  tl.set('#st2ask', { display: 'none' }, 42.95);
+  tl.set('#venn', { display: 'block', opacity: 1 }, 42.95); // «ببین چقدر به مشتری‌های احتمالی تو نزدیکن»
+  tl.fromTo(['#cA', '#cA2'], { attr: { cx: 190 } }, { attr: { cx: 345 }, duration: .7, ease: E_MOVE }, 43.0);
+  tl.fromTo(['#cB', '#cB2'], { attr: { cx: 604 } }, { attr: { cx: 449 }, duration: .7, ease: E_MOVE }, 43.0);
+  out('#st2', 45.55);
+
+  // step 3  45.8 – 52.6
+  stepOn(2, 45.78);
+  rise('#st3', 45.82); wipeFa('#st3m', 46.2);           // «سوم…»
+  const a3 = $$('.st3a'); rise(a3[0], 46.6); rise(a3[1], 47.8);    // کیفیت تعامل / نتایج تبلیغات قبلی
+  pop(a3[0].querySelector('.ok'), 49.5); pop(a3[1].querySelector('.ok'), 49.65);  // «بررسی کن»
+  rise('#st3c', 50.3);                                  // «و اگه امکانش هست…»
+  mark('#st3m2', 51.2);                                 // «اول با بودجه کم تست کن»
+  out(['#st3', ...S, ...Cn], 52.45, .02);
+
+  /* ---------- S4  52.88 – 59.4  common mistake ---------- */
+  showFa('#s4chip', 52.88);
+  rise('#s4card', 53.0);
+  const r4 = $$('.s4r'); rise(r4[0], 54.4); rise(r4[1], 55.6);     // «فقط تعداد فالوور و قیمت تبلیغ…»
+  rise(r4[2], 57.6); mark('#s4m', 58.2);                 // «بدون اینکه هدفشون رو در نظر بگیرن»
+  const C4 = sweep(59.43, .14);
+  hide(['#s4chip', '#s4card'], C4);
+
+  /* ---------- S5  59.7 – 72.3  CTA ---------- */
+  showFa('#s5t1', C4);                                   // «پس قبل از تبلیغ بعدیت»
+  const T5 = $$('.s5tile');
+  rise(T5, 61.75, .15);                                  // «سه تا پیج رو»
+  T5.forEach((tile, i) => tile.querySelectorAll('.ck .ic').forEach((c, j) =>
+    pop(c, 62.7 + j * .15 + i * .08)));                  // «با همین معیارها مقایسه کن»
+  out('#s5t1', 64.95); showFa('#s5t2', 65.15);          // «یادت باشه، پیج مناسب لزوماً پرفالوورترین…»
+  T5.forEach((tile, i) => rise(tile.querySelector('.fl'), 66.5 + i * .08));
+  out('#s5t2', 68.55); showFa('#s5t3', 68.75); mark('#s5m', 69.6);  // «پیجیه که با هدف تبلیغت هماهنگ باشه»
+  tl.to([T5[0], T5[2]], { opacity: .45, duration: .24, ease: E_OUT }, 69.4);
+  pop('#pick', 69.8);
+  out([...T5, '#pick', '#s5t3'], 71.2);
+  rise('#end', 71.35);
+  tl.fromTo('#endrule', { scaleX: 0 }, { scaleX: 1, duration: .4, ease: E_MOVE }, 71.55);
+  tl.set({}, {}, TOTAL);
+
+  window.__total = TOTAL;
+  window.__seek = t => { tl.seek(Math.min(t, TOTAL - 1e-4), false); };
+  window.__ready = true;
+  if (!RENDER) {
+    tl.play(0);
+    addEventListener('click', () => tl.paused(!tl.paused()));
+    addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); tl.paused(!tl.paused()); } if (e.key.toLowerCase() === 'r') tl.restart(); });
+  }
+})();
+</script>
+</body>
+</html>
