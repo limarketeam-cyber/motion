@@ -10,7 +10,7 @@ function pop(sel,t0,t1,o={}){
   tl.fromTo(sel,{opacity:0,scale:0.86,y:24},{opacity:1,scale:1,y:0,duration:0.32,ease:'power3.out'},t0);
   const acc=el.querySelector('.acc'); if(acc) tl.fromTo(acc,{scaleY:0},{scaleY:1,duration:0.28,ease:'power2.out'},t0+0.12);
   const ps=el.querySelectorAll('[pathLength]'); if(ps.length) tl.fromTo(ps,{strokeDashoffset:1},{strokeDashoffset:0,duration:0.5,ease:'power2.inOut',stagger:0.06},t0+0.1);
-  const cap=el.querySelector('.cap span'); if(cap) tl.fromTo(cap,{opacity:0,y:12},{opacity:1,y:0,duration:0.25,ease:'power3.out'},t0+0.2);
+  const cap=el.querySelector('.cap span,.lb'); if(cap) tl.fromTo(cap,{opacity:0,y:12},{opacity:1,y:0,duration:0.25,ease:'power3.out'},t0+0.25);
   if(t1!=null) tl.to(sel,{opacity:0,scale:0.92,duration:0.2,ease:'power2.in'},t1-0.2);
   if(o.snd!==false) sfx(t0,o.snd||'pop',o.g??0.9);
 }
@@ -22,6 +22,15 @@ function kt(sel,t0,t1,o={}){
   if(o.shake){ tl.fromTo(el,{x:-9},{x:9,duration:0.05,repeat:7,yoyo:true,ease:'none'},t0+0.3); tl.set(el,{x:0},t0+0.72); }
   tl.to(el,{opacity:0,y:-18,duration:0.14,ease:'power2.in'},t1-0.14); tl.set(el,{y:0},t1);
   if(o.snd!==false) sfx(t0,'swish',0.5);
+}
+// chapter bar: red plate wipes in from the right, white rule grows, title and number follow
+function chap(sel,t0,t1){
+  tl.fromTo(sel,{opacity:1,scaleX:0},{scaleX:1,duration:0.35,ease:'power3.out'},t0);
+  tl.fromTo(sel+' .bar',{scaleY:0},{scaleY:1,duration:0.25,ease:'power2.out'},t0+0.2);
+  tl.fromTo(sel+' b',{opacity:0,x:30},{opacity:1,x:0,duration:0.3,ease:'power3.out'},t0+0.25);
+  tl.fromTo(sel+' .no',{opacity:0},{opacity:1,duration:0.3},t0+0.4);
+  tl.to(sel,{opacity:0,y:-18,duration:0.16,ease:'power2.in'},t1-0.16); tl.set(sel,{y:0},t1);
+  sfx(t0,'whoosh',0.6); sfx(t0+0.4,'tick',0.8);
 }
 function fadeIn(sel,t,from={y:30},d=0.35){ tl.fromTo(sel,{opacity:0,...from},{opacity:1,x:0,y:0,duration:d,ease:'power3.out'},t); }
 // brand transitions (pack T01/T02/T03): 3 stacked colour layers, the cut happens while fully covered
@@ -44,17 +53,17 @@ function mark(sel,t,d=0.9){ tl.to(sel,{backgroundSize:'100% 100%',duration:d,eas
 
 // ===== HOOK: country vs quality (first frame already carries the text)
 kt('#k1',0,T.k2,{instant:true}); sfx(0.02,'thud',0.9);
-pop('#t_vn',0.12,T.k2,{snd:false}); pop('#t_cn',0.35,T.k2); pop('#t_kr',0.6,T.k2,{snd:false}); pop('#t_in',0.85,T.k2);
+pop('#i_vn',0.12,T.k2,{snd:false}); pop('#i_cn',0.35,T.k2); pop('#i_kr',0.6,T.k2,{snd:false}); pop('#i_in',0.85,T.k2);
 kt('#k2',T.k2,T.call-0.24);
-pop('#t_shield',T.k2+0.1,T.call-0.24); pop('#t_q1',T.k2+0.35,T.call-0.24);
+pop('#i_shield',T.k2+0.1,T.call-0.24); pop('#i_q1',T.k2+0.35,T.call-0.24);
 // ===== STORY: the friend who wants a Vietnam A57 — a held brand wipe covers the source's zoom-blur (frames 131–144)
 const ST0=PIECES[1][3], STC=ST0+0.07, STR=4.84;
 wipe('v',STC,0.42,STR-STC-0.04); sfx(ST0,'thud',1);
-kt('#k3',STR,T.k4); pop('#call',STR+0.05,T.k4,{snd:'ring',g:0.6});
-kt('#k4',T.k4,T.k5); pop('#t_phone',T.k4+0.06,T.k5);
-kt('#k5',T.k5,T.k6,{shake:true}); pop('#t_ex',T.k5+0.1,T.k6); sfx(T.k5+0.3,'thud',0.8);
-kt('#k6',T.k6,T.k7); pop('#t_vn2',T.k6+0.04,T.k7,{snd:'tick'});
-kt('#k7',T.k7,T.BA); pop('#t_mute',T.k7+0.06,T.BA);
+kt('#k3',STR,T.k4); pop('#i_call',STR+0.05,T.k4,{snd:'ring',g:0.6});
+kt('#k4',T.k4,T.k5); pop('#i_phone',T.k4+0.06,T.k5);
+kt('#k5',T.k5,T.k6,{shake:true}); pop('#i_ex',T.k5+0.1,T.k6); sfx(T.k5+0.3,'thud',0.8);
+kt('#k6',T.k6,T.k7); pop('#i_vn2',T.k6+0.04,T.k7,{snd:'tick'});
+kt('#k7',T.k7,T.BA); pop('#i_mute',T.k7+0.06,T.BA);
 // ===== BOARD A: Samsung's support page — 3 points
 boardIn(T.BA); scene('#sA',T.BA,T.P1);
 pop('#aTile',T.BA+0.15,null);
@@ -70,11 +79,10 @@ pop('#bE1',T.P1eq,null,{snd:'ding'}); pop('#bE2',T.P1eq+0.15,null,{snd:false});
 tl.fromTo('#bPill',{opacity:0,scale:0.7},{opacity:1,scale:1,duration:0.35,ease:'back.out(2)'},T.P1same); sfx(T.P1same,'ding',0.8);
 boardOut(T.P2);
 // ===== SPEAKER: point 2 — same technology everywhere
-pop('#p2tag',T.P2+0.05,T.P3,{snd:'tick'});
-kt('#k8',T.P2+0.05,T.P2b); kt('#k9',T.P2b,T.P3);
-pop('#t_gear1',T.P2+0.25,T.P3); pop('#t_gear2',T.P2+0.45,T.P3,{snd:false}); pop('#t_fac',T.P2+1.0,T.P3);
-tl.fromTo('#t_gear1 svg',{rotation:0},{rotation:120,duration:T.P3-T.P2,ease:'none'},T.P2+0.25);
-tl.fromTo('#t_gear2 svg',{rotation:0},{rotation:-150,duration:T.P3-T.P2,ease:'none'},T.P2+0.45);
+chap('#ch2',T.P2+0.05,T.P2b); kt('#k9',T.P2b,T.P3);
+pop('#i_gear1',T.P2+0.25,T.P3); pop('#i_fac',T.P2+0.5,T.P3,{snd:false}); pop('#i_gear2',T.P2+0.75,T.P3,{snd:false});
+tl.fromTo('#i_gear1 svg',{rotation:0},{rotation:90,duration:T.P3-T.P2,ease:'none'},T.P2+0.25);
+tl.fromTo('#i_gear2 svg',{rotation:0},{rotation:-120,duration:T.P3-T.P2,ease:'none'},T.P2+0.75);
 // ===== BOARD C: point 3 — quality control, then the official report
 boardIn(T.P3); scene('#sC',T.P3,T.L); ring('#n3',T.P3+0.1,T.P3ev);
 fadeIn('#cHdr',T.P3+0.15,{x:50});
@@ -88,19 +96,19 @@ pop('#cTile',T.P3ev,null); fadeIn('#cNote',T.P3ev+0.12,{x:40});
 fadeIn('#cQ',T.P3ev+0.3,{y:90},0.45); sfx(T.P3ev+0.3,'whoosh',0.5); mark('#cQ mark',T.P3ev+0.85,1.0);
 boardOut(T.L);
 // ===== SPEAKER: the 4 things to compare
-kt('#k10',T.L+0.04,T.r1); pop('#spec',T.L+0.15,T.D-0.05,{snd:'whoosh'});
-[['#r1',T.r1],['#r2',T.r2],['#r3',T.r3],['#r4',T.r4]].forEach(([s,t])=>{ tl.fromTo(s,{opacity:0,x:40},{opacity:1,x:0,duration:0.26,ease:'back.out(2)'},t); sfx(t,'tick',1); });
-kt('#k11',T.r4,T.D-0.05); pop('#t_shield2',T.r4+0.1,T.D-0.05,{snd:'ding',g:0.7});
+kt('#k10',T.L+0.04,T.r1);
+pop('#i_model',T.r1,T.D-0.05,{snd:'tick'}); pop('#i_ram',T.r2,T.D-0.05,{snd:'tick'}); pop('#i_sto',T.r3,T.D-0.05,{snd:'tick'});
+kt('#k11',T.r4,T.D-0.05); pop('#fsh',T.r4+0.08,T.D-0.05,{snd:'ding',g:0.8});
 // ===== BOARD D: one price on Hamahang (brand blue→red gradient)
 boardIn(T.D,0.42); scene('#sD',T.D,T.D2); tl.set('#dbg',{opacity:1},T.D); tl.set('#dbg',{opacity:0},T.D2);
 fadeIn('#dHead',T.D+0.12,{y:30}); fadeIn('#dCard',T.D+0.32,{y:80},0.4);
 [1,2,3].forEach(i=>{ fadeIn('#dR'+i,T.D+0.55+i*0.18,{x:50},0.25); sfx(T.D+0.55+i*0.18,'tick',0.8); });
 boardOut(T.D2);
 // ===== SPEAKER: the price question
-kt('#k12',T.D2,T.M); pop('#t_cart',T.D2+0.06,T.M);
-kt('#k13',T.M,T.X1); pop('#t_price',T.M+0.06,T.X1,{snd:'cash'}); pop('#t_pay',T.M+0.3,T.X1,{snd:false});
-kt('#k14',T.X1,T.X2); pop('#t_disc',T.X1+0.06,T.SPEECH);
-kt('#k15',T.X2,T.SPEECH); pop('#t_q2',T.X2+0.06,T.SPEECH); pop('#t_q3',T.X2+0.3,T.SPEECH,{snd:false});
+kt('#k12',T.D2,T.M); pop('#i_cart',T.D2+0.06,T.M);
+kt('#k13',T.M,T.X1); pop('#i_price',T.M+0.06,T.X1,{snd:'cash'}); pop('#i_pay',T.M+0.3,T.X1,{snd:false});
+kt('#k14',T.X1,T.X2); pop('#i_disc',T.X1+0.06,T.SPEECH);
+kt('#k15',T.X2,T.SPEECH); pop('#i_q2',T.X2+0.06,T.SPEECH); pop('#i_q3',T.X2+0.3,T.SPEECH,{snd:false});
 // ===== END CARD (brand only)
 wipe('v',T.SPEECH,0.55); tl.set('#endc',{opacity:1},T.SPEECH);
 tl.fromTo('#endc .lg',{opacity:0,y:30},{opacity:1,y:0,duration:0.45,ease:'power3.out'},T.SPEECH+0.3);
@@ -111,19 +119,23 @@ tl.set({},{},T.END);
 
 // chest text: one fixed spot — centred, on the lapel mic
 const TEXT_CY=1150;
-function placeText(){ document.querySelectorAll('#fx .kt').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
+function placeText(){ document.querySelectorAll('#fx .kt,#fx .chap').forEach(el=>{ el.style.top=(TEXT_CY-el.offsetHeight/2)+'px'; }); }
+// subtitles: brand subtitle plate, one cue at a time
+let lastSub=null;
+function setSub(t){ const c=SUBS.find(c=>t>=c[0]&&t<c[1]); const el=$('#sub');
+  if(c){ if(lastSub!==c){ el.querySelector('span').textContent=c[2]; lastSub=c; } el.style.opacity=1; } else el.style.opacity=0; }
 // every cut gets a clear zoom change (100% / 110%) plus a slow push
 function camScale(t){
   if(t>=2.3 && t<PIECES[1][3]) return 1.10+0.02*(t-2.3)/2;     // hard cut colour→B&W inside the hook gets a zoom change
   let i=0; for(let k=0;k<PIECES.length;k++) if(t>=PIECES[k][3]-1e-6) i=k;
   const p=PIECES[i], k=Math.min(1,(t-p[3])/Math.max(0.4,p[2]-p[1]));
-  const amp=p[0]==='L'?0.04:0.10;   // the 4-item card needs the right-hand column: gentler punch-in there
+  const amp=p[0]==='L'?0.05:0.10;   // the 4-things icons need both side columns: gentler punch-in there
   return ((i%2)?1+amp:1.0)+0.02*k;
 }
 function load(img,src){ return new Promise(r=>{ if(img.src.endsWith(src)) return r(); img.onload=()=>r(); img.onerror=()=>r(); img.src=src; }); }
 const maskImg=new Image();
 window.seekFrame=async function(i){
-  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText(); setSub(t);
   $('#cam').style.transform=`scale(${camScale(Math.min(t,SPEECH-0.01)).toFixed(4)})`;
   const n=String(Math.min(i+1,VIDEO_FRAMES)).padStart(5,'0');
   const src=`${FRAMES}/${n}.jpg`, msrc=`${MASKS}/${n}.png`;
@@ -133,12 +145,15 @@ window.seekFrame=async function(i){
   return t;
 };
 window.frontRects=function(i){
-  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText();
+  const t=i/FPS; tl.seek(Math.max(t,0.001),false); placeText(); setSub(t);
   const bx=gsap.getProperty('#board','xPercent'), endO=+getComputedStyle($('#endc')).opacity;
   const out=[], s=camScale(Math.min(t,SPEECH-0.01));
+  const vis=el=>{ let o=1,e=el; while(e&&e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; } return o>0.05; };
+  const sub=$('#sub .sp'); if(vis(sub)){ const r=sub.getBoundingClientRect(); out.push(['SUB',r.left,r.top,r.right,r.bottom]); }
   if(Math.abs(bx)<100 || endO>0.5) return {t,cover:true,s,r:out};
-  document.querySelectorAll('#behind .t3,#behind .pc').forEach(el=>{ if(+getComputedStyle(el).opacity>0.05){ const r=el.getBoundingClientRect();
-    out.push([(el.classList.contains('t3')?'TILE:':'CARD:')+el.id,r.left,r.top,r.right,r.bottom]); } });
+  document.querySelectorAll('#behind .ic').forEach(el=>{ if(+getComputedStyle(el).opacity>0.05){ const r=el.getBoundingClientRect();
+    out.push(['ICON:'+el.id,r.left,r.top,r.right,r.bottom]); const l=el.querySelector('.lb'); if(l){ const q=l.getBoundingClientRect(); out.push(['LBL:'+el.id,q.left,q.top,q.right,q.bottom]); } } });
+  ['#ch2','#fsh'].forEach(s=>{ const el=$(s); if(vis(el)){ const r=el.getBoundingClientRect(); out.push([s.slice(1),r.left,r.top,r.right,r.bottom]); } });
   document.querySelectorAll('#fx .kt .w').forEach(el=>{
     let o=1,e=el; while(e&&e!==document.body){ o*=+getComputedStyle(e).opacity; e=e.parentElement; }
     if(o>0.05){ const r=el.getBoundingClientRect(); out.push([el.closest('[id]').id,r.left,r.top,r.right,r.bottom]); }

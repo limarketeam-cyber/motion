@@ -34,47 +34,59 @@ def icon(name, recolor, draw=False):
 ON_ACTOR = lambda n: icon(n, {INK: RED}, draw=True)                 # red line icon (speaker shots)
 ON_BOARD = lambda n: icon(n + '-color', {SEC: INK, RED: BLUE})      # ink structure, blue accent (boards)
 
-# ---------------- tiles behind the speaker ----------------
-# id: (icon or flag, caption, size, initial x, y)
-TILES = {
-    't_vn': ('F:VN', 'ویتنام', 170, 70, 330), 't_cn': ('F:CN', 'چین', 170, 840, 300),
-    't_in': ('F:IN', 'هند', 160, 850, 580), 't_kr': ('F:KR', 'کره', 160, 70, 600),
-    't_shield': ('warranty', None, 180, 70, 360), 't_q1': ('faq', None, 170, 830, 330),
-    't_phone': ('phone-rear', 'A57', 180, 830, 340), 't_ex': ('warning', None, 180, 70, 360),
-    't_vn2': ('F:VN', None, 190, 60, 330), 't_mute': ('mute', None, 180, 830, 360),
-    't_gear1': ('gear', None, 170, 70, 330), 't_gear2': ('gear', None, 150, 850, 380), 't_fac': ('factory', None, 170, 70, 600),
-    't_shield2': ('warranty', None, 170, 70, 360),
-    't_cart': ('cart', None, 180, 70, 360), 't_price': ('price', None, 180, 830, 340), 't_pay': ('payment', None, 160, 70, 380),
-    't_disc': ('discount', None, 180, 70, 360), 't_q2': ('faq', None, 180, 830, 340), 't_q3': ('faq', None, 150, 80, 420),
+# ---------------- big white line icons behind the speaker (layout from the client's reference frames) ----------------
+# id: (icon / F:flag, red label or None, size, target x, target y)  — flags are 3:2, icons square
+ICONS = {
+    'i_vn': ('F:VN', 'ویتنام', 170, 90, 330), 'i_cn': ('F:CN', 'چین', 170, 830, 320),
+    'i_kr': ('F:KR', 'کره', 150, 90, 600), 'i_in': ('F:IN', 'هند', 150, 850, 600),
+    'i_shield': ('warranty', None, 300, 50, 380), 'i_q1': ('faq', None, 260, 770, 330),
+    'i_call': ('call-center', 'دوستم', 230, 800, 320), 'i_phone': ('phone-rear', 'A57', 240, 790, 320),
+    'i_ex': ('warning', None, 300, 50, 380), 'i_vn2': ('F:VN', None, 220, 60, 380), 'i_mute': ('mute', None, 280, 770, 330),
+    'i_gear1': ('gear', None, 300, 40, 440), 'i_fac': ('factory', None, 330, 690, 290), 'i_gear2': ('gear', None, 240, 720, 620),
+    'i_model': ('phone-front', 'مدل دقیق', 210, 830, 300), 'i_ram': ('ram', 'رم', 230, 790, 600), 'i_sto': ('storage', 'حافظه', 210, 60, 420),
+    'i_cart': ('cart', None, 300, 50, 370), 'i_price': ('price', None, 280, 770, 340), 'i_pay': ('payment', None, 240, 60, 400),
+    'i_disc': ('discount', None, 300, 50, 380), 'i_q2': ('faq', None, 280, 760, 320), 'i_q3': ('faq', None, 200, 80, 650),
 }
-POS = json.load(open('reel_tiles.json')) if os.path.exists('reel_tiles.json') else {}
+POS = json.load(open('reel_icons.json')) if os.path.exists('reel_icons.json') else {}
+WHITE = lambda n: icon(n, {INK: '#FFFFFF'}, draw=True)
 
 
-def tile_html(tid):
-    kind, cap, sz, x, y = TILES[tid]; up = False
-    if tid in POS: x, y, sz, up = POS[tid]
-    if kind.startswith('F:'):
-        face = f'<div class="face fl"><img src="assets/brand/flags/{kind[2:]}.svg"><i class="acc"></i></div>'
-    else:
-        face = f'<div class="face">{ON_ACTOR(kind)}<i class="acc"></i></div>'
-    c = f'<div class="cap"><span{" class=ltr" if cap and cap[0].isascii() else ""}>{cap}</span></div>' if cap else ''
-    return f'<div class="t3{" capup" if up else ""}" id="{tid}" style="left:{x}px;top:{y}px;width:{sz}px;height:{sz}px">{face}{c}</div>'
+def icon_html(iid):
+    kind, lab, sz, x, y = ICONS[iid]; up = False
+    if iid in POS: x, y, sz, up = POS[iid]
+    fl = kind.startswith('F:'); h = round(sz * 2 / 3) if fl else sz
+    inner = f'<img src="assets/brand/flags/{kind[2:]}.svg">' if fl else WHITE(kind)
+    lb = f'<div class="lb{" ltr" if lab[0].isascii() else ""}">{lab}</div>' if lab else ''
+    return f'<div class="ic{" fl" if fl else ""}{" up" if up else ""}" id="{iid}" style="left:{x}px;top:{y}px;width:{sz}px;height:{h}px">{inner}{lb}</div>'
 
 
-CARD_POS = {'call': (60, 330), 'p2tag': (60, 290), 'spec': (750, 280)}
-CARD_POS.update({k: tuple(v) for k, v in (json.load(open('reel_cards.json')) if os.path.exists('reel_cards.json') else {}).items()})
-cards = f'''
-<div class="pc" id="call" style="left:{CARD_POS['call'][0]}px;top:{CARD_POS['call'][1]}px;width:200px">
-  <div class="hd">تماس ورودی…</div>
-  <div class="bd">{ON_ACTOR('call-center')}<b>دوستم</b></div><i class="acc"></i></div>
-<div class="pc" id="p2tag" style="left:{CARD_POS['p2tag'][0]}px;top:{CARD_POS['p2tag'][1]}px">
-  <div class="row1"><span class="ix">۲</span><b>تکنولوژی<br>تولید</b></div><i class="acc"></i></div>
-<div class="pc" id="spec" style="left:{CARD_POS['spec'][0]}px;top:{CARD_POS['spec'][1]}px;width:198px">
-  <div class="st"><b>۴ چیز</b></div>
-  <div class="sr" id="r1"><span class="ix">۱</span>مدل دقیق</div>
-  <div class="sr" id="r2"><span class="ix">۲</span>رم</div>
-  <div class="sr" id="r3"><span class="ix">۳</span>حافظه</div>
-  <div class="sr star" id="r4"><span class="ix">۴</span>گارانتی</div><i class="acc"></i></div>'''
+icons = '\n'.join(icon_html(i) for i in ICONS)
+# chapter bar (reference frame 1) and the big red shield over the chest (reference frame 2) — front layer
+chapter = '<div class="chap" id="ch2"><i class="bar"></i><b>تکنولوژی تولید</b><span class="no">02</span></div>'
+shield = f'<div id="fsh">{icon("warranty", {INK: RED}, draw=True)}</div>'
+
+# ---------------- subtitles (brand subtitle plate) ----------------
+LINES = [(0.10, 2.30, 'واقعاً کشور تولیدکننده'), (2.30, 4.33, 'کیفیت گوشی‌های سامسونگ رو تضمین می‌کنه؟'),
+         (22.10, 23.90, 'امروز دوستم با من تماس گرفت'), (24.10, 26.00, 'گفت یه دونه A57 سامسونگ می‌خوام'),
+         (26.20, 28.70, 'خیلی تأکید داشت که حتماً، حتماً'), (28.70, 29.44, 'ویتنام باشه'),
+         (34.95, 36.22, 'اما گوشش بدهکار نبود'),
+         (52.44, 54.40, 'سامسونگ توی صفحه‌ی پشتیبانی'), (54.40, 55.37, 'سه تا نکته رو گفته'),
+         (55.37, 58.64, 'یک: محصولاتی که توی کارخونه‌ها تولید می‌شن'), (60.77, 63.46, 'همگی از نظر کیفیت یکسان هستن'),
+         (63.46, 67.30, 'دو: تکنولوژی تولید توی تمام این کارخونه‌ها'), (67.41, 68.68, 'با همدیگه برابره'),
+         (68.68, 73.50, 'سه: تمام محصولات قبل از عرضه چندین مرحله'), (73.63, 76.90, 'از نظر اینکه با استانداردهای رسمی سامسونگ'),
+         (76.90, 78.72, 'یکی باشن چک می‌شن'),
+         (103.75, 105.50, 'باید چهارتا چیز رو در نظر بگیریم'), (105.50, 107.45, 'یک: مدل دقیق دستگاه'),
+         (107.66, 109.30, 'دو: رم اون دستگاه'), (109.30, 111.35, 'سه: حافظه‌ی اون دستگاه'),
+         (111.47, 114.48, 'چهار و مهم‌ترینشون: گارانتی اون دستگاه'),
+         (128.95, 131.40, 'توی سایت هماهنگ که همه‌شون یک قیمتن'), (131.60, 133.90, 'اما اگه خواستی از جای دیگه بخری'),
+         (134.05, 135.94, 'دو، سه میلیون و بیشتر هزینه کنی'), (138.22, 139.40, 'این اختلاف قیمت'),
+         (139.57, 141.41, 'دقیقاً بابت چه تفاوتیه؟')]
+SUBS = []
+for a_, b_, txt in LINES:
+    ra, rb = N(a_), N(b_ - 0.01)
+    if rb - ra > 0.25: SUBS.append([round(ra, 3), round(rb, 3), txt])
+for k in range(len(SUBS) - 1): SUBS[k][1] = min(SUBS[k][1], SUBS[k + 1][0])
+subs = '<div id="sub"><div class="sp"><span></span><i></i></div></div>'
 
 # ---------------- chest text (white words, key word on a red plate) ----------------
 KT = {'k1': [('کشورِ', 1), ('سازنده', 0)], 'k2': [('کیفیت', 1), ('رو تضمین می‌کنه؟', 0)],
@@ -153,7 +165,6 @@ WIPES = '''
 defs = re.search(r'<svg width="0" height="0" style="position:absolute"><defs>.*?</defs></svg>', open('teaser4.html', encoding='utf-8').read(), re.S).group(0)
 
 CSS = open('reel.css', encoding='utf-8').read()
-tiles = '\n'.join(tile_html(t) for t in TILES)
 html = f'''<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -169,21 +180,23 @@ html = f'''<!doctype html>
   <div id="cam">
     <img id="vid" alt="">
     <div id="behind">
-{tiles}
-{cards}
+{icons}
     </div>
     <div id="actor"><img id="vid2" alt=""></div>
   </div>
   <div class="layer" id="fx">
 {kts}
+{chapter}
+{shield}
   </div>
 {board}
+{subs}
 {endc}
 {WIPES}
 </div>
 <script src="assets/gsap.min.js"></script>
 <script>
-const PIECES={json.dumps(PC)}, SPEECH={SPEECH}, END={END};
+const PIECES={json.dumps(PC)}, SPEECH={SPEECH}, END={END}, SUBS={json.dumps(SUBS, ensure_ascii=False)};
 const FPS=30, FRAMES='rf', MASKS='rmasks', VIDEO_FRAMES={len([f for f in os.listdir('rf') if f.endswith('.jpg')]) if os.path.exists('rf') else 1711};
 {open('reel_timeline.js', encoding='utf-8').read()}
 </script>

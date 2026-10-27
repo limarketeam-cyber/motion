@@ -115,3 +115,22 @@ body{font-family:"HH",sans-serif;font-weight:400}
 #wipe .ws{position:absolute;inset:0;overflow:hidden}
 #wipe i{position:absolute;inset:0}
 #wipe .wi i{left:-16%;right:-16%;clip-path:polygon(14% 0,100% 0,86% 100%,0 100%)}
+
+/* ---- reference layout: big white line icons behind the speaker, red labels (white + red only) ---- */
+.ic{position:absolute;opacity:0}
+.ic>svg{width:100%;height:100%;overflow:visible;display:block}
+.ic.fl>img{width:100%;height:100%;object-fit:contain;display:block}
+.ic .lb{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);white-space:nowrap;color:var(--r);font-weight:700;font-size:40px;line-height:1.25}
+.ic.up .lb{top:auto;bottom:calc(100% + 8px)}
+/* chapter bar: red plate, white rule + title, index number */
+.chap{position:absolute;left:130px;right:130px;height:104px;border-radius:12px;background:var(--r);opacity:0;display:flex;align-items:center;padding:0 28px 0 36px;transform-origin:100% 50%}
+.chap .bar{display:block;width:4px;height:56px;background:#fff;border-radius:2px;flex:none;margin-left:22px}
+.chap b{color:#fff;font-weight:700;font-size:50px;flex:1;text-align:right;padding-bottom:8px;white-space:nowrap}
+.chap .no{direction:ltr;color:var(--ink);font-size:60px;font-weight:400;flex:none;padding-bottom:6px}
+#fsh{position:absolute;left:425px;top:830px;width:230px;height:230px;opacity:0}
+#fsh svg{width:100%;height:100%;overflow:visible}
+/* subtitles: brand subtitle plate (ink, white text, red rule); kept clear of the caption area and the button column */
+#sub{position:absolute;left:130px;right:130px;bottom:436px;display:flex;justify-content:center;opacity:0;z-index:40;pointer-events:none}
+#sub .sp{position:relative;width:820px;background:var(--ink);border-radius:14px;padding:16px 44px 22px;text-align:center}
+#sub span{color:#fff;font-size:36px;font-weight:400;line-height:1.45}
+#sub i{position:absolute;right:14px;top:24px;bottom:24px;width:3px;border-radius:2px;background:var(--r)}
